@@ -447,8 +447,6 @@
         const inactiveClasses = ['bg-surface-container-high', 'text-on-surface-variant'];
 
         if (btnStruktur && btnAnggota && secStruktur && secAnggota) {
-            secAnggota.style.display = 'none';
-
             const activateTab = (tab) => {
                 if (tab === 'struktur') {
                     btnStruktur.classList.remove(...inactiveClasses);
@@ -466,6 +464,15 @@
                     secStruktur.style.display = 'none';
                 }
             };
+
+            // Auto switch tab if URL contains ?tab=anggota or hash #anggota
+            const urlParams = new URLSearchParams(window.location.search);
+            const hash = window.location.hash;
+            if (urlParams.get('tab') === 'anggota' || hash === '#anggota') {
+                activateTab('anggota');
+            } else {
+                activateTab('struktur');
+            }
 
             btnStruktur.addEventListener('pointerdown', (e) => { e.preventDefault(); activateTab('struktur'); });
             btnStruktur.addEventListener('click', (e) => { e.preventDefault(); activateTab('struktur'); });
