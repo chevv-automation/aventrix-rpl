@@ -1,0 +1,484 @@
+<!DOCTYPE html><html class="light" lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Prestasi &amp; Penghargaan - XII RPL Lencana Kelas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#b8c4ff",
+                        "primary": "#00288e",
+                        "surface-container-highest": "#e0e3e5",
+                        "outline": "#757684",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary-fixed": "#e2e2e2",
+                        "primary-fixed": "#dde1ff",
+                        "error": "#ba1a1a",
+                        "tertiary-container": "#872d00",
+                        "on-primary-fixed": "#001453",
+                        "primary-container": "#1e40af",
+                        "on-tertiary-fixed-variant": "#802a00",
+                        "secondary-container": "#dfe0e0",
+                        "tertiary-fixed": "#ffdbce",
+                        "secondary": "#5d5f5f",
+                        "background": "#f7f9fb",
+                        "on-secondary-container": "#616363",
+                        "on-surface": "#191c1e",
+                        "on-primary-fixed-variant": "#173bab",
+                        "tertiary": "#611e00",
+                        "surface-tint": "#3755c3",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#454747",
+                        "on-surface-variant": "#444653",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb59a",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-container-high": "#e6e8ea",
+                        "surface": "#f7f9fb",
+                        "on-background": "#191c1e",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b8c4ff",
+                        "surface-dim": "#d8dadc",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary-container": "#ffa583",
+                        "on-tertiary-fixed": "#380d00",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#a8b8ff",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#c6c6c7",
+                        "surface-container": "#eceef0",
+                        "outline-variant": "#c4c5d5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1200px",
+                        "section-gap": "120px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Plus Jakarta Sans"],
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "headline-xl-mobile": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                        "headline-xl-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "headline-xl": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                        "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .achievement-card {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+        .achievement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px -12px rgba(0, 40, 142, 0.12);
+        }
+        .filter-pill.active {
+            background-color: #00288e;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm h-20 transition-all duration-300">
+    <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-full">
+        <a href="index.html" class="font-display-lg-mobile text-2xl font-extrabold text-primary tracking-tight">XII RPL</a>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+            <a href="index.html" class="nav-link font-label-caps text-label-caps transition-colors text-on-surface-variant hover:text-primary" data-page="beranda">Beranda</a>
+            
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="profil">Profil Kelas <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="prestasi.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Daftar Prestasi</a>
+                    <a href="anggota.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Anggota Kelas</a>
+                </div>
+            </div>
+
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="jadwal">Jadwal <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="jadwal.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Jadwal Mata Pelajaran</a>
+                    <a href="jadwal-piket.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Jadwal Piket</a>
+                </div>
+            </div>
+
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="administrasi">Administrasi <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="administrasi-inventaris.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Inventaris Kelas</a>
+                    <a href="administrasi-absensi.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Absensi & Jurnal Kelas</a>
+                </div>
+            </div>
+
+            <a href="galeri.html" class="nav-link font-label-caps text-label-caps transition-colors text-on-surface-variant hover:text-primary" data-page="galeri">Galeri</a>
+        </div>
+        
+        <div class="hidden md:block">
+            <button class="bg-primary text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors shadow-md">Hubungi Kami</button>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-btn" class="md:hidden flex items-center text-on-surface-variant p-2 rounded-lg hover:bg-surface-container transition-colors">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full bg-white shadow-xl border-b border-outline-variant/20 flex-col overflow-hidden max-h-[80vh] overflow-y-auto">
+        <div class="p-6 flex flex-col gap-6">
+            <a href="index.html" class="text-on-surface font-headline-md text-lg hover:text-primary transition-colors">Beranda</a>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Profil Kelas</span>
+                <a href="prestasi.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Daftar Prestasi</a>
+                <a href="anggota.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Anggota Kelas</a>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Jadwal</span>
+                <a href="jadwal.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Jadwal Mata Pelajaran</a>
+                <a href="jadwal-piket.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Jadwal Piket</a>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Administrasi</span>
+                <a href="administrasi-inventaris.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Inventaris Kelas</a>
+                <a href="administrasi-absensi.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Absensi & Jurnal Kelas</a>
+            </div>
+            
+            <a href="galeri.html" class="text-on-surface font-headline-md text-lg hover:text-primary transition-colors">Galeri</a>
+            
+            <button class="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm text-center mt-2 shadow-md w-full hover:bg-primary/90 transition-colors">Hubungi Kami</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const page = path.split('/').pop() || 'index.html';
+            
+            // Set active state
+            const links = document.querySelectorAll('.nav-link, .nav-dropdown-btn');
+            
+            const setActive = (el) => {
+                el.classList.add('text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                el.classList.remove('text-on-surface-variant');
+            };
+            
+            if(page.includes('profil_kelas')) {
+                const el = document.querySelector('[data-group="profil"]');
+                if(el) setActive(el);
+            } else if(page.includes('jadwal')) {
+                const el = document.querySelector('[data-group="jadwal"]');
+                if(el) setActive(el);
+            } else if(page.includes('administrasi')) {
+                const el = document.querySelector('[data-group="administrasi"]');
+                if(el) setActive(el);
+            } else if(page.includes('galeri')) {
+                const el = document.querySelector('[data-page="galeri"]');
+                if(el) setActive(el);
+            } else {
+                const el = document.querySelector('[data-page="beranda"]');
+                if(el) setActive(el);
+            }
+            
+            // Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            if(btn && menu) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                    menu.classList.toggle('flex');
+                    const icon = btn.querySelector('span');
+                    if (icon) {
+                        icon.textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
+                    }
+                });
+            }
+        });
+    </script>
+</nav>
+
+<!-- TopNavBar -->
+
+<main class="pt-[80px]">
+<!-- Hero Section -->
+<header class="bg-primary-container py-16 px-margin-mobile md:px-gutter relative overflow-hidden">
+<div class="max-w-container-max mx-auto relative z-10">
+
+<h1 class="font-headline-xl text-headline-xl md:font-display-lg md:text-display-lg text-white mb-4">
+                    Prestasi &amp; Penghargaan
+                </h1>
+<p class="font-body-lg text-body-lg text-primary-fixed max-w-2xl opacity-90">
+                    Kumpulan pencapaian gemilang siswa XII RPL dalam berbagai bidang akademik, teknologi, dan minat bakat.
+                </p>
+</div>
+<!-- Atmospheric micro-pattern background -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+<div class="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:40px_40px]"></div>
+</div>
+</header>
+<!-- Filter Bar -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-gutter mt-12 mb-8">
+<div class="flex flex-wrap gap-3 items-center">
+<button class="filter-pill active px-6 py-2.5 rounded-full font-label-caps text-label-caps transition-all border border-primary">
+                    Semua
+                </button>
+<button class="filter-pill bg-surface-container text-secondary px-6 py-2.5 rounded-full font-label-caps text-label-caps hover:bg-primary-fixed-dim hover:text-primary transition-all">
+                    Akademik
+                </button>
+<button class="filter-pill bg-surface-container text-secondary px-6 py-2.5 rounded-full font-label-caps text-label-caps hover:bg-primary-fixed-dim hover:text-primary transition-all">
+                    Teknologi
+                </button>
+<button class="filter-pill bg-surface-container text-secondary px-6 py-2.5 rounded-full font-label-caps text-label-caps hover:bg-primary-fixed-dim hover:text-primary transition-all">
+                    Non-Akademik
+                </button>
+</div>
+</section>
+<!-- Achievements Grid -->
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-gutter mb-section-gap">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter" id="achievements-container">
+<!-- Card 1 -->
+<article class="achievement-card bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col">
+<div class="aspect-video overflow-hidden">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLsbUCUw0gSRuJgF3UbXEnQFH75VsNKrhd1HQtsEten11lsHtsp64Zc58EXg_j1M5gozqfyI3caTjVXn-4siqma4E6MciWmByQQUlwjetz028bVgs-0nK52SiRM8FiPiWS3QBqAqaIhIe-cxvK1E2X6ekZpeWJT_jIly7_WNbWsAUImO1_BgAje5Zub9GZEtTVHXjOyv77HBCViJP0SN--Lh0KNvghz_ZZ5ya19WNT7i8bSUiaYQetEYMYA-">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary-fixed-dim/30 text-primary px-3 py-1 rounded-full font-label-caps text-[10px]">TEKNOLOGI</span>
+<span class="text-outline font-label-caps text-[11px]">Provinsi  2024</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Juara 1 LKS Tingkat Provinsi</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">
+                            Bidang Software Development. Kompetensi bergengsi yang menguji ketajaman logika dan kecepatan dalam membangun aplikasi berbasis data.
+                        </p>
+<a class="inline-flex items-center text-primary font-label-caps text-label-caps group" href="#">
+                            Lihat Detail 
+                            <span class="material-symbols-outlined ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="achievement-card bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col">
+<div class="aspect-video overflow-hidden">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLt8C1vvSFcyqzhma70lNELu_dkBAHZAflk2oxpLQyI_w8qc_YRwcbqQdzqHTDHBBK-oAvGWEyGAIaT028YakEDRbph_UOYzkrEOxDR0zIDPwKIOihOFHwmHkTWWaXeQQjQx-NAim53VmxuDQt2wRdWX1gVeGtzbK6rAaCrnlxy_kiEiNJHWwrW3pDvPMLhQXS-G6rNjyw3NW92WlINDgPJpMcm26g_JvukNKc5fI1gLiDjg3aUtta8_x1e2">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary-fixed-dim/30 text-primary px-3 py-1 rounded-full font-label-caps text-[10px]">TEKNOLOGI</span>
+<span class="text-outline font-label-caps text-[11px]">Nasional  2023</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Juara 2 Hackathon Nasional</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">
+                            Fokus pada UI/UX Design dan Inovasi Solusi Digital untuk masalah sosial. Berhasil menyisihkan lebih dari 100 tim peserta.
+                        </p>
+<a class="inline-flex items-center text-primary font-label-caps text-label-caps group" href="#">
+                            Lihat Detail 
+                            <span class="material-symbols-outlined ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="achievement-card bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col">
+<div class="aspect-video overflow-hidden">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AP1WRLuMNbf9kFiLEv7O412O-Ob55FdPxfd-UwVmC4hZtB0qfMsWJWOJvkwTKVeRz7sfLCwVd_YPZmDHbX-IWlRFNWJpZItqyu73sMwHJPHJP9GKbUVSDHafZMLQge4isO8z3pQZtz0N68oEqKr6iujPsIYibLVjD-aPtVNjr1OfAfv0XMC7UYj1j_U2qL8jhFPiRjmF1uosgeXQiENyDutnKNoZp6-V85hCcWeaujzlxA6HgpzjZkukdbx2pNDh">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary-fixed-dim/30 text-primary px-3 py-1 rounded-full font-label-caps text-[10px]">AKADEMIK</span>
+<span class="text-outline font-label-caps text-[11px]">Nasional  2024</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Finalis Olimpiade Sains</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">
+                            Bidang Informatika. Membuktikan kompetensi teoritis dan pemecahan masalah algoritma di tingkat yang lebih tinggi.
+                        </p>
+<a class="inline-flex items-center text-primary font-label-caps text-label-caps group" href="#">
+                            Lihat Detail 
+                            <span class="material-symbols-outlined ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="achievement-card bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col">
+<div class="aspect-video overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist photo of a modern high-school computer lab with sleek monitors displaying vibrant web UI designs. The lighting is bright and airy with a cool white aesthetic, reflecting a professional design workspace. In the foreground, a trophy sits on a desk, symbolizing excellence in digital creativity and user interface design for future education platforms." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB2WjYtCfgYz6uONUtVRmXv-_I-rNEzQvAfa5tOkT-3yY01Xx0VhCtlM7zFaCsOsq-FMTD4xC5yIUcx7zji92VwnuwkDp6iLFgczDjCcyHlvhnPqESwvRVclfYTDWgOnQfWrxEwcCg_2vabPuJRqOwcYHidVMcD85D6axyDt2LylbgYl0RXgq0pJTcHSoY6cVJK6WUJW5iJJ2-YJb7hDqhAdPdKUtv-YowF7K7nbVKQV8I-PUSywyWcQ">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary-fixed-dim/30 text-primary px-3 py-1 rounded-full font-label-caps text-[10px]">TEKNOLOGI</span>
+<span class="text-outline font-label-caps text-[11px]">Lokal  2024</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Juara 1 Lomba Web Design</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">
+                            Mendesain antarmuka yang intuitif dan responsif untuk platform edukasi masa depan.
+                        </p>
+<a class="inline-flex items-center text-primary font-label-caps text-label-caps group" href="#">
+                            Lihat Detail 
+                            <span class="material-symbols-outlined ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="achievement-card bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col">
+<div class="aspect-video overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-action, sharp photograph of a martial arts student in a crisp white karate gi performing a powerful kick in a clean dojo with polished wooden floors. The lighting is dramatic yet professional, focusing on the athlete's disciplined expression. A gold medal hung around their neck gleams under soft overhead spotlights, symbolizing provincial-level triumph and martial arts mastery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2m7QCGfdJg_82N88HVmDjNe0Vw0XA32A9Jp_DjzM7VHfcfw1mxcx9V2blj9QuQw2VxVMTpC6D0yp0s9AvZzClFtyZbBY0OOzi2siS3eVnijXdSXvEYXP-GKLJbRtEi63LSBxIazECrJc5HA07sp9yBMoRShE1NuMD5KPU6JbYOQEWHR7SEWCh0exdnzWOCoRNGDbF-B7HHkbaQU8BISMI0X7XMyP2hT7_MwcVdUHVwiHByRYTwKKm9g">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary-fixed-dim/30 text-primary px-3 py-1 rounded-full font-label-caps text-[10px]">NON-AKADEMIK</span>
+<span class="text-outline font-label-caps text-[11px]">Provinsi  2023</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Medali Emas Karate</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">
+                            Pencapaian luar biasa dalam bidang olahraga bela diri, menunjukkan disiplin dan semangat juang yang tinggi.
+                        </p>
+<a class="inline-flex items-center text-primary font-label-caps text-label-caps group" href="#">
+                            Lihat Detail 
+                            <span class="material-symbols-outlined ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="achievement-card bg-surface-container-lowest rounded-xl overflow-hidden flex flex-col">
+<div class="aspect-video overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An editorial-style shot of a group of high school software engineering students proudly standing next to their innovative mobile app project displayed on a large high-resolution screen. The setting is a brightly lit, modern school exhibition hall with wooden paneling and glass architecture. The mood is celebratory and academically prestigious, highlighting the 'Best Innovation' award plaque held by one of the students." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQN5zAmAepPBeNVoeekFt911QoBYBoDVYFjBJ25sfwcaSIivB0De8YnAbsaf6JGSgXe9LeQ4k38K0bTLWKkj_MvOiCthQI_UoquHB57R1kHcvK332YdbMt1DPGhJrF5LNLzeMx_-aHln6yDd9kbVssaFh-Tw1Vtskt8905ccyDXUc4bHNdSziu2-CA9Vc0bIeNARfCG-kg-WJBiLb4cDiVVAbdE9LmBZY5Jeph6J8AS6oTVgjnCPeuOQ">
+</div>
+<div class="p-6 flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-3">
+<span class="bg-primary-fixed-dim/30 text-primary px-3 py-1 rounded-full font-label-caps text-[10px]">TEKNOLOGI</span>
+<span class="text-outline font-label-caps text-[11px]">Sekolah  2024</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-3">Best Innovation Award</h3>
+<p class="font-body-md text-body-md text-secondary mb-6 flex-grow">
+                            Penghargaan untuk ide aplikasi paling inovatif dalam pameran karya akhir tahun sekolah.
+                        </p>
+<a class="inline-flex items-center text-primary font-label-caps text-label-caps group" href="#">
+                            Lihat Detail 
+                            <span class="material-symbols-outlined ml-1 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-16 px-margin-mobile md:px-gutter bg-surface-container-low border-t border-outline-variant">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
+<div class="md:col-span-5">
+<div class="font-headline-md text-headline-md font-bold text-[#1E40AF] mb-4">
+                    XII RPL
+                </div>
+<p class="text-on-surface-variant font-body-md max-w-md">
+                    Mewujudkan generasi digital yang kompeten, berkarakter, dan siap berkontribusi untuk masa depan.
+                </p>
+</div>
+<div class="md:col-span-2">
+<h4 class="font-label-caps text-label-caps text-primary mb-4">NAVIGASI</h4>
+<ul class="space-y-2">
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Beranda</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Prestasi</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Organisasi</a></li>
+</ul>
+</div>
+<div class="md:col-span-2">
+<h4 class="font-label-caps text-label-caps text-primary mb-4">INFO KELAS</h4>
+<ul class="space-y-2">
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Akademik</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Kedisiplinan</a></li>
+<li class=""><a class="text-on-surface-variant hover:text-primary transition-colors text-body-md" href="#">Inventaris</a></li>
+</ul>
+</div>
+<div class="md:col-span-3">
+<h4 class="font-label-caps text-label-caps text-primary mb-4">HUBUNGI</h4>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-white border border-outline-variant flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">mail</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-white border border-outline-variant flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant text-center">
+<p class="text-on-surface-variant text-body-md">
+                © 2024 XII RPL - SMK Negeri Unggulan. All rights reserved.
+            </p>
+</div>
+</div>
+</footer>
+<script>
+        // Simple filter interaction simulation
+        document.querySelectorAll('.filter-pill').forEach(pill => {
+            pill.addEventListener('click', () => {
+                document.querySelectorAll('.filter-pill').forEach(p => {
+                    p.classList.remove('active', 'bg-primary', 'text-white');
+                    p.classList.add('bg-surface-container', 'text-secondary');
+                });
+                pill.classList.add('active');
+                pill.classList.remove('bg-surface-container', 'text-secondary');
+                pill.style.backgroundColor = '#00288e';
+                pill.style.color = 'white';
+            });
+        });
+
+        // Sticky nav scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/supabase-config.js"></script>
+<script src="./js/global-ui.js"></script>
+    <script src="./js/supabase-fetch.js"></script></body></html>

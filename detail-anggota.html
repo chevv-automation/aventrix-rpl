@@ -1,0 +1,354 @@
+<!DOCTYPE html><html class="light" lang="id" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title id="detail-nama-title">Profil Siswa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f7f9fb;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#ba1a1a",
+                      "on-primary-fixed": "#001453",
+                      "secondary-fixed": "#e2e2e2",
+                      "surface-container": "#eceef0",
+                      "error-container": "#ffdad6",
+                      "tertiary-container": "#872d00",
+                      "tertiary-fixed-dim": "#ffb59a",
+                      "on-primary-container": "#a8b8ff",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "surface-tint": "#3755c3",
+                      "tertiary-fixed": "#ffdbce",
+                      "on-secondary-container": "#616363",
+                      "surface-container-low": "#f2f4f6",
+                      "surface-bright": "#f7f9fb",
+                      "surface-variant": "#e0e3e5",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "on-tertiary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "inverse-primary": "#b8c4ff",
+                      "surface-container-high": "#e6e8ea",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d8dadc",
+                      "on-background": "#191c1e",
+                      "on-primary-fixed-variant": "#173bab",
+                      "outline": "#757684",
+                      "on-tertiary-fixed-variant": "#802a00",
+                      "on-tertiary-fixed": "#380d00",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#00288e",
+                      "on-tertiary-container": "#ffa583",
+                      "inverse-on-surface": "#eff1f3",
+                      "background": "#f7f9fb",
+                      "outline-variant": "#c4c5d5",
+                      "inverse-surface": "#2d3133",
+                      "on-surface-variant": "#444653",
+                      "on-primary": "#ffffff",
+                      "tertiary": "#611e00",
+                      "surface": "#f7f9fb",
+                      "primary-fixed-dim": "#b8c4ff",
+                      "on-error-container": "#93000a",
+                      "surface-container-highest": "#e0e3e5",
+                      "secondary-container": "#dfe0e0",
+                      "secondary": "#5d5f5f",
+                      "primary-fixed": "#dde1ff",
+                      "on-secondary-fixed-variant": "#454747",
+                      "primary-container": "#1e40af"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "section-gap": "120px",
+                      "margin-mobile": "20px",
+                      "gutter": "24px",
+                      "container-max": "1200px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "display-lg-mobile": ["Plus Jakarta Sans"],
+                      "headline-xl-mobile": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "headline-xl": ["Plus Jakarta Sans"],
+                      "label-caps": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "headline-xl-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "headline-xl": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface">
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm h-20 transition-all duration-300">
+    <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-full">
+        <a href="index.html" class="font-display-lg-mobile text-2xl font-extrabold text-primary tracking-tight">XII RPL</a>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+            <a href="index.html" class="nav-link font-label-caps text-label-caps transition-colors text-on-surface-variant hover:text-primary" data-page="beranda">Beranda</a>
+            
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="profil">Profil Kelas <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="prestasi.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Daftar Prestasi</a>
+                    <a href="anggota.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Anggota Kelas</a>
+                </div>
+            </div>
+
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="jadwal">Jadwal <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="jadwal.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Jadwal Mata Pelajaran</a>
+                    <a href="jadwal-piket.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Jadwal Piket</a>
+                </div>
+            </div>
+
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="administrasi">Administrasi <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="administrasi-inventaris.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Inventaris Kelas</a>
+                    <a href="administrasi-absensi.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Absensi & Jurnal Kelas</a>
+                </div>
+            </div>
+
+            <a href="galeri.html" class="nav-link font-label-caps text-label-caps transition-colors text-on-surface-variant hover:text-primary" data-page="galeri">Galeri</a>
+        </div>
+        
+        <div class="hidden md:block">
+            <button class="bg-primary text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors shadow-md">Hubungi Kami</button>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-btn" class="md:hidden flex items-center text-on-surface-variant p-2 rounded-lg hover:bg-surface-container transition-colors">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full bg-white shadow-xl border-b border-outline-variant/20 flex-col overflow-hidden max-h-[80vh] overflow-y-auto">
+        <div class="p-6 flex flex-col gap-6">
+            <a href="index.html" class="text-on-surface font-headline-md text-lg hover:text-primary transition-colors">Beranda</a>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Profil Kelas</span>
+                <a href="prestasi.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Daftar Prestasi</a>
+                <a href="anggota.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Anggota Kelas</a>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Jadwal</span>
+                <a href="jadwal.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Jadwal Mata Pelajaran</a>
+                <a href="jadwal-piket.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Jadwal Piket</a>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Administrasi</span>
+                <a href="administrasi-inventaris.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Inventaris Kelas</a>
+                <a href="administrasi-absensi.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Absensi & Jurnal Kelas</a>
+            </div>
+            
+            <a href="galeri.html" class="text-on-surface font-headline-md text-lg hover:text-primary transition-colors">Galeri</a>
+            
+            <button class="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm text-center mt-2 shadow-md w-full hover:bg-primary/90 transition-colors">Hubungi Kami</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const page = path.split('/').pop() || 'index.html';
+            
+            // Set active state
+            const links = document.querySelectorAll('.nav-link, .nav-dropdown-btn');
+            
+            const setActive = (el) => {
+                el.classList.add('text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                el.classList.remove('text-on-surface-variant');
+            };
+            
+            if(page.includes('profil_kelas')) {
+                const el = document.querySelector('[data-group="profil"]');
+                if(el) setActive(el);
+            } else if(page.includes('jadwal')) {
+                const el = document.querySelector('[data-group="jadwal"]');
+                if(el) setActive(el);
+            } else if(page.includes('administrasi')) {
+                const el = document.querySelector('[data-group="administrasi"]');
+                if(el) setActive(el);
+            } else if(page.includes('galeri')) {
+                const el = document.querySelector('[data-page="galeri"]');
+                if(el) setActive(el);
+            } else {
+                const el = document.querySelector('[data-page="beranda"]');
+                if(el) setActive(el);
+            }
+            
+            // Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            if(btn && menu) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                    menu.classList.toggle('flex');
+                    const icon = btn.querySelector('span');
+                    if (icon) {
+                        icon.textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
+                    }
+                });
+            }
+        });
+    </script>
+</nav>
+
+<main class="pt-20 min-h-screen">
+<!-- Header Dark Band -->
+<section class="bg-primary-container h-[160px] flex items-center">
+<div class="w-full px-gutter max-w-container-max mx-auto">
+<h1 class="text-headline-xl font-headline-xl text-white mb-2">Profil Anggota</h1>
+<p class="text-body-lg text-primary-fixed/80">Mengenal lebih dekat anggota kelas XII RPL</p>
+</div>
+</section>
+<!-- Content Area -->
+<div class="w-full px-gutter max-w-container-max mx-auto -mt-10 pb-section-gap">
+<!-- Back Link -->
+<a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps mb-6 hover:underline underline-offset-4 transition-all" href="#">
+<span class="material-symbols-outlined">arrow_back</span>
+                Kembali ke Anggota Kelas
+            </a><a class="inline-flex items-center gap-2 text-primary font-label-caps text-label-caps mb-6 ml-6 px-4 py-2 rounded-lg border border-primary/20 hover:bg-primary/5 transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="">Kembali ke Organisasi</span>
+</a>
+<!-- Main Profile Card (35/65 split) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_30px_60px_-15px_rgba(0,40,142,0.08)] overflow-hidden grid grid-cols-1 md:grid-cols-[30%_35%_35%] mb-gutter" style="transform: translateY(0px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);"><!-- Column 1: Photo & Badge -->
+<div class="p-8 bg-surface-container-low/30 flex flex-col items-center border-outline-variant/30">
+<div class="w-full max-w-sm mx-auto aspect-[3/4] rounded-xl overflow-hidden mb-6 shadow-sm">
+<img id="detail-avatar" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300 ease-out" data-alt="Avatar Siswa" src="" loading="lazy" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/initials/svg?seed=Fallback&backgroundColor=00288e,7C3AED&textColor=ffffff';">
+</div>
+<div id="detail-jabatan" class="bg-tertiary-fixed text-on-tertiary-fixed px-4 py-1.5 rounded-full font-label-caps text-label-caps flex items-center gap-2 whitespace-nowrap">
+        Memuat...
+    </div>
+</div>
+<!-- Column 2 & 3 Combined: Identity & Contact -->
+<div class="flex flex-col justify-between md:col-span-2 p-8">
+<div class="flex flex-col md:flex-row md:justify-between">
+<div>
+<h1 id="detail-nama" class="font-display-lg text-[40px] font-extrabold text-primary mb-1 tracking-tight">Memuat...</h1>
+<p id="detail-absen" class="font-body-lg text-on-surface-variant mb-6">Memuat...</p>
+<div>
+<div class="inline-block bg-primary-fixed text-primary px-4 py-1 rounded-sm font-label-caps text-[10px] tracking-widest mb-2 whitespace-nowrap">TEMPAT, TANGGAL LAHIR</div>
+<p id="detail-ttl" class="font-headline-md text-on-surface">Memuat...</p>
+</div>
+</div>
+</div>
+<div class="mt-8 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+<div>
+<a class="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border border-primary text-primary font-label-caps text-label-caps hover:bg-primary/5 transition-all active:scale-95" href="#" target="_blank">
+<span class="material-symbols-outlined text-[20px]">description</span>Download CV
+            </a>
+</div>
+<div class="flex flex-col md:items-end">
+<div class="inline-block bg-primary-fixed text-primary px-4 py-1 rounded-sm font-label-caps text-[10px] tracking-widest mb-4 uppercase whitespace-nowrap">KONTAK</div>
+<div class="flex flex-col gap-3 md:items-end mb-4">
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">call</span>
+<span id="detail-whatsapp" class="font-body-md">Memuat...</span>
+</div>
+<div class="flex items-center gap-3 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">location_on</span>
+<span id="detail-alamat" class="font-body-md">Memuat...</span>
+</div>
+</div>
+<div class="flex gap-3 md:justify-end">
+<a class="w-9 h-9 rounded-full bg-outline-variant/20 flex items-center justify-center text-on-surface-variant/60 hover:bg-primary/10 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">person</span>
+</a>
+<a class="w-9 h-9 rounded-full bg-outline-variant/20 flex items-center justify-center text-on-surface-variant/60 hover:bg-primary/10 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+<a class="w-9 h-9 rounded-full bg-outline-variant/20 flex items-center justify-center text-on-surface-variant/60 hover:bg-primary/10 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">work</span>
+</a>
+</div>
+</div>
+</div>
+</div></div>
+<!-- Secondary Cards (50/50 split) -->
+<div class="bg-surface-container-lowest rounded-xl p-10 shadow-[0_20px_40px_-10px_rgba(0,40,142,0.04)] mb-gutter"><div class="inline-block bg-primary-fixed text-primary px-3 py-1 rounded-sm font-label-caps text-[10px] tracking-widest mb-4 uppercase whitespace-nowrap">TENTANG SAYA</div><h2 class="font-headline-xl text-primary mb-4">Mengenal Lebih Dekat</h2><p id="detail-deskripsi" class="font-body-lg text-on-surface-variant leading-relaxed max-w-3xl">Memuat...</p></div><div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Hobbies Card -->
+<div class="bg-surface-container-lowest rounded-xl p-10 shadow-[0_20px_40px_-10px_rgba(0,40,142,0.04)]">
+<div class="inline-block bg-primary-fixed text-primary px-3 py-1 rounded-sm font-label-caps text-[10px] tracking-widest mb-4 whitespace-nowrap">HOBI</div>
+<h2 class="font-headline-xl text-primary mb-6">Hobi &amp; Minat</h2>
+<div id="detail-hobi-container" class="flex flex-wrap gap-3">
+<!-- Loaded dynamically via JS -->
+</div>
+</div>
+<!-- Motivation Card -->
+<div class="bg-surface-container-lowest rounded-xl p-10 shadow-[0_20px_40px_-10px_rgba(0,40,142,0.04)] relative overflow-hidden">
+
+<h2 class="font-headline-xl text-primary mb-6">Kata Motivasi</h2>
+<div class="relative">
+<span class="absolute -top-4 -left-6 text-tertiary/10 font-serif text-[120px] leading-none pointer-events-none"></span>
+<blockquote id="detail-motivasi" class="font-body-lg italic text-on-surface-variant leading-relaxed relative z-10 pl-4 border-l-2 border-tertiary/20">
+                            Memuat...
+                        </blockquote>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Component -->
+<footer class="w-full bg-[#F8F9FA] pt-16 pb-8 border-t border-outline-variant/20"><div class="max-w-container-max mx-auto px-gutter"><div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12"><div class="flex flex-col gap-4"><div class="font-display-lg-mobile text-display-lg-mobile font-extrabold text-primary tracking-tight">XII RPL</div><p class="text-on-surface-variant font-body-md max-w-md">Mewujudkan generasi digital yang kompeten, berkarakter, dan siap berkontribusi untuk masa depan.</p></div><div class="grid grid-cols-3 gap-8 md:justify-end"><div class="flex flex-col gap-4"><h4 class="font-label-caps text-label-caps text-on-surface font-bold">NAVIGASI</h4><div class="flex flex-col gap-2"><a class="text-on-surface-variant/70 font-body-md hover:text-primary" href="#">Beranda</a><a class="text-on-surface-variant/70 font-body-md hover:text-primary" href="#">Prestasi</a><a class="text-on-surface-variant/70 font-body-md hover:text-primary" href="#">Organisasi</a></div></div><div class="flex flex-col gap-4"><h4 class="font-label-caps text-label-caps text-on-surface font-bold">INFO KELAS</h4><div class="flex flex-col gap-2"><a class="text-on-surface-variant/70 font-body-md hover:text-primary" href="#">Akademik</a><a class="text-on-surface-variant/70 font-body-md hover:text-primary" href="#">Kedisiplinan</a><a class="text-on-surface-variant/70 font-body-md hover:text-primary" href="#">Inventaris</a></div></div><div class="flex flex-col gap-4"><h4 class="font-label-caps text-label-caps text-on-surface font-bold">HUBUNGI</h4><div class="flex gap-2"><div class="w-8 h-8 rounded-full bg-outline-variant/20 flex items-center justify-center text-on-surface-variant/60"><span class="material-symbols-outlined text-[18px]">mail</span></div><div class="w-8 h-8 rounded-full bg-outline-variant/20 flex items-center justify-center text-on-surface-variant/60"><span class="material-symbols-outlined text-[18px]">share</span></div></div></div></div></div><div class="w-full h-[1px] bg-outline-variant/30 mb-8"></div><div class="text-center"><p class="text-on-surface-variant/60 text-[14px] font-body-md">© 2024 XII RPL - SMK Negeri Unggulan. All rights reserved.</p></div></div></footer>
+<script>
+        // Micro-interactions for the profile card
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('.bg-surface-container-lowest');
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/supabase-config.js"></script>
+<script src="./js/global-ui.js"></script>
+    <script src="./js/supabase-fetch.js"></script></body></html>

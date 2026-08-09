@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin | XII RPL</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/js/supabase-config.js"></script>
+    <script src="/admin/js/auth-guard.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f7f9fb; }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined'; font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
+        <div class="flex justify-between items-center w-full px-6 h-16 max-w-6xl mx-auto">
+            <div class="font-bold text-xl text-blue-800">XII RPL Admin</div>
+            <div class="flex items-center gap-4">
+                <button onclick="window.logoutAdmin()" class="text-sm font-bold text-slate-500 hover:text-blue-800 transition-colors">
+                    Keluar
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12">
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-extrabold text-blue-900 mb-2">Admin Dashboard</h1>
+            <p class="text-slate-500">Pilih modul yang ingin Anda kelola.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Absensi -->
+            <a href="/admin/absensi.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all group flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-3xl">fact_check</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1">Daftar Hadir</h3>
+                <p class="text-sm text-slate-500">Input presensi harian 35 siswa</p>
+            </a>
+            
+            <!-- Jurnal -->
+            <a href="/admin/jurnal.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:blue-300 transition-all group flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-3xl">book</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1">Jurnal Kelas</h3>
+                <p class="text-sm text-slate-500">Kelola riwayat pembelajaran</p>
+            </a>
+
+            <!-- Inventaris -->
+            <a href="/admin/inventaris.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:blue-300 transition-all group flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-3xl">inventory_2</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1">Inventaris</h3>
+                <p class="text-sm text-slate-500">Kelola aset & barang kelas</p>
+            </a>
+
+            <!-- Jadwal Piket -->
+            <a href="/admin/jadwal-piket.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:blue-300 transition-all group flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <span class="material-symbols-outlined text-3xl">cleaning_services</span>
+                </div>
+                <h3 class="font-bold text-lg mb-1">Jadwal Piket</h3>
+                <p class="text-sm text-slate-500">Rolling petugas kebersihan</p>
+            </a>
+        </div>
+    </main>
+
+    <footer class="mt-auto border-t border-slate-200 py-6 text-center">
+        <p class="text-xs font-bold text-slate-400 tracking-widest">XII RPL ADMIN PANEL © 2024</p>
+    </footer>
+</body>
+</html>

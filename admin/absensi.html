@@ -1,0 +1,394 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>XII RPL Admin - Input Daftar Hadir</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/admin/js/auth-guard.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#dfe0e0",
+                    "inverse-primary": "#b8c4ff",
+                    "on-tertiary-fixed": "#380d00",
+                    "inverse-surface": "#2d3133",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#757684",
+                    "on-primary-container": "#a8b8ff",
+                    "surface-container-high": "#e6e8ea",
+                    "surface": "#f7f9fb",
+                    "outline-variant": "#c4c5d5",
+                    "tertiary": "#611e00",
+                    "primary": "#00288e",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-surface-variant": "#444653",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "on-background": "#191c1e",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "background": "#f7f9fb",
+                    "on-secondary-fixed-variant": "#454747",
+                    "primary-fixed-dim": "#b8c4ff",
+                    "on-primary-fixed-variant": "#173bab",
+                    "on-error-container": "#93000a",
+                    "secondary": "#5d5f5f",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed": "#ffdbce",
+                    "on-tertiary-fixed-variant": "#802a00",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "surface-container": "#eceef0",
+                    "on-tertiary-container": "#ffa583",
+                    "tertiary-fixed-dim": "#ffb59a",
+                    "surface-tint": "#3755c3",
+                    "on-secondary": "#ffffff",
+                    "on-primary-fixed": "#001453",
+                    "error": "#ba1a1a",
+                    "surface-dim": "#d8dadc",
+                    "primary-container": "#1e40af",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-error": "#ffffff",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-container-low": "#f2f4f6",
+                    "on-secondary-container": "#616363",
+                    "tertiary-container": "#872d00",
+                    "primary-fixed": "#dde1ff",
+                    "surface-bright": "#f7f9fb",
+                    "on-surface": "#191c1e"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "120px",
+                    "unit": "8px",
+                    "margin-mobile": "20px",
+                    "container-max": "1200px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "headline-xl": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "label-caps": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-xl": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .status-btn-active-hadir { @apply bg-green-600 text-white shadow-md scale-105; }
+        .status-btn-active-izin { @apply bg-blue-600 text-white shadow-md scale-105; }
+        .status-btn-active-sakit { @apply bg-yellow-500 text-white shadow-md scale-105; }
+        .status-btn-active-alpa { @apply bg-red-600 text-white shadow-md scale-105; }
+        
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c4c5d5; border-radius: 10px; }
+        
+        .academic-glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface/80 backdrop-blur-md border-b border-outline-variant sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-gutter h-16 max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<a href="/admin/index.html" class="material-symbols-outlined text-slate-400 hover:text-primary transition-colors">arrow_back</a>
+<span class="font-headline-md text-headline-md font-bold text-primary">XII RPL Admin</span>
+</div>
+<nav class="hidden md:flex space-x-8">
+<a class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1" href="/admin/absensi.html">Daftar Hadir</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="/admin/jurnal.html">Jurnal</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="/admin/inventaris.html">Inventaris</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors" href="/admin/jadwal-piket.html">Piket</a>
+</nav>
+<div class="flex items-center gap-4">
+<button onclick="window.logoutAdmin()" class="font-label-caps text-label-caps text-primary hover:bg-surface-container transition-all px-3 py-2 rounded-lg">Keluar</button>
+</div>
+</div>
+</header>
+<main class="flex-grow max-w-container-max mx-auto w-full px-gutter py-8 space-y-8">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-headline-xl text-headline-xl text-primary">Input Daftar Hadir</h1>
+<p class="text-on-surface-variant mt-1">Semua siswa otomatis berstatus Hadir - cukup ubah siswa yang tidak masuk.</p>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Tanggal Presensi</label>
+<div class="relative">
+<input id="tanggal-presensi" class="bg-surface border border-outline-variant rounded-xl px-4 py-2 focus:ring-2 focus:ring-primary focus:outline-none text-on-surface font-semibold" type="date">
+</div>
+</div>
+</div>
+<!-- Info Banner -->
+<div class="bg-primary-fixed text-on-primary-fixed-variant p-4 rounded-xl flex items-center gap-4 shadow-sm">
+<span class="material-symbols-outlined text-[28px]">info</span>
+<p class="font-body-md italic">35 siswa berstatus Hadir secara default. Klik tombol status untuk mengubah siswa yang Izin, Sakit, atau Alpa.</p>
+</div>
+<!-- Content Section: Bento-ish layout -->
+<div class="bg-white rounded-2xl shadow-[0_30px_60px_-15px_rgba(0,40,142,0.04)] border border-outline-variant/30 overflow-hidden">
+<!-- Table Controls -->
+<div class="p-6 border-b border-outline-variant/30 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-surface-container-lowest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">group</span>
+<span class="font-headline-md text-headline-md text-primary">Daftar Siswa XII RPL</span>
+</div>
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input id="search-input" class="w-full pl-10 pr-4 py-2.5 rounded-full border border-outline-variant bg-surface focus:ring-2 focus:ring-primary focus:outline-none text-body-md transition-all" placeholder="Cari nama siswa..." type="text">
+</div>
+</div>
+<!-- Student Table -->
+<div class="overflow-x-auto">
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container text-left border-b border-outline-variant">
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant w-20">No</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant">Nama Siswa</th>
+<th class="px-6 py-4 font-label-caps text-label-caps text-on-surface-variant text-center">Status Kehadiran</th>
+</tr>
+</thead>
+<tbody id="table-body" class="divide-y divide-outline-variant/20">
+<tr><td colspan="3" class="text-center py-8 text-slate-500 italic">Memuat data siswa...</td></tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 border-t border-outline-variant/30 flex justify-between items-center bg-surface-container-lowest">
+    <span id="page-info" class="text-sm font-semibold text-on-surface-variant">Menampilkan 0 data</span>
+    <div class="flex gap-2">
+        <button id="btn-prev" class="px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-container disabled:opacity-50 text-sm font-bold">Prev</button>
+        <button id="btn-next" class="px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-container disabled:opacity-50 text-sm font-bold">Next</button>
+    </div>
+</div>
+</div>
+<!-- Bottom spacing for sticky bar -->
+<div class="h-32"></div>
+</div>
+</main>
+<!-- Sticky Bottom Bar -->
+<footer class="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-lg border-t border-outline-variant/30 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+<div class="max-w-container-max mx-auto px-gutter h-20 flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-6 overflow-x-auto w-full md:w-auto pb-2 md:pb-0">
+<div class="flex items-center gap-2 whitespace-nowrap">
+<span class="w-3 h-3 rounded-full bg-green-600"></span>
+<span class="font-body-md text-on-surface-variant"><span class="font-bold text-on-surface">Hadir:</span> <span id="count-hadir">0</span></span>
+</div>
+<div class="flex items-center gap-2 whitespace-nowrap">
+<span class="w-3 h-3 rounded-full bg-blue-600"></span>
+<span class="font-body-md text-on-surface-variant"><span class="font-bold text-on-surface">Izin:</span> <span id="count-izin">0</span></span>
+</div>
+<div class="flex items-center gap-2 whitespace-nowrap">
+<span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+<span class="font-body-md text-on-surface-variant"><span class="font-bold text-on-surface">Sakit:</span> <span id="count-sakit">0</span></span>
+</div>
+<div class="flex items-center gap-2 whitespace-nowrap">
+<span class="w-3 h-3 rounded-full bg-red-600"></span>
+<span class="font-body-md text-on-surface-variant"><span class="font-bold text-on-surface">Alpa:</span> <span id="count-alpa">0</span></span>
+</div>
+</div>
+<div class="flex items-center gap-4 w-full md:w-auto">
+<button id="btn-save" class="w-full md:w-auto bg-primary text-white font-headline-md text-[16px] px-8 py-3 rounded-xl hover:bg-primary-container transition-all active:scale-95 shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                    Simpan Presensi
+                </button>
+</div>
+</div>
+</footer>
+<script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!window.supabaseClient) return;
+
+            // Current date setter
+            const dateInput = document.getElementById('tanggal-presensi');
+            dateInput.value = new Date().toISOString().split('T')[0];
+
+            let allStudents = [];
+            let currentStatusMap = {}; // Maps profile_id -> status
+            let currentPage = 1;
+            const itemsPerPage = 10;
+            let filteredStudents = [];
+            
+            const tbody = document.getElementById('table-body');
+            const searchInput = document.getElementById('search-input');
+            const btnSave = document.getElementById('btn-save');
+
+            const loadData = async () => {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center py-8 text-slate-500 italic">Memuat data...</td></tr>';
+                try {
+                    // Fetch students
+                    if (allStudents.length === 0) {
+                        const { data: pData, error: pError } = await window.supabaseClient.from('profiles').select('*').order('nomor_absen', { ascending: true });
+                        if (pError) throw pError;
+                        allStudents = pData || [];
+                    }
+
+                    // Fetch absensi for selected date
+                    const selDate = dateInput.value;
+                    const { data: aData, error: aError } = await window.supabaseClient.from('absensi').select('*').eq('tanggal', selDate);
+                    if (aError) throw aError;
+
+                    const absensiMap = {};
+                    (aData || []).forEach(a => {
+                        absensiMap[a.profile_id] = a.status;
+                    });
+
+                    // Build initial map defaulting to 'Hadir'
+                    allStudents.forEach(s => {
+                        currentStatusMap[s.id] = absensiMap[s.id] || 'Hadir';
+                    });
+
+                    applyFilters();
+
+                } catch (err) {
+                    tbody.innerHTML = `<tr><td colspan="3" class="text-center py-8 text-red-500 italic">Error: ${err.message}</td></tr>`;
+                }
+            };
+
+            const applyFilters = () => {
+                const term = searchInput.value.toLowerCase();
+                filteredStudents = allStudents.filter(s => s.nama.toLowerCase().includes(term));
+                currentPage = 1;
+                renderTable();
+                updateMetrics();
+            };
+
+            const updateMetrics = () => {
+                let counts = { Hadir: 0, Izin: 0, Sakit: 0, Alpa: 0 };
+                allStudents.forEach(s => {
+                    counts[currentStatusMap[s.id]]++;
+                });
+                document.getElementById('count-hadir').textContent = counts.Hadir;
+                document.getElementById('count-izin').textContent = counts.Izin;
+                document.getElementById('count-sakit').textContent = counts.Sakit;
+                document.getElementById('count-alpa').textContent = counts.Alpa;
+            };
+
+            window.changeStatus = (id, newStatus) => {
+                currentStatusMap[id] = newStatus;
+                renderTable();
+                updateMetrics();
+            };
+
+            const renderTable = () => {
+                if (filteredStudents.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center py-8 text-slate-500 italic">Siswa tidak ditemukan.</td></tr>';
+                    document.getElementById('page-info').textContent = 'Menampilkan 0 data';
+                    return;
+                }
+
+                const startIdx = (currentPage - 1) * itemsPerPage;
+                const paginated = filteredStudents.slice(startIdx, startIdx + itemsPerPage);
+
+                tbody.innerHTML = paginated.map(s => {
+                    const st = currentStatusMap[s.id];
+                    
+                    const btnClass = (type, match) => {
+                        if (st !== match) return "text-on-surface-variant hover:bg-white";
+                        if (match === 'Hadir') return "bg-green-600 text-white shadow-sm scale-105";
+                        if (match === 'Izin') return "bg-blue-600 text-white shadow-sm scale-105";
+                        if (match === 'Sakit') return "bg-yellow-500 text-white shadow-sm scale-105";
+                        return "bg-red-600 text-white shadow-sm scale-105";
+                    };
+
+                    return `
+                    <tr class="hover:bg-surface-container-low transition-colors border-b border-outline-variant/20">
+                        <td class="px-6 py-4 text-on-surface-variant font-semibold">${String(s.nomor_absen).padStart(2, '0')}</td>
+                        <td class="px-6 py-4 font-headline-md text-[16px] text-primary">${s.nama}</td>
+                        <td class="px-6 py-4">
+                            <div class="flex justify-center items-center gap-1 bg-surface-container p-1 rounded-full w-fit mx-auto">
+                                <button onclick="changeStatus('${s.id}', 'Hadir')" class="px-4 py-1.5 rounded-full text-[13px] font-bold transition-all ${btnClass(st, 'Hadir')}">Hadir</button>
+                                <button onclick="changeStatus('${s.id}', 'Izin')" class="px-4 py-1.5 rounded-full text-[13px] font-bold transition-all ${btnClass(st, 'Izin')}">Izin</button>
+                                <button onclick="changeStatus('${s.id}', 'Sakit')" class="px-4 py-1.5 rounded-full text-[13px] font-bold transition-all ${btnClass(st, 'Sakit')}">Sakit</button>
+                                <button onclick="changeStatus('${s.id}', 'Alpa')" class="px-4 py-1.5 rounded-full text-[13px] font-bold transition-all ${btnClass(st, 'Alpa')}">Alpa</button>
+                            </div>
+                        </td>
+                    </tr>`;
+                }).join('');
+
+                const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+                document.getElementById('page-info').textContent = `Halaman ${currentPage} dari ${totalPages}`;
+                document.getElementById('btn-prev').disabled = currentPage === 1;
+                document.getElementById('btn-next').disabled = currentPage === totalPages;
+            };
+
+            document.getElementById('btn-prev').addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderTable(); } });
+            document.getElementById('btn-next').addEventListener('click', () => { 
+                if (currentPage < Math.ceil(filteredStudents.length / itemsPerPage)) { currentPage++; renderTable(); } 
+            });
+
+            searchInput.addEventListener('input', applyFilters);
+            dateInput.addEventListener('change', loadData);
+
+            btnSave.addEventListener('click', async () => {
+                const selDate = dateInput.value;
+                const originalHtml = btnSave.innerHTML;
+                btnSave.innerHTML = `<span class="material-symbols-outlined animate-spin">progress_activity</span> Menyimpan...`;
+                btnSave.disabled = true;
+
+                try {
+                    const upsertData = allStudents.map(s => ({
+                        profile_id: s.id,
+                        nama: s.nama,
+                        tanggal: selDate,
+                        status: currentStatusMap[s.id],
+                        keterangan: '-' // default for admin batch input
+                    }));
+
+                    // We need the ID for upsert to work correctly if they already exist.
+                    // But Supabase doesn't natively upsert on non-PK without unique constraints.
+                    // A safe way: Delete all for this date, then insert.
+                    await window.supabaseClient.from('absensi').delete().eq('tanggal', selDate);
+                    const { error } = await window.supabaseClient.from('absensi').insert(upsertData);
+                    
+                    if (error) throw error;
+                    alert("Berhasil menyimpan presensi!");
+                } catch(err) {
+                    alert("Gagal menyimpan presensi: " + err.message);
+                } finally {
+                    btnSave.innerHTML = originalHtml;
+                    btnSave.disabled = false;
+                }
+            });
+
+            await loadData();
+        });
+    </script>
+
+
+<footer class="w-full py-8 mt-auto border-t border-outline-variant/30 bg-surface-container-lowest">
+  <div class="max-w-container-max mx-auto px-gutter text-center">
+    <p class="font-label-caps text-label-caps text-on-surface-variant tracking-widest">
+      XII RPL ADMIN PANEL • SISTEM INFORMASI AKADEMIK © 2024
+    </p>
+  </div>
+</footer></body></html>

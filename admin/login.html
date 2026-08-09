@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html class="light" lang="id"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login Admin | XII RPL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/admin/js/auth-guard.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#e0e3e5",
+                    "on-background": "#191c1e",
+                    "on-error": "#ffffff",
+                    "surface-container-highest": "#e0e3e5",
+                    "primary-fixed-dim": "#b8c4ff",
+                    "primary": "#00288e",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#757684",
+                    "tertiary-fixed": "#ffdbce",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#802a00",
+                    "on-primary-container": "#a8b8ff",
+                    "on-tertiary-container": "#ffa583",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#872d00",
+                    "secondary-fixed-dim": "#c6c6c7",
+                    "primary-fixed": "#dde1ff",
+                    "tertiary": "#611e00",
+                    "surface-dim": "#d8dadc",
+                    "primary-container": "#1e40af",
+                    "secondary": "#5d5f5f",
+                    "on-tertiary": "#ffffff",
+                    "surface-container": "#eceef0",
+                    "on-surface": "#191c1e",
+                    "surface-container-low": "#f2f4f6",
+                    "outline-variant": "#c4c5d5",
+                    "surface": "#f7f9fb",
+                    "on-secondary-container": "#616363",
+                    "on-secondary-fixed-variant": "#454747",
+                    "inverse-on-surface": "#eff1f3",
+                    "surface-bright": "#f7f9fb",
+                    "on-tertiary-fixed": "#380d00",
+                    "secondary-fixed": "#e2e2e2",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "on-primary-fixed": "#001453",
+                    "on-primary": "#ffffff",
+                    "surface-tint": "#3755c3",
+                    "surface-container-high": "#e6e8ea",
+                    "on-primary-fixed-variant": "#173bab",
+                    "inverse-surface": "#2d3133",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb59a",
+                    "secondary-container": "#dfe0e0",
+                    "inverse-primary": "#b8c4ff",
+                    "background": "#f7f9fb",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#444653"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-gap": "120px",
+                    "margin-mobile": "20px",
+                    "container-max": "1200px",
+                    "gutter": "24px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "label-caps": ["Plus Jakarta Sans"],
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-xl": ["Plus Jakarta Sans"],
+                    "display-lg": ["Plus Jakarta Sans"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-xl-mobile": ["Plus Jakarta Sans"],
+                    "headline-md": ["Plus Jakarta Sans"],
+                    "display-lg-mobile": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-xl": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-xl-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined { font-family: 'Material Symbols Outlined';
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .login-card {
+            box-shadow: 0 4px 30px rgba(0, 40, 142, 0.04);
+        }
+    </style>
+</head>
+<body class="bg-surface min-h-screen flex items-center justify-center p-gutter">
+<!-- Main Wrapper ensuring centering -->
+<main class="w-full max-w-[400px] flex flex-col items-center justify-center">
+<div class="bg-surface-container-lowest rounded-xl p-10 login-card border border-outline-variant/30 flex flex-col items-center w-full">
+<!-- Brand Identity -->
+<div class="mb-10 text-center">
+<h1 class="font-display-lg text-primary tracking-tight mb-2 select-none" style="font-size: 32px; line-height: 1;">XII RPL</h1>
+<p class="font-label-caps text-on-surface-variant uppercase tracking-[0.2em] opacity-70">Admin Panel</p>
+</div>
+<!-- Login Form -->
+<form action="#" class="w-full space-y-6" id="loginForm">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="font-label-caps text-on-surface-variant block ml-1" for="email">Email</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant transition-colors group-focus-within:text-primary">mail</span>
+<input class="w-full pl-12 pr-4 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-on-surface placeholder:text-outline-variant/60" id="email" name="email" placeholder="admin@xiirpl.com" required="" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<label class="font-label-caps text-on-surface-variant block ml-1" for="password">Password</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline-variant transition-colors group-focus-within:text-primary">lock</span>
+<input class="w-full pl-12 pr-12 py-3 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-body-md text-on-surface placeholder:text-outline-variant/60" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-4 top-1/2 -translate-y-1/2 text-outline-variant hover:text-primary transition-colors" onclick="togglePassword()" type="button">
+<span class="material-symbols-outlined" id="eyeIcon">visibility</span>
+</button>
+</div>
+</div>
+<!-- Submit Button -->
+<div class="pt-2">
+<button class="w-full bg-[#14235B] hover:bg-primary active:scale-[0.98] text-white font-label-caps py-4 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2" type="submit">
+<span>Masuk</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</form>
+<!-- Navigation Link -->
+<div class="mt-8">
+<a class="font-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2 group" href="/">
+<span class="material-symbols-outlined text-[16px] transition-transform group-hover:-translate-x-1">arrow_back</span>
+<span>Kembali ke Beranda</span>
+</a>
+</div>
+</div>
+<!-- Utility Footer -->
+<p class="text-center mt-8 font-label-caps text-outline-variant/60">
+            © 2024 SMKN Unggulan Jakarta
+        </p>
+</main>
+<script>
+        // Micro-interaction: Toggle Password Visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.textContent = 'visibility_off';
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.textContent = 'visibility';
+            }
+        }
+
+        // Form Submit Implementation for Native Supabase Auth
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="animate-spin material-symbols-outlined">progress_activity</span>`;
+            
+            try {
+                const { data, error } = await window.supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    throw error;
+                }
+                
+                // Success: Redirect to dashboard
+                window.location.href = '/admin/index.html';
+                
+            } catch (err) {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                alert('Login Gagal: ' + err.message);
+            }
+        });
+    </script>
+</body></html>

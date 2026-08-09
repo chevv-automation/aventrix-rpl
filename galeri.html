@@ -1,0 +1,399 @@
+<!DOCTYPE html><html lang="id"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Galeri Kelas - XII RPL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#b8c4ff",
+                      "on-secondary-fixed": "#1a1c1c",
+                      "tertiary-fixed-dim": "#ffb59a",
+                      "tertiary-container": "#872d00",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#dfe0e0",
+                      "primary-container": "#1e40af",
+                      "surface": "#f7f9fb",
+                      "on-tertiary-container": "#ffa583",
+                      "surface-bright": "#f7f9fb",
+                      "on-secondary": "#ffffff",
+                      "tertiary-fixed": "#ffdbce",
+                      "secondary": "#5d5f5f",
+                      "on-tertiary-fixed": "#380d00",
+                      "on-surface": "#191c1e",
+                      "inverse-surface": "#2d3133",
+                      "surface-container-lowest": "#ffffff",
+                      "primary": "#00288e",
+                      "on-primary-fixed": "#001453",
+                      "on-tertiary": "#ffffff",
+                      "outline-variant": "#c4c5d5",
+                      "surface-tint": "#3755c3",
+                      "outline": "#757684",
+                      "on-primary-fixed-variant": "#173bab",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container-highest": "#e0e3e5",
+                      "secondary-fixed-dim": "#c6c6c7",
+                      "tertiary": "#611e00",
+                      "inverse-on-surface": "#eff1f3",
+                      "background": "#f7f9fb",
+                      "surface-dim": "#d8dadc",
+                      "on-background": "#191c1e",
+                      "inverse-primary": "#b8c4ff",
+                      "surface-container-high": "#e6e8ea",
+                      "error": "#ba1a1a",
+                      "surface-container": "#eceef0",
+                      "primary-fixed": "#dde1ff",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed": "#e2e2e2",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#454747",
+                      "on-primary": "#ffffff",
+                      "surface-container-low": "#f2f4f6",
+                      "on-surface-variant": "#444653",
+                      "on-primary-container": "#a8b8ff",
+                      "on-tertiary-fixed-variant": "#802a00",
+                      "on-secondary-container": "#616363",
+                      "accent-purple": "#7C3AED"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "gutter": "24px",
+                      "margin-mobile": "20px",
+                      "container-max": "1200px",
+                      "section-gap": "120px"
+              },
+              "fontFamily": {
+                      "headline-xl-mobile": ["Plus Jakarta Sans"],
+                      "display-lg": ["Plus Jakarta Sans"],
+                      "display-lg-mobile": ["Plus Jakarta Sans"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "headline-md": ["Plus Jakarta Sans"],
+                      "label-caps": ["Plus Jakarta Sans"],
+                      "headline-xl": ["Plus Jakarta Sans"],
+                      "body-md": ["Plus Jakarta Sans"]
+              },
+              "fontSize": {
+                      "headline-xl-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                      "headline-xl": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+        @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 4; } }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+        .gallery-card:hover .gallery-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<nav class="fixed top-0 w-full z-50 bg-white/90 backdrop-blur-md border-b border-outline-variant/30 shadow-sm h-20 transition-all duration-300">
+    <div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto h-full">
+        <a href="index.html" class="font-display-lg-mobile text-2xl font-extrabold text-primary tracking-tight">XII RPL</a>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-8">
+            <a href="index.html" class="nav-link font-label-caps text-label-caps transition-colors text-on-surface-variant hover:text-primary" data-page="beranda">Beranda</a>
+            
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="profil">Profil Kelas <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="prestasi.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Daftar Prestasi</a>
+                    <a href="anggota.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Anggota Kelas</a>
+                </div>
+            </div>
+
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="jadwal">Jadwal <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="jadwal.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Jadwal Mata Pelajaran</a>
+                    <a href="jadwal-piket.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Jadwal Piket</a>
+                </div>
+            </div>
+
+            <div class="relative group">
+                <button class="nav-dropdown-btn flex items-center gap-1 font-label-caps text-label-caps transition-all text-on-surface-variant hover:text-primary" data-group="administrasi">Administrasi <span class="material-symbols-outlined text-[16px] group-hover:rotate-180 transition-transform duration-300">expand_more</span></button>
+                <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-outline-variant/20 z-50 py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                    <a href="administrasi-inventaris.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Inventaris Kelas</a>
+                    <a href="administrasi-absensi.html" class="block px-6 py-3 text-[14px] text-on-surface hover:bg-primary/5 hover:text-primary transition-colors">Absensi & Jurnal Kelas</a>
+                </div>
+            </div>
+
+            <a href="galeri.html" class="nav-link font-label-caps text-label-caps transition-colors text-on-surface-variant hover:text-primary" data-page="galeri">Galeri</a>
+        </div>
+        
+        <div class="hidden md:block">
+            <button class="bg-primary text-white px-6 py-2.5 rounded-lg font-bold text-sm hover:bg-primary/90 transition-colors shadow-md">Hubungi Kami</button>
+        </div>
+        
+        <!-- Mobile Menu Toggle -->
+        <button id="mobile-menu-btn" class="md:hidden flex items-center text-on-surface-variant p-2 rounded-lg hover:bg-surface-container transition-colors">
+            <span class="material-symbols-outlined text-3xl">menu</span>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="hidden absolute top-20 left-0 w-full bg-white shadow-xl border-b border-outline-variant/20 flex-col overflow-hidden max-h-[80vh] overflow-y-auto">
+        <div class="p-6 flex flex-col gap-6">
+            <a href="index.html" class="text-on-surface font-headline-md text-lg hover:text-primary transition-colors">Beranda</a>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Profil Kelas</span>
+                <a href="prestasi.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Daftar Prestasi</a>
+                <a href="anggota.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Anggota Kelas</a>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Jadwal</span>
+                <a href="jadwal.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Jadwal Mata Pelajaran</a>
+                <a href="jadwal-piket.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Jadwal Piket</a>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <span class="text-primary/70 text-xs font-bold uppercase tracking-widest border-b border-outline-variant/20 pb-2">Administrasi</span>
+                <a href="administrasi-inventaris.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Inventaris Kelas</a>
+                <a href="administrasi-absensi.html" class="text-on-surface-variant hover:text-primary pl-2 transition-colors">Absensi & Jurnal Kelas</a>
+            </div>
+            
+            <a href="galeri.html" class="text-on-surface font-headline-md text-lg hover:text-primary transition-colors">Galeri</a>
+            
+            <button class="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm text-center mt-2 shadow-md w-full hover:bg-primary/90 transition-colors">Hubungi Kami</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            const page = path.split('/').pop() || 'index.html';
+            
+            // Set active state
+            const links = document.querySelectorAll('.nav-link, .nav-dropdown-btn');
+            
+            const setActive = (el) => {
+                el.classList.add('text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                el.classList.remove('text-on-surface-variant');
+            };
+            
+            if(page.includes('profil_kelas')) {
+                const el = document.querySelector('[data-group="profil"]');
+                if(el) setActive(el);
+            } else if(page.includes('jadwal')) {
+                const el = document.querySelector('[data-group="jadwal"]');
+                if(el) setActive(el);
+            } else if(page.includes('administrasi')) {
+                const el = document.querySelector('[data-group="administrasi"]');
+                if(el) setActive(el);
+            } else if(page.includes('galeri')) {
+                const el = document.querySelector('[data-page="galeri"]');
+                if(el) setActive(el);
+            } else {
+                const el = document.querySelector('[data-page="beranda"]');
+                if(el) setActive(el);
+            }
+            
+            // Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const menu = document.getElementById('mobile-menu');
+            if(btn && menu) {
+                btn.addEventListener('click', () => {
+                    menu.classList.toggle('hidden');
+                    menu.classList.toggle('flex');
+                    const icon = btn.querySelector('span');
+                    if (icon) {
+                        icon.textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
+                    }
+                });
+            }
+        });
+    </script>
+</nav>
+
+<!-- TopNavBar -->
+
+<main class="pt-[72px]">
+<!-- Header Band -->
+<header class="bg-primary py-16 pt-32 px-gutter">
+<div class="max-w-container-max mx-auto">
+
+<h1 class="font-headline-xl text-headline-xl text-white mb-2">Galeri Kelas</h1>
+<p class="font-body-lg text-body-lg text-primary-fixed max-w-2xl">Kumpulan momen dan kegiatan XII RPL sepanjang tahun ajaran</p>
+</div>
+</header>
+<!-- Filters -->
+<section class="py-8 bg-surface-container-lowest">
+<div class="max-w-container-max mx-auto px-gutter overflow-x-auto">
+<div class="flex items-center gap-3 whitespace-nowrap min-w-max pb-2">
+<button class="bg-accent-purple text-white px-6 py-2 rounded-full font-label-caps text-label-caps hover:opacity-90 transition-all shadow-sm">Semua</button>
+<button class="border border-outline-variant text-secondary px-6 py-2 rounded-full font-label-caps text-label-caps hover:bg-surface-container transition-all">Kegiatan Kelas</button>
+<button class="border border-outline-variant text-secondary px-6 py-2 rounded-full font-label-caps text-label-caps hover:bg-surface-container transition-all">Praktikum</button>
+<button class="border border-outline-variant text-secondary px-6 py-2 rounded-full font-label-caps text-label-caps hover:bg-surface-container transition-all">Piket</button>
+<button class="border border-outline-variant text-secondary px-6 py-2 rounded-full font-label-caps text-label-caps hover:bg-surface-container transition-all">Acara Sekolah</button>
+</div>
+</div>
+</section>
+<!-- Masonry Grid -->
+<section class="py-12 bg-surface">
+<div class="max-w-container-max mx-auto px-gutter">
+<div class="masonry-grid">
+<!-- Item 1 -->
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-auto object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="A group of Indonesian high school students in batik and white uniforms cheering and celebrating together during their graduation party. The scene is bright and joyful, set outdoors with colorful banners in the background under a warm sunlight. The visual style is professional, high-end photography with a focus on emotional expression and institutional pride." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkcQj0N_ZLGrRjrGQ4NqhomQoD9MYQJKZY3cf9EMqbVxcXjC7kTVrxchFgiD--TAA7_3NxbEY6ZhpZdL94DMGppQ26EU3PXq1KPRRFT_iKfqsp08JOeKbs_ytknXj1VW2K-rTXrEnckSjjFR_mnpXpe8IikmGDqNXpBiZBG3aVMIdFLxlgElpe2CUOxwLsM9iTrzr7mhUQXKxDfnxbiyinavXpSvsjkMhy1hW61yMWvS6M_2PeQQ4HEw">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Kegiatan Kelas</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Perayaan Kelulusan Angkatan 2024</h3>
+</div>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-[400px] object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="University students working collaboratively on a detailed architectural model in a brightly lit, modern design studio. The setting is filled with drafting tools, blueprints, and soft overhead studio lighting, creating a focused academic environment. The color palette is clean, dominated by neutral wood tones and crisp whites, reflecting a professional and innovative educational atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfSCinxRo5nWkFXmiqI8xVODZFIXcmIMy-2ad1u6ONaA4nnJuG0iKqkasGp-T7c-0VtnS1CiuRAm1qXB5E9HqOLDkCPgrNXw5pPPDAW9kWB9W5srEFmNUquTo93TeyaGFHXJk_0K9XNCwckLrdEXBV1bWZXqQaQloLx1LS1y27jAChrpr6h6r3IzJjzic4omtxQw8K2LoUe0mER3O66weRipHDa9kC9lpCTseF_YdW8OYW8RVnLH83bA">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Praktikum</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Proyek Akhir Basis Data Lanjut</h3>
+</div>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-[320px] object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="Four high school students in smart navy and white uniforms laughing and talking in a modern, well-lit school hallway with large glass windows. The building architecture features industrial brick and clean concrete lines, suggesting a prestigious educational institution. The lighting is soft and natural, emphasizing the personal warmth and community feel of the student group." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCR7Fzgr3ldLJSNMH2utQiH4v2rtpD_p6v4RQUQFe3lB5Gyjv3tIj6wzsIj81C1ie_yvvZEVuqIzF_ntSnMseg-eg92bqP5hVbor_hfy3bzt_6Rz4QyNJs8bIiBXC8KWNgv-LOlncijBJiAXorn8-sN4csvBTy5CcLmXXIArl4LsLjdMsb9Xl4M_tQVl6qcyEK1ByEb0DEwEYx_NGYIADKUQEoALde4LLy2dSowIxwm8ApFF5hAJS_Itw">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Istirahat</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Keseruan di Selasar Kelas</h3>
+</div>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-auto object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="A student leader giving a presentation to her classmates in a classroom. She is holding a microphone and pointing at a projector screen displaying environmental strategy slides. The classroom is filled with attentive students sitting at wooden desks, with an Indonesian flag and official portraits in the background. The mood is academic and professional, with soft indoor lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA43jVE8WMJOKWI85cmUkN1Au4188Dm8uD-uRlbhk-iygtBDyM-0EmSxSMszbZrUE1SlhJqlVYhD8bYHlhkeLgFGrHaHpR34Wr6Q8x-T74gRuayU3v-q420qRVe2c-CsWhf_TcHuy4vaKEHMUv_bTyoWnjnB0xskTrVk3DE3BsIgqKoqq59QBRj3I6zEc57a0ltjuvoFx6WL_SQeni-F03uYVGgsB_YLe6l35Yjw7qeFJ7nZdAsLOyXtQ">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Kegiatan Kelas</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Presentasi Proyek Lingkungan</h3>
+</div>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-[380px] object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="Students gathered around a laptop in a cozy, library-like setting with bookshelves in the background. They are deeply engaged in a discussion, pointing at the screen and taking notes in journals. The warm, golden-hour light filtering through the windows creates an inviting and studious atmosphere. The focus is on the teamwork and the academic pursuit of the group." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAk6Fc3-lb6S-vy7qESRD6Gc7nEzhJjDSUxOLh8WOszaWTfhYruDMCNYKgK7Dj3zGFqsCjc6hPSCooZg5jKlbKf6oynwAmHa-4S-jsrW5HYDzxIJxl57uP2UQO4NIr0Cc5RDMnrJVc70mj4P6G3cOX6EG5eZpiAC4ztfNliE-xE4g-RwIZPjSK6HSUdWsjdVO3YTK_0Cb2LXbnpgargjRtBbGVhBAso8km7dMK4YjRc_8tRx5_i7MSHiA">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Akademik</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Sesi Belajar Bersama di Perpustakaan</h3>
+</div>
+</div>
+</div>
+<!-- Item 6 -->
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-[300px] object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="A diverse group of students smiling and laughing around a desk in a modern lab or classroom. A laptop is open in the center, and books are scattered across the table. The lighting is bright and even, highlighting the clean, modern interior of the classroom. The composition captures a moment of joy and academic collaboration between students." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRb-x4n0QWov_EyuBcViFF9QwNdnJan617julhlEAtlESTWBBB-UkAiHLCw3WjAfmlucMAXYXOb2ZPSe1JlSz1G75rIIZwRLKz5WwvYd6BemVsf57rGYcI-ADz4juQpxPF4oYe-kb5pg-hfh1fU0z013zvMBcpO_uebxd4vN8bWMdC9rEQPlkUz3wuScPKe3PSVd9AUCNRmPnhikQf7WIu33sqIO_3jWv_OGKEGhHCxf_LIetVHlZTHw">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Praktikum</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Diskusi Kelompok Pengembangan Web</h3>
+</div>
+</div>
+</div>
+<!-- Repeated/Varied Items for Grid Density -->
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-[450px] object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="High school students in uniforms participating in a coding workshop. The classroom is filled with desktop computers, and a teacher is walking around providing guidance. The image captures the technical nature of the RPL vocational class, with a focus on focused concentration and hands-on learning in a clean, professional lab environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmlS30ggNeWKuduovxZQxPTk4U6Gp_7B9kPjceu5vHsTtREqXp1TKCK9wBHYJhpnhbXSA7EsEjPfG3jppq3QYIvvL3T6Nw1sLISCIPR_lNbOpyFZ97FkpMxBdPElJSoSZTziRUtAdey63FbRR-7zgqdFzitCLDm7y6_5DmcKokVO50GFawZUrkJppYLaSIBv3RTE-jyKkI6odu74-BGZdpC2Kd-lrv8Xvg52L-SS4Y6XwioxBvRinBDQ">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Praktikum</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Uji Kompetensi Keahlian 2025</h3>
+</div>
+</div>
+</div>
+<div class="masonry-item">
+<div class="gallery-card relative overflow-hidden rounded-xl bg-surface-container-high group cursor-pointer shadow-[0_4px_30px_rgba(0,40,142,0.04)]">
+<img class="w-full h-[320px] object-cover transform transition-transform duration-500 group-hover:scale-110" data-alt="A low angle shot of a group of students in high school uniforms sitting on the grass during a school event. They are laughing and eating together, with a blurred school building in the background. The lighting is bright and warm, conveying a sense of community and the casual, social aspects of school life in Indonesia." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRB1s-8Wnwfc7Kkm2XglZjgp-PZ8nD1hcY1YO2zMxagkSg-ltt5yaI-yegCYnAgKSPXTuTRKxqMx-sSbzPSzL73XZkOU2qx5myKjTsfqqe__iEt7SS14vQvozZF0WW-71LtNRd5hsLlBkI2GwWT0WTQSIvq74U11lZR3S-u8U-HZjDGyBK0bloBSh2EQetjDFhLsZtNb_txGEKE5pQHsmov8dAJX4Tc-QGVbFbZA7amKC2AfzXoiyHFw">
+<div class="gallery-overlay absolute inset-0 bg-primary/80 opacity-0 transition-opacity duration-300 flex flex-col justify-end p-6">
+<span class="text-white font-label-caps text-label-caps mb-1">Kegiatan Kelas</span>
+<h3 class="text-white font-headline-md text-[18px] leading-tight">Momen Kebersamaan Istirahat</h3>
+</div>
+</div>
+</div>
+</div>
+<!-- Load More Button -->
+<div class="mt-section-gap flex justify-center">
+<button class="px-10 py-4 border-2 border-primary text-primary rounded-full font-label-caps text-label-caps hover:bg-primary hover:text-white transition-all duration-300 font-bold">
+                        Muat Lebih Banyak
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full pt-16 pb-8 bg-[#EEF2FF] border-t border-outline-variant"><div class="max-w-container-max mx-auto px-gutter"><div class="grid grid-cols-1 md:grid-cols-12 gap-gutter mb-12"><div class="md:col-span-5 space-y-4"><div class="font-headline-md text-headline-md font-bold text-primary">XII RPL</div><p class="text-secondary font-body-md text-body-md max-w-md">Mewujudkan generasi digital yang kompeten, berkarakter, dan siap berkontribusi untuk masa depan.</p></div><div class="md:col-span-7 grid grid-cols-3 gap-gutter"><div class="space-y-4"><h4 class="font-label-caps text-label-caps text-on-surface font-bold">NAVIGASI</h4><ul class="space-y-2"><li class=""><a class="text-secondary hover:text-primary transition-all" href="#">Beranda</a></li><li class=""><a class="text-secondary hover:text-primary transition-all" href="#">Prestasi</a></li><li class=""><a class="text-secondary hover:text-primary transition-all" href="#">Organisasi</a></li></ul></div><div class="space-y-4"><h4 class="font-label-caps text-label-caps text-on-surface font-bold">INFO KELAS</h4><ul class="space-y-2"><li class=""><a class="text-secondary hover:text-primary transition-all" href="#">Akademik</a></li><li class=""><a class="text-secondary hover:text-primary transition-all" href="#">Kedisiplinan</a></li><li class=""><a class="text-secondary hover:text-primary transition-all" href="#">Inventaris</a></li></ul></div><div class="space-y-4"><h4 class="font-label-caps text-label-caps text-on-surface font-bold">HUBUNGI</h4><div class="flex gap-3"><div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary"><span class="material-symbols-outlined">mail</span></div><div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary"><span class="material-symbols-outlined">share</span></div></div></div></div></div><div class="pt-8 border-t border-outline-variant text-center"><p class="text-secondary text-[14px]">© 2024 XII RPL - SMK Negeri Unggulan. All rights reserved.</p></div></div></footer>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.95)';
+                el.style.opacity = '0.8';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = '';
+                el.style.opacity = '';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = '';
+                el.style.opacity = '';
+            });
+        });
+
+        // Filter functionality simulation
+        const filterButtons = document.querySelectorAll('.whitespace-nowrap button');
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => {
+                    b.classList.remove('bg-accent-purple', 'text-white', 'shadow-sm');
+                    b.classList.add('border', 'border-outline-variant', 'text-secondary');
+                });
+                btn.classList.remove('border', 'border-outline-variant', 'text-secondary');
+                btn.classList.add('bg-accent-purple', 'text-white', 'shadow-sm');
+            });
+        });
+    </script>
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/supabase-config.js"></script>
+<script src="./js/global-ui.js"></script>
+    <script src="./js/supabase-fetch.js"></script></body></html>
