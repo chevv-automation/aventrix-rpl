@@ -100,6 +100,15 @@
         }
     </script>
 <style>
+        * {
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-touch-callout: none;
+        }
+        button, a, select, input {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+            touch-action: manipulation;
+        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -430,7 +439,7 @@
             });
         });
 
-        // Tabs Logic
+        // Tabs Logic (Instant touch color switching)
         const btnStruktur = document.getElementById('btn-struktur');
         const btnAnggota = document.getElementById('btn-anggota');
         const secStruktur = document.getElementById('struktur');
@@ -440,28 +449,30 @@
         const inactiveClasses = ['bg-surface-container-high', 'text-on-surface-variant'];
 
         if (btnStruktur && btnAnggota && secStruktur && secAnggota) {
-            // By default Anggota is hidden
             secAnggota.style.display = 'none';
 
-            btnStruktur.addEventListener('click', () => {
-                btnStruktur.classList.remove(...inactiveClasses);
-                btnStruktur.classList.add(...activeClasses);
-                btnAnggota.classList.remove(...activeClasses);
-                btnAnggota.classList.add(...inactiveClasses);
-                
-                secStruktur.style.display = 'block';
-                secAnggota.style.display = 'none';
-            });
+            const activateTab = (tab) => {
+                if (tab === 'struktur') {
+                    btnStruktur.classList.remove(...inactiveClasses);
+                    btnStruktur.classList.add(...activeClasses);
+                    btnAnggota.classList.remove(...activeClasses);
+                    btnAnggota.classList.add(...inactiveClasses);
+                    secStruktur.style.display = 'block';
+                    secAnggota.style.display = 'none';
+                } else {
+                    btnAnggota.classList.remove(...inactiveClasses);
+                    btnAnggota.classList.add(...activeClasses);
+                    btnStruktur.classList.remove(...activeClasses);
+                    btnStruktur.classList.add(...inactiveClasses);
+                    secAnggota.style.display = 'block';
+                    secStruktur.style.display = 'none';
+                }
+            };
 
-            btnAnggota.addEventListener('click', () => {
-                btnAnggota.classList.remove(...inactiveClasses);
-                btnAnggota.classList.add(...activeClasses);
-                btnStruktur.classList.remove(...activeClasses);
-                btnStruktur.classList.add(...inactiveClasses);
-                
-                secAnggota.style.display = 'block';
-                secStruktur.style.display = 'none';
-            });
+            btnStruktur.addEventListener('pointerdown', (e) => { e.preventDefault(); activateTab('struktur'); });
+            btnStruktur.addEventListener('click', (e) => { e.preventDefault(); activateTab('struktur'); });
+            btnAnggota.addEventListener('pointerdown', (e) => { e.preventDefault(); activateTab('anggota'); });
+            btnAnggota.addEventListener('click', (e) => { e.preventDefault(); activateTab('anggota'); });
         }
     </script>
 

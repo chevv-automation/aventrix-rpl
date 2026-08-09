@@ -114,11 +114,12 @@
                 renderMemberCards(filtered);
             };
 
-            // Gender Filter Event Listeners
+            // Gender Filter Event Listeners (Instant touch response)
             const genderButtons = document.querySelectorAll('.gender-btn');
             if (genderButtons.length > 0) {
                 genderButtons.forEach(btn => {
-                    btn.addEventListener('click', () => {
+                    const handleGenderSwitch = (e) => {
+                        e.preventDefault();
                         genderButtons.forEach(b => {
                             b.classList.remove('bg-primary', 'text-white', 'shadow-sm');
                             b.classList.add('text-on-surface-variant');
@@ -126,9 +127,14 @@
                         btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
                         btn.classList.remove('text-on-surface-variant');
 
-                        activeGender = btn.getAttribute('data-gender') || 'all';
-                        applyFilters();
-                    });
+                        const targetGender = btn.getAttribute('data-gender') || 'all';
+                        if (activeGender !== targetGender) {
+                            activeGender = targetGender;
+                            applyFilters();
+                        }
+                    };
+                    btn.addEventListener('pointerdown', handleGenderSwitch);
+                    btn.addEventListener('click', handleGenderSwitch);
                 });
             }
 
