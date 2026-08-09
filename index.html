@@ -536,7 +536,70 @@
         })();
     </script>
 
+<!-- Certificate & Photo Lightbox Modal Preview -->
+<div id="cert-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-4 transition-all duration-300">
+  <div class="relative max-w-4xl w-full flex flex-col items-center">
+    <button id="close-cert-modal" class="absolute -top-12 right-0 text-white/80 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full flex items-center justify-center">
+      <span class="material-symbols-outlined text-2xl">close</span>
+    </button>
+    <img id="modal-cert-img" class="max-h-[80vh] max-w-full rounded-2xl shadow-2xl object-contain border border-white/10" src="" alt="Preview">
+    <div class="mt-4 text-center">
+      <h4 id="modal-cert-title" class="text-white font-bold text-lg md:text-xl"></h4>
+      <p id="modal-cert-caption" class="text-slate-300 text-xs md:text-sm mt-1 max-w-xl mx-auto line-clamp-2"></p>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./js/supabase-config.js"></script>
 <script src="./js/global-ui.js"></script>
-    <script src="./js/supabase-fetch.js"></script></body></html>
+    <script src="./js/supabase-fetch.js"></script>
+    <script>
+        // Certificate & Photo Lightbox Modal Logic
+        const certModal = document.getElementById('cert-modal');
+        const modalCertImg = document.getElementById('modal-cert-img');
+        const modalCertTitle = document.getElementById('modal-cert-title');
+        const modalCertCaption = document.getElementById('modal-cert-caption');
+        const closeCertModalBtn = document.getElementById('close-cert-modal');
+
+        document.querySelectorAll('.bg-surface-container-lowest').forEach(card => {
+            const img = card.querySelector('img');
+            if (img) {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', (e) => {
+                    if (e.target.closest('a')) return;
+                    const title = card.querySelector('h3')?.textContent || 'Foto Preview';
+                    const caption = card.querySelector('p')?.textContent || '';
+                    
+                    if (certModal) {
+                        modalCertImg.src = img.src;
+                        modalCertImg.alt = title;
+                        modalCertTitle.textContent = title;
+                        modalCertCaption.textContent = caption;
+                        certModal.classList.remove('hidden');
+                        certModal.classList.add('flex');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            }
+        });
+
+        const closeCertModal = () => {
+            if (certModal) {
+                certModal.classList.add('hidden');
+                certModal.classList.remove('flex');
+                document.body.style.overflow = '';
+            }
+        };
+
+        if (closeCertModalBtn) closeCertModalBtn.addEventListener('click', closeCertModal);
+        if (certModal) {
+            certModal.addEventListener('click', (e) => {
+                if (e.target === certModal) closeCertModal();
+            });
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeCertModal();
+        });
+    </script>
+</body></html>
