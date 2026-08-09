@@ -69,7 +69,7 @@ ON CONFLICT (nomor_absen) DO UPDATE SET
     alamat_rumah = EXCLUDED.alamat_rumah,
     jabatan = EXCLUDED.jabatan,
     deskripsi_diri = EXCLUDED.deskripsi_diri;;;;SPLIT_HERE;;;INSERT INTO profiles (nomor_absen, nama, tempat_lahir, tanggal_lahir, nomor_whatsapp, email, alamat_rumah, jabatan, deskripsi_diri)
-VALUES (8, 'Dayyana Khoirun Nisa''', 'Jember', '2026-08-02', '081252630652', 'kdayyana@gmail.com', 'Jl.  Anggur XV no.28 Perumnas Patrang', 'Wakil Ketua Kelas', 'Hai aku dayyana khoirun nisa, u guys can call me dayyana, aku cuma mau bilang, semakin kita besar semakin gada waktu buat tidur, bahkan tidur adalah hal yang paling kita tunggu-tunggu, jadi selagi kalian masih ada waktu untuk bisa tidur siang, tidurlah.')
+VALUES (8, 'Dayyana Khoirun Nisa''', 'Jember', '2008-08-02', '081252630652', 'kdayyana@gmail.com', 'Jl.  Anggur XV no.28 Perumnas Patrang', 'Wakil Ketua Kelas', 'Hai aku dayyana khoirun nisa, u guys can call me dayyana, aku cuma mau bilang, semakin kita besar semakin gada waktu buat tidur, bahkan tidur adalah hal yang paling kita tunggu-tunggu, jadi selagi kalian masih ada waktu untuk bisa tidur siang, tidurlah.')
 ON CONFLICT (nomor_absen) DO UPDATE SET
     nama = EXCLUDED.nama,
     tempat_lahir = EXCLUDED.tempat_lahir,
@@ -159,7 +159,7 @@ ON CONFLICT (nomor_absen) DO UPDATE SET
     alamat_rumah = EXCLUDED.alamat_rumah,
     jabatan = EXCLUDED.jabatan,
     deskripsi_diri = EXCLUDED.deskripsi_diri;;;;SPLIT_HERE;;;INSERT INTO profiles (nomor_absen, nama, tempat_lahir, tanggal_lahir, nomor_whatsapp, email, alamat_rumah, jabatan, deskripsi_diri)
-VALUES (17, 'Bima Mahesa', 'jember', '2026-04-30', '089531670221', 'mahesabima115@gmail.com', 'perum cempaka blok h15', 'Bendahara', 'hai, saya Mahesa Bima Satrio Riyanawa, seorang pelajar SMK Negeri 3 Jember jurusan Rekayasa Perangkat Lunak (RPL). Saya lahir di Jember pada 30 April 2008 dan saat ini berdomisili di Perum Cempaka, Jember.
+VALUES (17, 'Bima Mahesa', 'jember', '2008-04-30', '089531670221', 'mahesabima115@gmail.com', 'perum cempaka blok h15', 'Bendahara', 'hai, saya Mahesa Bima Satrio Riyanawa, seorang pelajar SMK Negeri 3 Jember jurusan Rekayasa Perangkat Lunak (RPL). Saya lahir di Jember pada 30 April 2008 dan saat ini berdomisili di Perum Cempaka, Jember.
 
 Saya memiliki minat yang besar dalam bidang Frontend Development, khususnya dalam merancang dan mengembangkan antarmuka website yang modern, responsif, dan mudah digunakan. Saya telah mengerjakan beberapa proyek, seperti Sistem Jadwal Piket Masjid, Sistem Penerimaan Murid Baru (SPMB), serta beberapa proyek game dan website lainnya sebagai sarana mengembangkan kemampuan di bidang pemrograman.
 
@@ -225,7 +225,7 @@ ON CONFLICT (nomor_absen) DO UPDATE SET
     alamat_rumah = EXCLUDED.alamat_rumah,
     jabatan = EXCLUDED.jabatan,
     deskripsi_diri = EXCLUDED.deskripsi_diri;;;;SPLIT_HERE;;;INSERT INTO profiles (nomor_absen, nama, tempat_lahir, tanggal_lahir, nomor_whatsapp, email, alamat_rumah, jabatan, deskripsi_diri)
-VALUES (23, 'Nadyah gina fatin ', 'Jember', '2026-08-24', '085749371726', 'nadya.gina45@smk.belajar.id', 'Jalan raya Puger desa grenden', 'Anggota', 'Saya adalah siswa SMKN 3 JEMBER khusus nya jurusan Rekayasa Perangkat Lunak kelas vll,saya programmer pemula yang siap belajar bersama untuk mendapatkan yang terbaik nanti nya')
+VALUES (23, 'Nadyah gina fatin ', 'Jember', '2009-08-24', '085749371726', 'nadya.gina45@smk.belajar.id', 'Jalan raya Puger desa grenden', 'Anggota', 'Saya adalah siswa SMKN 3 JEMBER khusus nya jurusan Rekayasa Perangkat Lunak kelas vll,saya programmer pemula yang siap belajar bersama untuk mendapatkan yang terbaik nanti nya')
 ON CONFLICT (nomor_absen) DO UPDATE SET
     nama = EXCLUDED.nama,
     tempat_lahir = EXCLUDED.tempat_lahir,
