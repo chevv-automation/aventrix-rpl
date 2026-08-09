@@ -24,30 +24,125 @@
         if (error) {
             console.error('Error fetching profiles:', error);
         } else if (data) {
-            // Update the title if available
-            const titleCount = document.getElementById('members-count-title');
-            if (titleCount) titleCount.textContent = `Anggota Kelas - ${data.length} Siswa`;
+            // Function to render cards cleanly
+            const renderMemberCards = (list) => {
+                if (!list || list.length === 0) {
+                    membersContainer.innerHTML = `<div class="col-span-full text-center py-12 text-on-surface-variant italic font-body-md">Tidak ada data siswa yang ditemukan.</div>`;
+                    return;
+                }
 
-            membersContainer.innerHTML = data.map(profile => {
-                // Use actual photo or fallback to DiceBear
-                const avatarUrl = profile.foto_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.nama)}&backgroundColor=00288e,7C3AED&textColor=ffffff`;
-                return `
-                <div class="group bg-white rounded-xl shadow-[0_30px_30px_-15px_rgba(0,40,142,0.04)] hover:shadow-[0_40px_40px_-10px_rgba(0,40,142,0.08)] border border-transparent hover:border-primary/10 transition-all duration-300 overflow-hidden flex flex-col h-full">
-                    <div class="aspect-[3/4] overflow-hidden bg-surface-variant flex items-center justify-center">
-                        <img class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300 ease-out" alt="Avatar ${profile.nama}" src="${avatarUrl}" loading="lazy" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.nama)}&backgroundColor=00288e,7C3AED&textColor=ffffff';">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-headline-md text-[18px] text-on-surface">${profile.nama}</h3>
-                            <span class="text-primary/60 font-label-caps text-[10px]">NO. ABSEN ${profile.nomor_absen.toString().padStart(2, '0')}</span>
+                membersContainer.innerHTML = list.map(profile => {
+                    const avatarUrl = profile.foto_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.nama)}&backgroundColor=00288e,7C3AED&textColor=ffffff`;
+                    const noAbsen = profile.nomor_absen ? profile.nomor_absen.toString().padStart(2, '0') : '00';
+                    const hasSpecialRole = profile.jabatan && profile.jabatan !== 'Anggota';
+                    const isSekretaris1 = profile.nama && (profile.nama.includes('Jorel') || profile.jabatan === 'Sekretaris 1' || profile.nomor_absen === 13);
+                    const customObjectPos = isSekretaris1 ? 'style="object-position: center 15%;"' : '';
+
+                    return `
+                    <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl border border-outline-variant/30 hover:border-primary/30 transition-all duration-300 overflow-hidden flex flex-col h-full relative">
+                        <!-- Photo container with floating badge overlay -->
+                        <div class="aspect-[3/4] overflow-hidden bg-surface-variant flex items-center justify-center relative">
+                            <img class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500 ease-out" ${customObjectPos} alt="Avatar ${profile.nama}" src="${avatarUrl}" loading="lazy" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile.nama)}&backgroundColor=00288e,7C3AED&textColor=ffffff';">
+                            
+                            <!-- Floating Attendance Badge (Pill overlay on photo) -->
+                            <div class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-white px-2.5 py-1 rounded-full text-[11px] font-extrabold tracking-wider shadow-md border border-white/20 flex items-center gap-1.5 z-10">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>ABSEN ${noAbsen}</span>
+                            </div>
                         </div>
-                        <p class="text-on-surface-variant text-body-md italic mb-6 line-clamp-2">"${profile.deskripsi_diri || 'Siswa XII RPL'}"</p>
-                        <a class="mt-auto text-custom-purple font-label-caps text-[11px] flex items-center gap-2 hover:translate-x-1 transition-transform" href="detailed_anggota.html?id=${profile.nomor_absen}">
-                            Lihat Detail <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-                        </a>
-                    </div>
-                </div>`;
-            }).join('');
+
+                        <!-- Card Body Content -->
+                        <div class="p-5 flex flex-col flex-grow">
+                            <!-- Student Name -->
+                            <h3 class="font-bold text-base md:text-lg text-on-surface line-clamp-1 group-hover:text-primary transition-colors mb-1.5" title="${profile.nama}">
+                                ${profile.nama}
+                            </h3>
+
+                            <!-- Badges Row -->
+                            <div class="flex flex-wrap items-center gap-1.5 mb-3">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md bg-primary/10 text-primary text-[11px] font-bold">
+                                    No. Absen ${noAbsen}
+                                </span>
+                                ${hasSpecialRole ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-md bg-amber-500/10 text-amber-700 text-[10px] font-bold">${profile.jabatan}</span>` : ''}
+                            </div>
+
+                            <!-- Self Description -->
+                            <p class="text-on-surface-variant text-xs italic mb-4 line-clamp-2 min-h-[32px]">
+                                "${profile.deskripsi_diri || 'Siswa XII RPL'}"
+                            </p>
+
+                            <!-- Link to Detail -->
+                            <a class="mt-auto text-primary font-label-caps text-[11px] font-bold flex items-center gap-1.5 hover:translate-x-1 transition-transform pt-3 border-t border-slate-100" href="detail-anggota.html?id=${profile.nomor_absen}">
+                                Lihat Detail <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>`;
+                }).join('');
+            };
+
+            // Female student attendance numbers list
+            const femaleAbsenNumbers = [3, 4, 5, 8, 9, 11, 14, 15, 18, 19, 23, 25, 26, 27, 32, 34];
+
+            // Dynamically assign gender ('P' or 'L') for each profile
+            data.forEach(p => {
+                p.jenis_kelamin = femaleAbsenNumbers.includes(p.nomor_absen) ? 'P' : 'L';
+            });
+
+            let activeGender = 'all';
+            let activeSearch = '';
+
+            const applyFilters = () => {
+                let filtered = data;
+                if (activeGender !== 'all') {
+                    filtered = filtered.filter(p => p.jenis_kelamin === activeGender);
+                }
+                if (activeSearch) {
+                    filtered = filtered.filter(p => 
+                        (p.nama && p.nama.toLowerCase().includes(activeSearch)) ||
+                        (p.nomor_absen && p.nomor_absen.toString().includes(activeSearch)) ||
+                        (p.jabatan && p.jabatan.toLowerCase().includes(activeSearch))
+                    );
+                }
+                
+                // Update title count
+                const titleCount = document.getElementById('members-count-title');
+                if (titleCount) {
+                    const genderLabel = activeGender === 'L' ? 'Laki-laki' : activeGender === 'P' ? 'Perempuan' : '';
+                    titleCount.textContent = `Anggota Kelas ${genderLabel ? '(' + genderLabel + ') ' : ''}- ${filtered.length} Siswa`;
+                }
+
+                renderMemberCards(filtered);
+            };
+
+            // Gender Filter Event Listeners
+            const genderButtons = document.querySelectorAll('.gender-btn');
+            if (genderButtons.length > 0) {
+                genderButtons.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        genderButtons.forEach(b => {
+                            b.classList.remove('bg-primary', 'text-white', 'shadow-sm');
+                            b.classList.add('text-on-surface-variant');
+                        });
+                        btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
+                        btn.classList.remove('text-on-surface-variant');
+
+                        activeGender = btn.getAttribute('data-gender') || 'all';
+                        applyFilters();
+                    });
+                });
+            }
+
+            // Search filter event listener
+            const searchInput = document.getElementById('member-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    activeSearch = e.target.value.toLowerCase().trim();
+                    applyFilters();
+                });
+            }
+
+            // Render initial state
+            applyFilters();
             
             // --- Update Organizational Structure avatars if they exist ---
             const getAvatar = (profile) => profile?.foto_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(profile?.nama || 'Unknown')}&backgroundColor=00288e,7C3AED&textColor=ffffff`;
@@ -59,7 +154,11 @@
             if (wakil && document.getElementById('img-wakil')) document.getElementById('img-wakil').src = getAvatar(wakil);
 
             const sek1 = data.find(p => p.nama === 'Jorel Permana' || p.nama.includes('Jorel'));
-            if (sek1 && document.getElementById('img-sekretaris-1')) document.getElementById('img-sekretaris-1').src = getAvatar(sek1);
+            if (sek1 && document.getElementById('img-sekretaris-1')) {
+                const el = document.getElementById('img-sekretaris-1');
+                el.src = getAvatar(sek1);
+                el.style.objectPosition = 'center 15%';
+            }
 
             const sek2 = data.find(p => p.nama.includes('Mikhaela'));
             if (sek2 && document.getElementById('img-sekretaris-2')) document.getElementById('img-sekretaris-2').src = getAvatar(sek2);
@@ -72,8 +171,57 @@
         }
     }
 
+    // --- Helper to resolve CV file path for each student ---
+    function getStudentCvUrl(profile) {
+        if (!profile || !profile.nomor_absen) return 'cv/1.pdf';
+        const noAbsen = parseInt(profile.nomor_absen, 10);
+
+        // Exact file mapping according to attendance number (1-35)
+        const cvFilesByAbsen = {
+            1: 'cv/1.pdf',
+            2: 'cv/2.jpg',
+            3: 'cv/3.jpg',
+            4: 'cv/4.jpg',
+            5: 'cv/5.jpg',
+            6: 'cv/6.pdf',
+            7: 'cv/7.pdf',
+            8: 'cv/8.pdf',
+            9: 'cv/9.pdf',
+            10: 'cv/10.jpg',
+            11: 'cv/11.pdf',
+            12: 'cv/12.png',
+            13: 'cv/13.png',
+            14: 'cv/14.pdf',
+            15: 'cv/15.pdf',
+            16: 'cv/16.pdf',
+            17: 'cv/17.jpg',
+            18: 'cv/18.png',
+            22: 'cv/22.jpg',
+            23: 'cv/23.png',
+            24: 'cv/24.pdf',
+            25: 'cv/25.jpg',
+            26: 'cv/26.png',
+            27: 'cv/27.pdf',
+            28: 'cv/28.pdf',
+            29: 'cv/29.pdf',
+            30: 'cv/30.pdf',
+            31: 'cv/31.pdf',
+            32: 'cv/32.png',
+            33: 'cv/33.pdf',
+            34: 'cv/34.pdf',
+            35: 'cv/35.pdf'
+        };
+
+        if (cvFilesByAbsen[noAbsen]) {
+            return cvFilesByAbsen[noAbsen];
+        }
+
+        // Fallback default
+        return `cv/${noAbsen}.pdf`;
+    }
+
     // --- 2.5 Anggota Kelas (Detail) ---
-    if (window.location.pathname.includes('detailed_anggota.html')) {
+    if (window.location.pathname.includes('detail-anggota.html') || window.location.pathname.includes('detailed_anggota.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id');
         
@@ -93,6 +241,15 @@
                 setEl('detail-alamat', data.alamat_rumah || '-');
                 setEl('detail-jabatan', data.jabatan || 'Anggota');
                 setEl('detail-deskripsi', data.deskripsi_diri || 'Belum ada deskripsi.');
+
+                // Download CV button mapping
+                const cvUrl = getStudentCvUrl(data);
+                const cvBtn = document.getElementById('detail-cv-btn');
+                if (cvBtn && cvUrl) {
+                    cvBtn.href = cvUrl;
+                    cvBtn.setAttribute('download', '');
+                    cvBtn.target = '_blank';
+                }
                 
                 const quoteEl = document.getElementById('detail-motivasi');
                 if (quoteEl) quoteEl.textContent = data.kata_motivasi ? `"${data.kata_motivasi}"` : '"Terus belajar dan berkembang."';
@@ -110,6 +267,9 @@
                 const avatarEl = document.getElementById('detail-avatar');
                 if (avatarEl) {
                     avatarEl.src = data.foto_url || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(data.nama)}&backgroundColor=00288e,7C3AED&textColor=ffffff`;
+                    if (data.nama && (data.nama.includes('Jorel') || data.nomor_absen === 13 || data.jabatan === 'Sekretaris 1')) {
+                        avatarEl.style.objectPosition = 'center 15%';
+                    }
                 }
             }
         }

@@ -6,8 +6,8 @@
     <title>Dashboard Admin | XII RPL</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="/js/supabase-config.js"></script>
-    <script src="/admin/js/auth-guard.js"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="./js/auth-guard.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <style>
@@ -30,15 +30,21 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow max-w-6xl mx-auto w-full px-6 py-12">
-        <header class="mb-10 text-center">
-            <h1 class="text-4xl font-extrabold text-blue-900 mb-2">Admin Dashboard</h1>
-            <p class="text-slate-500">Pilih modul yang ingin Anda kelola.</p>
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-12">
+        <!-- Hero Header Banner -->
+        <header class="mb-8 bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white rounded-2xl sm:rounded-3xl p-5 sm:p-10 shadow-lg relative overflow-hidden">
+            <div class="relative z-10 max-w-2xl">
+                <span class="bg-white/15 text-blue-100 px-3 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider mb-2.5 inline-block">PANEL KELOLA ADMIN</span>
+                <h1 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-white mb-2 sm:mb-3 tracking-tight leading-tight">Dashboard Admin XII RPL</h1>
+                <p class="text-blue-100/90 text-xs sm:text-sm md:text-base leading-relaxed">Selamat datang di sistem manajemen informasi kelas. Pilih modul di bawah ini untuk mengelola presensi harian, jurnal mengajar, inventaris, dan jadwal piket.</p>
+            </div>
+            <!-- Decorative Glow -->
+            <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
         </header>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Absensi -->
-            <a href="/admin/absensi.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all group flex flex-col items-center text-center">
+            <a href="absensi.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all group flex flex-col items-center text-center">
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-3xl">fact_check</span>
                 </div>
@@ -47,7 +53,7 @@
             </a>
             
             <!-- Jurnal -->
-            <a href="/admin/jurnal.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:blue-300 transition-all group flex flex-col items-center text-center">
+            <a href="jurnal.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all group flex flex-col items-center text-center">
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-3xl">book</span>
                 </div>
@@ -56,7 +62,7 @@
             </a>
 
             <!-- Inventaris -->
-            <a href="/admin/inventaris.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:blue-300 transition-all group flex flex-col items-center text-center">
+            <a href="inventaris.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all group flex flex-col items-center text-center">
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-3xl">inventory_2</span>
                 </div>
@@ -65,7 +71,7 @@
             </a>
 
             <!-- Jadwal Piket -->
-            <a href="/admin/jadwal-piket.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:blue-300 transition-all group flex flex-col items-center text-center">
+            <a href="jadwal-piket.html" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:shadow-md hover:border-blue-300 transition-all group flex flex-col items-center text-center">
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <span class="material-symbols-outlined text-3xl">cleaning_services</span>
                 </div>
@@ -75,8 +81,8 @@
         </div>
     </main>
 
-    <footer class="mt-auto border-t border-slate-200 py-6 text-center">
-        <p class="text-xs font-bold text-slate-400 tracking-widest">XII RPL ADMIN PANEL © 2024</p>
+    <footer class="mt-auto border-t border-slate-200 py-6 text-center bg-white">
+        <p class="text-[12px] text-slate-500 font-medium">© 2025/2026 XII RPL - SMK Negeri 3 Jember. All rights reserved.</p>
     </footer>
 </body>
 </html>

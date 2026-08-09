@@ -210,13 +210,13 @@
                 el.classList.remove('text-on-surface-variant');
             };
             
-            if(page.includes('profil_kelas')) {
+            if(page.includes('anggota') || page.includes('prestasi') || page.includes('profil')) {
                 const el = document.querySelector('[data-group="profil"]');
                 if(el) setActive(el);
             } else if(page.includes('jadwal')) {
                 const el = document.querySelector('[data-group="jadwal"]');
                 if(el) setActive(el);
-            } else if(page.includes('administrasi')) {
+            } else if(page.includes('inventaris') || page.includes('absensi') || page.includes('administrasi')) {
                 const el = document.querySelector('[data-group="administrasi"]');
                 if(el) setActive(el);
             } else if(page.includes('galeri')) {
@@ -247,42 +247,42 @@
 <!-- TopNavBar -->
 
 <!-- Hero Section -->
-<header class="relative w-full h-[870px] flex items-center justify-center overflow-hidden">
+<header class="relative w-full h-[380px] sm:h-[480px] md:h-[870px] flex items-center justify-center overflow-hidden pt-20 md:pt-0">
 <div class="absolute inset-0 z-0">
-<img class="w-full h-full object-cover" data-alt="A cinematic, high-quality photograph of a modern, brightly lit classroom with large windows. A diverse group of high school students in neat uniforms are engaged in collaborative software development projects at sleek white desks with laptops. The lighting is soft and natural, with a professional editorial tone. The overall atmosphere is focused, intelligent, and visionary, reflecting a prestige academic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1rxwXykA-V4V3zch52X1HJgeoWV9Cg5zhSsKvpKEl_1ya0aDBlsHgtCF3LcdWcCKkZuYNMCXIyLFk6Lz0OIELUmtSCtsNRsQIz2YiHXtgo36sLid4rVyNV6LAPmojPrudLS8HTha3yJUmyCtL1vL6o1GkWIWVQD5LQ3WT_kWq2WQwtEY8Wxc-IvcMDuYA_jROnt8dv2gIWMWF84hoOLgMibBsP_ppD0iG62k4Lm9MqatC1vdSx5egmw">
+<img class="w-full h-full object-cover object-[center_35%]" alt="Foto Outing Class XII RPL" src="image_beranda/foto outing class.jpeg">
 <div class="absolute inset-0 hero-gradient"></div>
 <div class="absolute inset-0 bg-primary/20 mix-blend-multiply"></div>
 </div>
-<div class="relative z-10 text-center px-gutter text-white max-w-4xl">
-<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4 drop-shadow-lg">
+<div class="relative z-10 text-center px-4 md:px-gutter text-white max-w-4xl my-auto">
+<h1 class="font-display-lg text-3xl sm:text-5xl md:text-6xl font-extrabold text-white mb-2 sm:mb-4 drop-shadow-lg tracking-tight">
                 XII RPL
             </h1>
-<p class="font-body-lg text-body-lg md:text-2xl font-light tracking-wide opacity-90 drop-shadow-md">
+<p class="font-body-lg text-xs sm:text-lg md:text-xl font-normal tracking-wide opacity-90 drop-shadow-md">
                 Rekayasa Perangkat Lunak - Tahun Ajaran 2025/2026
             </p>
-<div class="mt-12 animate-bounce opacity-50">
-<span class="material-symbols-outlined text-4xl">keyboard_arrow_down</span>
+<div class="mt-6 md:mt-12 animate-bounce opacity-50">
+<span class="material-symbols-outlined text-3xl md:text-4xl">keyboard_arrow_down</span>
 </div>
 </div>
 </header>
 <!-- Sekilas Info (Floating Bar Style) -->
-<section class="relative z-20 -mt-16 px-gutter max-w-container-max mx-auto transition-all duration-1000 opacity-100 translate-y-0">
-<div class="bg-surface-container-lowest rounded-xl editorial-shadow p-8 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 border border-outline-variant/30">
+<section class="relative z-20 -mt-6 md:-mt-16 px-4 md:px-gutter max-w-container-max mx-auto transition-all duration-1000 opacity-100 translate-y-0">
+<div class="bg-surface-container-lowest rounded-2xl md:rounded-3xl editorial-shadow p-4 md:p-12 grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-4 border border-outline-variant/30">
 <div class="flex flex-col items-center md:items-start text-center md:text-left">
-<span class="font-label-caps text-label-caps text-primary mb-2">Jumlah Siswa</span>
-<span class="font-headline-xl text-headline-xl text-on-surface">35</span>
+<span class="font-label-caps text-[10px] md:text-label-caps text-primary mb-1 md:mb-2">Jumlah Siswa</span>
+<span class="font-headline-xl text-xl md:text-headline-xl text-on-surface">35</span>
 </div>
 <div class="flex flex-col items-center md:items-start text-center md:text-left">
-<span class="font-label-caps text-label-caps text-primary mb-2">Wali Kelas</span>
-<span class="font-headline-md text-headline-md text-on-surface leading-tight">Ibu Mimin Putri Raharyani, S.Kom.</span>
+<span class="font-label-caps text-[10px] md:text-label-caps text-primary mb-1 md:mb-2">Wali Kelas</span>
+<span class="font-headline-md text-xs md:text-headline-md text-on-surface leading-tight">Ibu Mimin Putri Raharyani, S.Kom.</span>
 </div>
 <div class="flex flex-col items-center md:items-start text-center md:text-left">
-<span class="font-label-caps text-label-caps text-primary mb-2">Jurusan</span>
-<span class="font-headline-md text-headline-md text-on-surface">RPL - Rekayasa Perangkat Lunak</span>
+<span class="font-label-caps text-[10px] md:text-label-caps text-primary mb-1 md:mb-2">Jurusan</span>
+<span class="font-headline-md text-xs md:text-headline-md text-on-surface">RPL - Rekayasa Perangkat Lunak</span>
 </div>
 <div class="flex flex-col items-center md:items-start text-center md:text-left">
-<span class="font-label-caps text-label-caps text-primary mb-2">Tahun Ajaran</span>
-<span class="font-headline-md text-headline-md text-on-surface">2025/2026</span>
+<span class="font-label-caps text-[10px] md:text-label-caps text-primary mb-1 md:mb-2">Tahun Ajaran</span>
+<span class="font-headline-md text-xs md:text-headline-md text-on-surface">2025/2026</span>
 </div>
 </div>
 </section>
@@ -295,15 +295,37 @@
 <h2 class="font-headline-xl text-headline-xl text-on-surface">Membangun Masa Depan Melalui Sinergi &amp; Teknologi</h2>
 </div>
 <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-                    Kelas XII RPL bukan sekadar kumpulan individu, melainkan sebuah ekosistem inovasi di mana setiap baris kode yang kami tulis adalah langkah menuju masa depan. Kami percaya bahwa kebersamaan adalah kunci utama dalam menghadapi tantangan kurikulum dan proyek kolaboratif.
+                    Kami adalah XII Rekayasa Perangkat Lunak, sebuah kelas yang belajar, berkembang, dan berproses bersama. Di balik setiap tugas, proyek, dan kegiatan, ada cerita serta kebersamaan yang menjadi bagian dari perjalanan kami.
                 </p>
 <p class="font-body-md text-body-md text-on-surface-variant italic border-l-4 border-primary pl-6">
                     "Kami tidak hanya belajar bagaimana membangun perangkat lunak, kami belajar bagaimana membangun karakter, integritas, dan kepemimpinan dalam setiap tantangan yang kami hadapi bersama."
                 </p>
 </div>
-<div class="relative group">
-<div class="absolute -inset-4 bg-primary/5 rounded-xl transition-all group-hover:scale-105"></div>
-<img class="relative rounded-xl w-full aspect-square md:aspect-auto md:h-[500px] object-cover editorial-shadow" data-alt="A candid, warm editorial photo of a group of high school students laughing and working together on a complex diagram on a glass whiteboard. The sun is streaming into a modern lab, highlighting the dust particles and creating a soft, nostalgic atmosphere. The students represent a mix of focused intensity and friendly collaboration, wearing clean academic uniforms. The shot is high-end, focusing on facial expressions of joy and pride." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJVMeCTZQhlXDp2V-NrCQxIUJTAGjcm9D54ndliQVYocS48KqpeorvwZcgpkGwRymnogQ7sSk3fQGbjb_tnzH0Ucowg6SdrjNxHv6LRWhoLbNYMszJrDRljVtZcW24XGqGRFOrSsv-1L1YQYAe93lyX6k4l5uKPHtEDyFkAEa_zgkv40yHr98HHmunjyPpokmkc0mYh08L_Bezts5mDZkZWRpWtBLMXnHmovdAwXfp6Q5EW34Ke9G4Aw">
+<div class="relative group flex justify-center w-full max-w-sm mx-auto">
+  <!-- Glowing Ambient Backdrop -->
+  <div class="absolute -inset-1 bg-gradient-to-tr from-blue-600/20 via-indigo-500/15 to-purple-600/20 rounded-[32px] blur-lg opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>
+  
+  <!-- Outer Card Frame with smooth squircle corners -->
+  <div class="relative w-full bg-white rounded-[28px] p-6 shadow-xl border border-slate-100 flex flex-col items-center justify-center transition-all duration-300 group-hover:-translate-y-1 overflow-hidden">
+    
+    <!-- Floating Emblem Badge -->
+    <div class="absolute top-3 right-4 bg-primary/10 text-primary px-3 py-0.5 rounded-full text-[10px] font-extrabold tracking-widest uppercase flex items-center gap-1.5 shadow-sm z-20">
+      <span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+      <span id="logo-badge-label">Logo Kelas</span>
+    </div>
+
+    <!-- Inner Logo Frame with Cross-fade images -->
+    <div class="w-full aspect-square bg-slate-50/60 rounded-2xl p-4 flex items-center justify-center overflow-hidden border border-slate-100/80 mt-4 relative">
+      <img id="logo-kelas-img" class="absolute inset-4 max-w-[calc(100%-2rem)] max-h-[calc(100%-2rem)] mx-auto my-auto object-contain rounded-xl drop-shadow-sm transition-opacity duration-1000 opacity-100 z-10" alt="Logo Kelas XII RPL" src="image_beranda/logo kelas.jpeg">
+      <img id="logo-rpl-img" class="absolute inset-4 max-w-[calc(100%-2rem)] max-h-[calc(100%-2rem)] mx-auto my-auto object-contain rounded-xl drop-shadow-sm transition-opacity duration-1000 opacity-0 z-0" alt="Logo Jurusan RPL" src="image_beranda/logo rpl.jpeg">
+    </div>
+    
+    <!-- Subtitle Label below logo -->
+    <div class="mt-4 pt-3 border-t border-slate-100 w-full text-center">
+      <h3 id="logo-title-label" class="font-extrabold text-base text-primary tracking-tight transition-all duration-500">XII RPL - AVENTRIX</h3>
+      <p id="logo-subtitle-label" class="text-xs text-on-surface-variant/80 font-medium transition-all duration-500">Logo Resmi Kelas XII RPL</p>
+    </div>
+  </div>
 </div>
 </div>
 </section>
@@ -315,36 +337,85 @@
 <span class="font-label-caps text-label-caps text-primary">PENCAPAIAN TERBAIK</span>
 <h2 class="font-headline-xl text-headline-xl text-on-surface">Prestasi yang Membanggakan</h2>
 </div>
-<button class="bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-full font-label-caps text-label-caps transition-all duration-300">
-                    Lihat Semua Prestasi
-                </button>
+<a href="prestasi.html" class="inline-flex items-center gap-2 bg-transparent border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-full font-label-caps text-label-caps transition-all duration-300">
+  Lihat Semua Prestasi <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
 </div>
 <div class="grid md:grid-cols-3 gap-8">
-<!-- Card 1 -->
-<div class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow border-t-4 border-primary hover:-translate-y-2 transition-transform duration-300">
-<img alt="Juara 1 LKS Tingkat Provinsi" class="w-full aspect-video object-cover rounded-lg mb-6 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXqSY3HOyZr0AUK_UKGzaNRZFPZDlYXhxQIbjiLx77QGbVP4FinhzjycQPCiPALL32Ng_tXIpzr-TL26-3bZCtBMDHYxVHuTgx2vizIKQYCxaVOAWxpOLbs3kW51W4lOSAChecESFXoOoPLKUkLhVgpHNx_QTyHRW8iaDdF7U7ljFzlTk3Y2ugTpZUhHPujtWs0pD2FHAXFWlkL0uEkIKfH0W_M-JXYJ7fsfHqQSAgsIsbYp8BKVK6Gg">
-<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Juara 1 LKS Tingkat Provinsi</h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Bidang Software Development. Kompetisi bergengsi yang menguji ketajaman logika dan kecepatan dalam membangun aplikasi berbasis data.</p>
-<span class="font-label-caps text-label-caps text-outline">Provinsi  2024</span>
+<!-- Card 1: EPIM 2024 Achievement from image_prestasi -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl editorial-shadow border-t-4 border-primary hover:-translate-y-2 transition-transform duration-300 flex flex-col justify-between">
+<div>
+  <div class="aspect-[4/3] overflow-hidden rounded-xl mb-5 shadow-sm border border-slate-100 bg-slate-50 flex items-center justify-center p-2">
+    <img alt="Sertifikat Tim Elder of Engineering - EPIM 2024" class="w-full h-full object-contain rounded-lg shadow-sm" src="image_prestasi/sertifikat_epim_2024.svg">
+  </div>
+  <div class="flex justify-between items-center mb-3">
+    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-caps text-[10px] font-bold">TEKNOLOGI & INOVASI</span>
+    <span class="text-outline font-label-caps text-[11px] font-semibold">Nasional 2024</span>
+  </div>
+  <h3 class="font-headline-md text-xl font-bold text-on-surface mb-3">The Most Compact Team - EPIM 2024</h3>
+  <p class="font-body-md text-xs text-on-surface-variant leading-relaxed mb-4">
+    <strong>Tim Elder of Engineering</strong> (M. Ceza Fairuz, Dayyana Khoirunnisa, Naufal Ahmad Zufar) meraih penghargaan <em>The Most Compact Team</em> pada Expo &amp; Pekan Ilmiah Mahasiswa Tingkat Nasional 2024 Politeknik Negeri Jember.
+  </p>
 </div>
-<!-- Card 2 -->
-<div class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow border-t-4 border-primary hover:-translate-y-2 transition-transform duration-300">
-<img alt="Juara 2 Hackathon Nasional" class="w-full aspect-video object-cover rounded-lg mb-6 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGSltTyR91HmGLUmKLns9CXT3qhyWx-jZIG6Ju6dxfC2EKBkqW0nPsgo2tIsTUfjGp86ZAMqaFvzLZkifEteBqXBBH1IQsMBMGXYAlIua6PlpukVxTPgwfgVQntI6CL-tbveIhcyTtUIQN7Mp8Mvpxm802tPbL1k6KgQbW3NIyFtaiZHDj0rXdXfNHWi05jfGwiG83HXNs1E25bAIrfYIxoWJqJSgs6NqH3So8WK0xJH0XQ5brCBW1wg">
-<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Juara 2 Hackathon Nasional</h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Fokus pada UI/UX Design dan Inovasi Solusi Digital untuk masalah sosial. Berhasil menyisihkan lebih dari 100 tim peserta.</p>
-<span class="font-label-caps text-label-caps text-outline">Nasional  2025</span>
+<div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-primary font-bold">
+  <span>XII RPL Team</span>
+  <span class="material-symbols-outlined text-sm">workspace_premium</span>
 </div>
-<!-- Card 3 -->
-<div class="bg-surface-container-lowest p-8 rounded-xl editorial-shadow border-t-4 border-primary hover:-translate-y-2 transition-transform duration-300">
-<img alt="Finalis Olimpiade Sains" class="w-full aspect-video object-cover rounded-lg mb-6 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAredm5y7rE20eF4ACMxAFXmrlkKC8vYkQu0gWBXvxNv9V_FCEqU15SSyYd7HRJakhvOxv1vgLSs7R3Eb38v9GJcAzkZi1PQ3zID68KLaKChvo6bYMaT1QQLFZd_yien6t3D23AQm-2QCBW9SzOkcduVzAgamIkVWY5G-e3KnxNndSBtU0yeWeECKoiKXTH_V2pfI8cmlGYJiGXD4zXX9hHuOlpbenE91sM2UiGhewrfqKqB0QZ4b1NMg">
-<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Finalis Olimpiade Sains</h3>
-<p class="font-body-md text-body-md text-on-surface-variant mb-6">Bidang Informatika. Membuktikan kompetensi teoritis dan pemecahan masalah algoritma di tingkat yang lebih tinggi.</p>
-<span class="font-label-caps text-label-caps text-outline">Nasional  2024</span>
+</div>
+
+<!-- Card 2 (Undocumented - Coming Soon) -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl editorial-shadow border-t-4 border-primary hover:-translate-y-2 transition-transform duration-300 flex flex-col justify-between">
+<div>
+  <div class="aspect-[4/3] overflow-hidden rounded-xl mb-5 border border-slate-100 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center relative p-4 group">
+    <div class="w-10 h-10 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center mb-2 shadow-inner">
+      <span class="material-symbols-outlined text-xl">photo_camera</span>
+    </div>
+    <span class="text-white font-extrabold text-xs tracking-widest uppercase">Dokumentasi</span>
+    <span class="bg-primary/20 text-primary border border-primary/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold mt-1 tracking-wider uppercase">COMING SOON</span>
+  </div>
+  <div class="flex justify-between items-center mb-3">
+    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-caps text-[10px] font-bold">SOFTWARE DEV</span>
+    <span class="text-outline font-label-caps text-[11px] font-semibold">Provinsi 2024</span>
+  </div>
+  <h3 class="font-headline-md text-xl font-bold text-on-surface mb-3">Juara 1 LKS Tingkat Provinsi</h3>
+  <p class="font-body-md text-xs text-on-surface-variant/70 italic leading-relaxed mb-4">
+    Rincian deskripsi dan foto dokumentasi prestasi akan segera diperbarui (Coming Soon).
+  </p>
+</div>
+<div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-primary font-bold">
+  <span>LKS RPL</span>
+  <span class="material-symbols-outlined text-sm">workspace_premium</span>
+</div>
+</div>
+
+<!-- Card 3 (Undocumented - Coming Soon) -->
+<div class="bg-surface-container-lowest p-6 rounded-2xl editorial-shadow border-t-4 border-primary hover:-translate-y-2 transition-transform duration-300 flex flex-col justify-between">
+<div>
+  <div class="aspect-[4/3] overflow-hidden rounded-xl mb-5 border border-slate-100 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center relative p-4 group">
+    <div class="w-10 h-10 rounded-full bg-primary/20 text-primary border border-primary/30 flex items-center justify-center mb-2 shadow-inner">
+      <span class="material-symbols-outlined text-xl">photo_camera</span>
+    </div>
+    <span class="text-white font-extrabold text-xs tracking-widest uppercase">Dokumentasi</span>
+    <span class="bg-primary/20 text-primary border border-primary/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold mt-1 tracking-wider uppercase">COMING SOON</span>
+  </div>
+  <div class="flex justify-between items-center mb-3">
+    <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-caps text-[10px] font-bold">UI/UX DESIGN</span>
+    <span class="text-outline font-label-caps text-[11px] font-semibold">Nasional 2024</span>
+  </div>
+  <h3 class="font-headline-md text-xl font-bold text-on-surface mb-3">Juara 2 Hackathon Nasional</h3>
+  <p class="font-body-md text-xs text-on-surface-variant/70 italic leading-relaxed mb-4">
+    Rincian deskripsi dan foto dokumentasi prestasi akan segera diperbarui (Coming Soon).
+  </p>
+</div>
+<div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-primary font-bold">
+  <span>Hackathon Digital</span>
+  <span class="material-symbols-outlined text-sm">workspace_premium</span>
+</div>
 </div>
 </div>
 </div>
 </section>
-<!-- Footer -->
+<!-- Footer / Dokumentasi Momen Kelas -->
 <section class="py-section-gap px-gutter max-w-container-max mx-auto transition-all duration-1000 opacity-100 translate-y-0">
 <div class="text-center mb-16 space-y-4">
 <span class="inline-block px-4 py-1 bg-primary/5 text-primary rounded-full font-label-caps text-label-caps tracking-widest">DOKUMENTASI</span>
@@ -352,70 +423,77 @@
 </div>
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
 <!-- Featured Large Photo -->
-<div class="md:col-span-2 md:row-span-2 group overflow-hidden rounded-xl editorial-shadow">
-<img alt="Classroom activity" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZ7n7V_dgpy6r6MEIxR4dtcCz5GxDJO1q2Nb2kHbrJ-ihz2E_60UmJaJ8GxBJXBas9s4uF-asUYMAT0HSO3RSAjM8tFDOkRscptLij-gqD6FEprU7XjLtXOKQFWLEkvk-TuY2jNwiSzHkvA_z1ol6V8FxqVkc5701ZBIzY2mQ8L-vD_qdgIGyeTmX7MIpnShjiC4RDh1NVVZ-CmfjtUCqh1Ho6CyhANfoogzbjVv-Hrrx9vqnXYicRww">
+<div class="md:col-span-2 md:row-span-2 group overflow-hidden rounded-2xl editorial-shadow relative cursor-pointer">
+<img alt="Foto Bersama Hari Kartini" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="images_galeri/foto bersama hari karini.jpeg">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+  <span class="text-white font-bold text-lg">Foto Bersama Hari Kartini</span>
+</div>
 </div>
 <!-- Smaller Photos -->
-<div class="group overflow-hidden rounded-xl editorial-shadow aspect-square">
-<img alt="Students studying" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9lygo-z2K5IPTeUE-D_kA6jalEifk8f46XVd93Rh1P3mVjx4nbRXQJMtT3HDd-69eN6OwnYtlM6jUqWnzyqtIRXcU_b4SAsSvEy1MF1NRJyggHA05GDIoovi2sWxFImuzmLUb3u09jqN5hUBRGb0njk_P3iyQXiACBj_CZxpZ1Y3oISnGX7B066Hk7aK_9Ek1h2UJryMFnYylSQZORWElo0PNRE513bn5LZFmN1vx8hp6e06Ib0F7Bw">
+<div class="group overflow-hidden rounded-2xl editorial-shadow aspect-square relative cursor-pointer">
+<img alt="Bukber Bersama XII RPL" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="images_galeri/bukber bersama.jpeg">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+  <span class="text-white font-semibold text-sm">Bukber Bersama XII RPL</span>
 </div>
-<div class="group overflow-hidden rounded-xl editorial-shadow aspect-square">
-<img alt="Student presentation" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCa-2Zle4iL1i04JKtfDO50vvIkvuBoT-E_Yhxnu0JNvt9x2VCuugGmcG7M57PNIOFu9NgDpWECqmLi-OhagwokK9mrnecpHjXwedlAwo1K8_5EoPLcSndapmXajetbz6i3C0yhtzWLvzrO0tjULCnG8iaA3PFxGJCfXmv62ALNpVobWQ9S3rcEdWNGF2ij9XiMAYd1FNMnr6NZVN4VPXCEg8oah-VC0TDxb4y1_9rLqf4nTqvCq6BtMw">
 </div>
-<div class="group overflow-hidden rounded-xl editorial-shadow aspect-square">
-<img alt="Creative project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFnWGOWKXFhyNWkCi_Yoe6nuVbFlaZeNgTAxyrd-FoWeaTGdrrAQ_qtTHWAXjlSgdNxyGu7QnMb50VHd1wzLUmi5HAD5brxD2ktarVgePO4apLzOVrygl9IM9MO3aNrcff8-VMNYFCPjeL68kf0bDR2b19TDCLDTXJOesWh_qlt7ND6Y8u67jB3HaG7URVxJqVId8qOeZTnYLqUU3GB6i30v6D8WpehZnyWGVHDk7cpY-c9VIgm8QYmQ">
+<div class="group overflow-hidden rounded-2xl editorial-shadow aspect-square relative cursor-pointer">
+<img alt="Kunjungan Industri Malang" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="images_galeri/kunjungan indutri malang tempat wisata santera.jpeg">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+  <span class="text-white font-semibold text-sm">Kunjungan Industri Malang</span>
 </div>
-<div class="group overflow-hidden rounded-xl editorial-shadow aspect-square">
-<img alt="Class celebration" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz_YzQEWPDP5sHs5BXpVNNhnLsXIVYj1qqwQpTh3uQVgSQDwhA8HRGmtT-eQ9eBcEy7usa0PU3Px34Q_8uZbRsmIpzTBqQJ6LaHYitMonkq0lvGWNqUtw3Ato9EgMo1n_2aPVi_lUQ7uswRUl4ZZhP584-7hFoQDSBz0V87KepGQqkOC4ZGad35scFUfXjgqqY8HZpSrhd3IejZsvDwfuQWvaCK3xwAdE_3C5ZWerX1vpiCNg4guduHQ">
 </div>
-<div class="group overflow-hidden rounded-xl editorial-shadow aspect-square">
-<img alt="Students in hallway" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa9Rklxf7YuuDDmOeHtJd0Y5O4Og6iYXPiEwAo8BZFeibva2bTtSXYERa9YWhtRIK34SFXfbZUPxlAyy-r5TPuqsAqvV1sRzUZMQLxUpUplxzS1nENLX5yYeblkUoBzOnprAYwCv9eA4H0EZNsjnJezyG2bmIM1wmbElefQ_fBREG5Uoi-rJ4SL8dDTAq_0cjwB2ce7YUSJsf94rz_cH2Tu5HRbJn5Ggbaj5iohtiz8k1yWDVcBpQipw">
+<div class="group overflow-hidden rounded-2xl editorial-shadow aspect-square relative cursor-pointer">
+<img alt="Tampil Drama Pekan Literasi" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="images_galeri/foto setelah tampil drama pekan literasi.jpeg">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+  <span class="text-white font-semibold text-sm">Tampil Drama Pekan Literasi</span>
+</div>
+</div>
+<div class="group overflow-hidden rounded-2xl editorial-shadow aspect-square relative cursor-pointer">
+<img alt="Presentasi Web Pembelajaran PKK" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="images_galeri/presentasi penjualan jasa pembuatan web penbelajaran pkk.jpeg">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+  <span class="text-white font-semibold text-sm">Presentasi Web PKK</span>
+</div>
+</div>
+<div class="group overflow-hidden rounded-2xl editorial-shadow aspect-square relative cursor-pointer">
+<img alt="Kunjungan Industri CV Nusantara Tama" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="images_galeri/kunjunagn industri cv nusantara tama.jpeg">
+<div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+  <span class="text-white font-semibold text-sm">CV Nusantara Tama</span>
+</div>
 </div>
 </div>
 <div class="flex justify-center">
-<button class="bg-white border-2 border-[#1e40af] text-[#1e40af] hover:bg-[#1e40af] hover:text-white px-8 py-3 rounded-full font-label-caps text-label-caps transition-all duration-300 flex items-center gap-2">
+<a href="galeri.html" class="bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white px-8 py-3 rounded-full font-label-caps text-label-caps transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md">
       Lihat Semua Galeri <span class="material-symbols-outlined text-sm">arrow_forward</span>
-</button>
+</a>
 </div>
-</section><footer class="bg-[#f9fafb] w-full py-16 border-t border-outline-variant/30">
+</section><footer class="w-full bg-white border-t border-outline-variant/30 py-8 mt-12">
 <div class="max-w-container-max mx-auto px-gutter">
-<div class="flex flex-col md:flex-row justify-between gap-12 mb-12">
-<div class="max-w-sm">
-<div class="font-bold text-2xl text-[#1e40af] mb-4">XII RPL</div>
-<p class="text-[#5d5f5f] leading-relaxed">
-          Mewujudkan generasi digital yang kompeten, berkarakter, dan siap berkontribusi untuk masa depan.
-        </p>
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 pb-6 border-b border-outline-variant/20">
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-1">
+<div class="font-extrabold text-xl text-primary tracking-tight">XII RPL</div>
+<p class="text-xs text-on-surface-variant max-w-sm">Mewujudkan generasi digital yang kompeten, berkarakter, dan siap berkontribusi untuk masa depan.</p>
 </div>
-<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
-<div class="flex flex-col gap-4">
-<span class="text-[12px] font-bold text-[#757684] tracking-widest uppercase">NAVIGASI</span>
-<a class="text-[#374151] hover:text-[#1e40af] transition-colors" href="#">Beranda</a>
-<a class="text-[#374151] hover:text-[#1e40af] transition-colors" href="#">Prestasi</a>
-<a class="text-[#374151] hover:text-[#1e40af] transition-colors" href="#">Organisasi</a>
-<a class="text-[#374151] hover:text-[#1e40af] transition-colors" href="#">Galeri</a></div>
-<div class="flex flex-col gap-4">
-<span class="text-[12px] font-bold text-[#757684] tracking-widest uppercase">INFO KELAS</span>
-<a class="text-[#374151] hover:text-[#1e40af] transition-colors" href="#">Akademik</a>
-<a class="text-[#374151] hover:text-[#1e40af] transition-colors" href="#">Kedisiplinan</a>
-<a class="text-[#374151] hover:text-[#1e40af] transition-colors" href="#">Inventaris</a>
+<div class="flex flex-wrap justify-center items-center gap-4 text-xs font-semibold text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="index.html">Beranda</a>
+<a class="hover:text-primary transition-colors" href="anggota.html">Anggota Kelas</a>
+<a class="hover:text-primary transition-colors" href="jadwal.html">Jadwal Pelajaran</a>
+<a class="hover:text-primary transition-colors" href="jadwal-piket.html">Jadwal Piket</a>
+<a class="hover:text-primary transition-colors" href="absensi.html">Absensi</a>
+<a class="hover:text-primary transition-colors" href="inventaris.html">Inventaris</a>
+<a class="hover:text-primary transition-colors" href="galeri.html">Galeri</a>
+<a class="hover:text-primary transition-colors" href="prestasi.html">Prestasi</a>
 </div>
-<div class="flex flex-col gap-4">
-<span class="text-[12px] font-bold text-[#757684] tracking-widest uppercase">HUBUNGI</span>
-<div class="flex gap-3">
-<a class="w-10 h-10 rounded-full bg-[#eceef0] flex items-center justify-center text-[#374151] hover:bg-[#1e40af] hover:text-white transition-all" href="#">
-<span class="material-symbols-outlined text-xl">mail</span>
+<div class="flex items-center gap-2">
+<a class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#" title="Email">
+<span class="material-symbols-outlined text-[16px]">mail</span>
 </a>
-<a class="w-10 h-10 rounded-full bg-[#eceef0] flex items-center justify-center text-[#374151] hover:bg-[#1e40af] hover:text-white transition-all" href="#">
-<span class="material-symbols-outlined text-xl">share</span>
+<a class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all" href="#" title="Share">
+<span class="material-symbols-outlined text-[16px]">share</span>
 </a>
 </div>
 </div>
-</div>
-</div>
-<div class="pt-8 border-t border-outline-variant/30 text-center">
-<p class="text-sm text-[#757684]">
-        © 2024 XII RPL - SMK Negeri Unggulan. All rights reserved.
-      </p>
+<div class="pt-4 text-center">
+<p class="text-[12px] text-on-surface-variant/70">© 2025/2026 XII RPL - SMK Negeri 3 Jember. All rights reserved.</p>
 </div>
 </div>
 </footer>
@@ -432,28 +510,41 @@
             }
         });
 
-        // Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1
-        };
+        // Alternating Logo Switcher (10 Seconds Interval)
+        (function initLogoSwitcher() {
+            const logoKelas = document.getElementById('logo-kelas-img');
+            const logoRpl = document.getElementById('logo-rpl-img');
+            const badgeLabel = document.getElementById('logo-badge-label');
+            const titleLabel = document.getElementById('logo-title-label');
+            const subtitleLabel = document.getElementById('logo-subtitle-label');
+            
+            if (!logoKelas || !logoRpl) return;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('opacity-100', 'translate-y-0');
-                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+            let showRpl = false;
+            setInterval(() => {
+                showRpl = !showRpl;
+                if (showRpl) {
+                    // Switch to Logo RPL
+                    logoKelas.classList.replace('opacity-100', 'opacity-0');
+                    logoKelas.classList.replace('z-10', 'z-0');
+                    logoRpl.classList.replace('opacity-0', 'opacity-100');
+                    logoRpl.classList.replace('z-0', 'z-10');
+                    if (badgeLabel) badgeLabel.textContent = 'Logo RPL';
+                    if (titleLabel) titleLabel.textContent = 'REKAYASA PERANGKAT LUNAK';
+                    if (subtitleLabel) subtitleLabel.textContent = 'Logo Resmi Jurusan RPL';
+                } else {
+                    // Switch back to Logo Kelas
+                    logoRpl.classList.replace('opacity-100', 'opacity-0');
+                    logoRpl.classList.replace('z-10', 'z-0');
+                    logoKelas.classList.replace('opacity-0', 'opacity-100');
+                    logoKelas.classList.replace('z-0', 'z-10');
+                    if (badgeLabel) badgeLabel.textContent = 'Logo Kelas';
+                    if (titleLabel) titleLabel.textContent = 'XII RPL - AVENTRIX';
+                    if (subtitleLabel) subtitleLabel.textContent = 'Logo Resmi Kelas XII RPL';
                 }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('section').forEach(section => {
-            section.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
-            observer.observe(section);
-        });
+            }, 10000); // 10000 ms = 10 detik
+        })();
     </script>
-
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./js/supabase-config.js"></script>

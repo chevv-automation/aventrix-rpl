@@ -1,34 +1,81 @@
-// Global UI Script
-document.addEventListener('DOMContentLoaded', () => {
-    // Scroll reveal animation
-    const observerOptions = { threshold: 0.1 };
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('opacity-100', 'translate-y-0');
-                entry.target.classList.remove('opacity-0', 'translate-y-10');
-            }
-        });
-    }, observerOptions);
+/**
+ * Aventrix RPL - Global UI & Smooth Page Transition Engine
+ */
+(function () {
+    // 1. Inject smooth CSS transition styles into head
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+        body {
+            opacity: 0;
+            transition: opacity 0.15s ease-out !important;
+        }
+        body.page-loaded {
+            opacity: 1 !important;
+        }
+    `;
+    document.head.appendChild(styleEl);
 
-    document.querySelectorAll('section, .card').forEach(el => {
-        if (!el.classList.contains('no-reveal')) {
-            el.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
-            observer.observe(el);
+    // 2. Trigger Instant Smooth Fade-In on Page Load
+    function revealPage() {
+        requestAnimationFrame(() => {
+            document.body.classList.add('page-loaded');
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', revealPage);
+    } else {
+        revealPage();
+    }
+
+    // Handle back-forward cache (BFCache)
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted) {
+            document.body.classList.add('page-loaded');
         }
     });
 
-    // Navbar Scroll Effect
-    const nav = document.querySelector('nav');
-    if (nav) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                nav.classList.add('h-16', 'shadow-md');
-                nav.classList.remove('h-20', 'shadow-sm');
+    // 4. Navbar Scroll Effect & Active Page Link Highlight
+    document.addEventListener('DOMContentLoaded', () => {
+        const nav = document.querySelector('nav');
+        if (nav) {
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 30) {
+                    nav.classList.add('shadow-md');
+                } else {
+                    nav.classList.remove('shadow-md');
+                }
+            }, { passive: true });
+        }
+
+        // Active link & underline highlighting based on page group
+        const path = window.location.pathname.toLowerCase();
+        const page = path.split('/').pop() || 'index.html';
+
+        const navElements = document.querySelectorAll('.nav-link, .nav-dropdown-btn');
+        if (navElements.length > 0) {
+            navElements.forEach(el => {
+                el.classList.remove('text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                el.classList.add('text-on-surface-variant');
+            });
+
+            const setActive = (el) => {
+                if (!el) return;
+                el.classList.add('text-primary', 'border-b-2', 'border-primary', 'pb-1');
+                el.classList.remove('text-on-surface-variant');
+            };
+
+            if (page.includes('anggota') || page.includes('prestasi') || page.includes('profil')) {
+                setActive(document.querySelector('[data-group="profil"]'));
+            } else if (page.includes('jadwal')) {
+                setActive(document.querySelector('[data-group="jadwal"]'));
+            } else if (page.includes('inventaris') || page.includes('absensi') || page.includes('administrasi')) {
+                setActive(document.querySelector('[data-group="administrasi"]'));
+            } else if (page.includes('galeri')) {
+                setActive(document.querySelector('[data-page="galeri"]'));
             } else {
-                nav.classList.add('h-20', 'shadow-sm');
-                nav.classList.remove('h-16', 'shadow-md');
+                setActive(document.querySelector('[data-page="beranda"]'));
             }
-        });
-    }
-});
+        }
+    });
+})();
