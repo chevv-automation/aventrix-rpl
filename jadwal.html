@@ -256,35 +256,40 @@
 
 <!-- Section Tugas & Deadline Pelajaran -->
 <section id="tugas-section" class="mt-12 pt-8 border-t border-slate-200">
-<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-  <div>
-    <span class="bg-rose-100 text-rose-800 text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">TASK TRACKER</span>
-    <h2 class="font-headline-xl text-2xl md:text-3xl font-extrabold text-on-surface">Tugas &amp; PR Pelajaran Kelas</h2>
-    <p class="text-on-surface-variant text-xs md:text-sm mt-1">Daftar deadline tugas aktif dan riwayat arsip tugas kelas XII RPL.</p>
-  </div>
-  <a href="admin/tugas.html" class="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline shrink-0">
-    <span class="material-symbols-outlined text-sm">edit_note</span> Kelola Tugas (Admin)
-  </a>
+<div class="mb-6">
+  <span class="bg-rose-100 text-rose-800 text-[11px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">TASK TRACKER</span>
+  <h2 class="font-headline-xl text-2xl md:text-3xl font-extrabold text-on-surface">Tugas &amp; PR Pelajaran Kelas</h2>
+  <p class="text-on-surface-variant text-xs md:text-sm mt-1">Pantau deadline tugas aktif dan riwayat arsip tugas kelas XII RPL.</p>
 </div>
 
-<!-- Filter & Search Controls (Super Clean) -->
-<div class="flex flex-col sm:flex-row items-center justify-between gap-3 mb-6 bg-slate-50 p-3 rounded-2xl border border-slate-200">
-  <!-- Search Input Bar -->
-  <div class="relative w-full sm:w-80">
-    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">search</span>
-    <input type="text" id="tugas-search-input" oninput="window.renderPublicTugas()" placeholder="Cari judul tugas, guru, materi..." class="w-full pl-9 pr-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all">
-  </div>
-
-  <!-- Subject Filter Dropdown -->
-  <div class="w-full sm:w-auto flex items-center gap-2">
-    <select id="tugas-filter-mapel" onchange="window.renderPublicTugas()" class="w-full sm:w-auto bg-white border border-slate-200 text-xs font-bold text-slate-700 px-3.5 py-2 rounded-xl outline-none focus:border-primary transition-all cursor-pointer">
-      <option value="all">📚 Semua Mata Pelajaran</option>
-    </select>
+<!-- Search Filter Bar Only -->
+<div class="mb-6">
+  <div class="relative w-full max-w-md">
+    <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg pointer-events-none">search</span>
+    <input type="text" id="tugas-search-input" oninput="window.renderPublicTugas()" placeholder="Cari tugas, mata pelajaran, guru, materi..." class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium outline-none focus:border-primary focus:bg-white transition-all shadow-sm">
   </div>
 </div>
 
-<div id="public-tugas-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-  <!-- Dynamic loaded -->
+<!-- Sub-section 1: Tugas Aktif -->
+<div class="mb-8">
+  <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2 mb-4">
+    <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+    Tugas Aktif &amp; Mendatang
+  </h3>
+  <div id="public-tugas-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Dynamic loaded -->
+  </div>
+</div>
+
+<!-- Sub-section 2: Riwayat & Arsip Tugas Terdahulu (Terpisah) -->
+<div class="mt-10 pt-6 border-t border-slate-200/80">
+  <h3 class="text-sm font-extrabold text-slate-600 flex items-center gap-2 mb-4">
+    <span class="material-symbols-outlined text-base text-slate-500">history</span>
+    Riwayat &amp; Arsip Tugas Terdahulu
+  </h3>
+  <div id="public-history-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Dynamic loaded -->
+  </div>
 </div>
 </section>
 
@@ -571,34 +576,16 @@
         window.renderPublicTugas = function() {
             const saved = localStorage.getItem('admin_tugas_records');
             let items = saved ? JSON.parse(saved) : defaultTugas;
-            const container = document.getElementById('public-tugas-container');
-            const mapelSelect = document.getElementById('tugas-filter-mapel');
+            const containerAktif = document.getElementById('public-tugas-container');
+            const containerHistory = document.getElementById('public-history-container');
             const searchInput = document.getElementById('tugas-search-input');
 
-            if (!container) return;
+            if (!containerAktif || !containerHistory) return;
 
-            // Populate Mapel Dropdown Options dynamically if not populated
-            if (mapelSelect && mapelSelect.options.length <= 1) {
-                const mapels = Array.from(new Set(items.map(i => i.mapel))).filter(Boolean);
-                mapels.forEach(m => {
-                    const opt = document.createElement('option');
-                    opt.value = m;
-                    opt.textContent = m;
-                    mapelSelect.appendChild(opt);
-                });
-            }
-
-            const selectedMapel = mapelSelect ? mapelSelect.value : 'all';
             const searchQuery = searchInput ? searchInput.value.trim().toLowerCase() : '';
 
-            let filtered = items;
-
-            // Filter by Selected Subject
-            if (selectedMapel !== 'all') {
-                filtered = filtered.filter(item => item.mapel === selectedMapel);
-            }
-
             // Filter by Search Query (Judul, Mapel, Guru, Deskripsi)
+            let filtered = items;
             if (searchQuery) {
                 filtered = filtered.filter(item => {
                     const text = `${item.judul} ${item.mapel} ${item.guru || ''} ${item.deskripsi || ''}`.toLowerCase();
@@ -606,12 +593,23 @@
                 });
             }
 
-            if (filtered.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-400 text-sm italic">Tidak ada tugas yang cocok dengan pencarian / filter mapel ini. 🔍</div>`;
-                return;
-            }
+            // Separate into Active vs History
+            const activeItems = [];
+            const historyItems = [];
 
-            container.innerHTML = filtered.map(item => {
+            filtered.forEach(item => {
+                const daysLeft = getDiff(item.deadline);
+                const isPassedMoreThan24h = daysLeft !== null && daysLeft < -1;
+
+                if (item.status === 'selesai' || isPassedMoreThan24h) {
+                    historyItems.push(item);
+                } else {
+                    activeItems.push(item);
+                }
+            });
+
+            // Card HTML Generator Helper
+            function renderCard(item, isHistory = false) {
                 const daysLeft = getDiff(item.deadline);
                 let badgeClass = 'bg-blue-100 text-blue-800';
                 let badgeText = `Deadline: ${item.deadline}`;
@@ -636,7 +634,7 @@
                 }
 
                 return `
-                <div class="bg-surface-container-lowest p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between ${item.status === 'selesai' || (daysLeft < -1) ? 'bg-slate-50/70 border-slate-200' : ''}">
+                <div class="bg-surface-container-lowest p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
                     <div>
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                             <span class="bg-rose-50 text-rose-700 font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-md border border-rose-200">
@@ -653,7 +651,21 @@
 
                     ${item.link ? `<div class="pt-2 border-t border-slate-100 flex items-center justify-between"><a href="${item.link}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">open_in_new</span> Link Tugas</a></div>` : ''}
                 </div>`;
-            }).join('');
+            }
+
+            // Render Active Tasks
+            if (activeItems.length === 0) {
+                containerAktif.innerHTML = `<div class="col-span-2 text-center py-6 text-slate-400 text-xs italic bg-slate-50 rounded-xl border border-dashed border-slate-200">Tidak ada tugas aktif mendesak saat ini. ✨</div>`;
+            } else {
+                containerAktif.innerHTML = activeItems.map(item => renderCard(item, false)).join('');
+            }
+
+            // Render History Tasks
+            if (historyItems.length === 0) {
+                containerHistory.innerHTML = `<div class="col-span-2 text-center py-6 text-slate-400 text-xs italic bg-slate-50 rounded-xl border border-dashed border-slate-200">Belum ada riwayat / arsip tugas terdahulu. 📜</div>`;
+            } else {
+                containerHistory.innerHTML = historyItems.map(item => renderCard(item, true)).join('');
+            }
         };
 
         document.addEventListener('DOMContentLoaded', () => {
