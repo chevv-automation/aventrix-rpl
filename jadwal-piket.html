@@ -494,26 +494,30 @@
             try {
                 const parsed = JSON.parse(saved);
                 if (parsed && typeof parsed === 'object') {
+                    if (parsed['Senin']) {
+                        parsed['Senin'] = parsed['Senin'].map(m => (m === 'Alvin' ? 'Dafi' : m));
+                        localStorage.setItem('piket_schedule_map', JSON.stringify(parsed));
+                    }
                     piketMembersMap = parsed;
-                    // Update DOM list items inside each day card
-                    Object.keys(piketMembersMap).forEach(day => {
-                        const card = document.querySelector(`.piket-day-card[data-day="${day}"]`);
-                        if (card) {
-                            const list = card.querySelector('ol');
-                            if (list) {
-                                list.innerHTML = piketMembersMap[day].map((m, i) => `
-                                    <li class="flex items-center gap-3 text-sm font-medium">
-                                        <span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">${i + 1}</span> ${m}
-                                    </li>
-                                `).join('');
-                            }
-                        }
-                    });
                 }
             } catch (e) {
                 console.warn("Error parsing piket_schedule_map:", e);
             }
         }
+        // Always render current map into DOM
+        Object.keys(piketMembersMap).forEach(day => {
+            const card = document.querySelector(`.piket-day-card[data-day="${day}"]`);
+            if (card) {
+                const list = card.querySelector('ol');
+                if (list) {
+                    list.innerHTML = piketMembersMap[day].map((m, i) => `
+                        <li class="flex items-center gap-3 text-sm font-medium">
+                            <span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">${i + 1}</span> ${m}
+                        </li>
+                    `).join('');
+                }
+            }
+        });
     }
 
     function updateRealtimePiket() {

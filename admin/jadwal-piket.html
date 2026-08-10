@@ -106,6 +106,10 @@
                 if (savedLocal) {
                     try {
                         currentPiketMap = JSON.parse(savedLocal);
+                        if (currentPiketMap && currentPiketMap['Senin']) {
+                            currentPiketMap['Senin'] = currentPiketMap['Senin'].map(m => (m === 'Alvin' ? 'Dafi' : m));
+                            localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
+                        }
                     } catch (e) {
                         currentPiketMap = null;
                     }
