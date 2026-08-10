@@ -251,6 +251,14 @@
       <span id="realtime-clock-badge">MEMUAT WAKTU HARI INI...</span>
     </div>
   </div>
+  <div class="flex items-center gap-2 no-print">
+    <button onclick="window.copyWhatsAppFormat()" class="inline-flex items-center gap-1.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold px-4 py-2 rounded-xl text-xs shadow-sm transition-all cursor-pointer">
+      <span class="material-symbols-outlined text-sm">content_copy</span> Copy Format WA
+    </button>
+    <button onclick="window.printPiket()" class="inline-flex items-center gap-1.5 bg-primary text-white hover:bg-primary/90 font-bold px-4 py-2 rounded-xl text-xs shadow-sm transition-all cursor-pointer">
+      <span class="material-symbols-outlined text-sm">print</span> Cetak PDF
+    </button>
+  </div>
 </div>
 
 <h2 class="font-headline-xl text-xl md:text-2xl font-extrabold text-primary mb-2">Petugas Piket - Minggu Ini</h2>
@@ -586,12 +594,67 @@
         });
     }
 
+    window.printPiket = function() {
+        window.print();
+    };
+
+    window.copyWhatsAppFormat = function() {
+        const activeMap = currentPiketData || DEFAULT_PIKET_MAP;
+        let waText = `✨ *JADWAL PIKET KELAS XII RPL* ✨\n🏫 *SMK NEGERI 3 JEMBER*\n📅 *Periode Minggu Ini*\n\n`;
+
+        const dayEmojis = {
+            'Senin': '🔴',
+            'Selasa': '🟡',
+            'Rabu': '🟢',
+            'Kamis': '🔵',
+            'Jumat': '🟣'
+        };
+
+        const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+        days.forEach(day => {
+            const emoji = dayEmojis[day] || '📌';
+            const members = activeMap[day] || [];
+            waText += `${emoji} *${day.toUpperCase()}*\n`;
+            if (members.length > 0) {
+                members.forEach((m, idx) => {
+                    waText += `   ${idx + 1}. ${m}\n`;
+                });
+            } else {
+                waText += `   - (Tidak ada petugas)\n`;
+            }
+            waText += `\n`;
+        });
+
+        waText += `_______________________________\n📌 *Mari Jaga Kebersihan Kelas Bersama!*`;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(waText).then(() => {
+                alert('✅ Jadwal Piket Format WhatsApp berhasil di-copy!\n\nSilakan buka WhatsApp dan tekan PASTE (Tempel) di Grup WA Kelas.');
+            }).catch(err => {
+                console.error(err);
+                prompt('Salin teks format WhatsApp di bawah ini:', waText);
+            });
+        } else {
+            prompt('Salin teks format WhatsApp di bawah ini:', waText);
+        }
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         loadDynamicPiketMap();
         updateRealtimePiket();
         setInterval(updateRealtimePiket, 1000);
     });
 </script>
+<style>
+@media print {
+    nav, footer, .no-print, #piket-today-callout { display: none !important; }
+    header { padding: 1.5rem !important; background: #00288e !important; color: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { background: white !important; color: black !important; }
+    .max-w-container-max { max-width: 100% !important; margin: 0 !important; padding: 0.5rem !important; }
+    .grid { display: grid !important; grid-template-cols: repeat(5, minmax(0, 1fr)) !important; gap: 0.5rem !important; }
+    .piket-day-card { break-inside: avoid; border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
+}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./js/supabase-config.js"></script>
 <script src="./js/global-ui.js"></script>

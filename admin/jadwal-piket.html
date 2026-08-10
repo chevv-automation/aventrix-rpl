@@ -44,10 +44,20 @@
                 <h1 class="text-3xl md:text-4xl font-extrabold text-blue-900 mb-2 tracking-tight">Rolling Jadwal Piket</h1>
                 <p class="text-slate-500">Kelola dan putar jadwal petugas kebersihan kelas.</p>
             </div>
-            <button id="btn-roll" class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white px-6 py-3 rounded-xl font-bold shadow-md shadow-blue-500/30 transition-all flex items-center gap-2">
-                <span class="material-symbols-outlined">autorenew</span>
-                Roll Jadwal Piket
-            </button>
+            <div class="flex flex-wrap items-center gap-3 no-print">
+                <button onclick="window.copyWhatsAppFormat()" class="bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white px-5 py-3 rounded-xl font-bold shadow-sm transition-all flex items-center gap-2 text-xs">
+                    <span class="material-symbols-outlined text-sm">content_copy</span>
+                    Copy Format WA
+                </button>
+                <button onclick="window.printPiket()" class="bg-slate-800 hover:bg-slate-900 active:scale-95 text-white px-5 py-3 rounded-xl font-bold shadow-sm transition-all flex items-center gap-2 text-xs">
+                    <span class="material-symbols-outlined text-sm">print</span>
+                    Cetak PDF
+                </button>
+                <button id="btn-roll" class="bg-blue-600 hover:bg-blue-700 active:scale-95 text-white px-6 py-3 rounded-xl font-bold shadow-md shadow-blue-500/30 transition-all flex items-center gap-2 text-xs">
+                    <span class="material-symbols-outlined text-sm">autorenew</span>
+                    Roll Jadwal Piket
+                </button>
+            </div>
         </div>
 
         <div id="toast-notif" class="hidden fixed top-20 right-6 bg-emerald-800 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center gap-3 z-50 transition-all border border-emerald-400/30">
@@ -244,6 +254,67 @@
             btnRoll.addEventListener('click', rollJadwal);
             loadData();
         });
+
+        window.printPiket = function() {
+            window.print();
+        };
+
+        window.copyWhatsAppFormat = function() {
+            const activeMap = window.currentPiketData || {
+                'Senin': ['Nathan', 'Khanza', 'Jorel', 'Dika', 'Luna', 'Nadyah', 'Jonas'],
+                'Selasa': ['Hizkia', 'Fathir', 'Nabila', 'Naufal', 'Ceza', 'Alicia', 'Alya'],
+                'Rabu': ['Naya', 'Alvin', 'Dayyana', 'Faaris', 'Christiano', 'Dito', 'Lovy'],
+                'Kamis': ['Ceza', 'Bima', 'Avniela', 'Hikaru', 'Chevy', 'Aulia', 'Aisyah'],
+                'Jumat': ['Nabil', 'Irland', 'Rinesa', 'Zufar', 'Vian', 'Wildan', 'Yudika']
+            };
+
+            let waText = `✨ *JADWAL PIKET KELAS XII RPL* ✨\n🏫 *SMK NEGERI 3 JEMBER*\n📅 *Periode Minggu Ini*\n\n`;
+
+            const dayEmojis = {
+                'Senin': '🔴',
+                'Selasa': '🟡',
+                'Rabu': '🟢',
+                'Kamis': '🔵',
+                'Jumat': '🟣'
+            };
+
+            const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+            days.forEach(day => {
+                const emoji = dayEmojis[day] || '📌';
+                const members = activeMap[day] || [];
+                waText += `${emoji} *${day.toUpperCase()}*\n`;
+                if (members.length > 0) {
+                    members.forEach((m, idx) => {
+                        waText += `   ${idx + 1}. ${m}\n`;
+                    });
+                } else {
+                    waText += `   - (Tidak ada petugas)\n`;
+                }
+                waText += `\n`;
+            });
+
+            waText += `_______________________________\n📌 *Mari Jaga Kebersihan Kelas Bersama!*`;
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(waText).then(() => {
+                    alert('✅ Jadwal Piket Format WhatsApp berhasil di-copy!\n\nSilakan buka WhatsApp dan tekan PASTE (Tempel) di Grup WA Kelas.');
+                }).catch(err => {
+                    console.error(err);
+                    prompt('Salin teks format WhatsApp di bawah ini:', waText);
+                });
+            } else {
+                prompt('Salin teks format WhatsApp di bawah ini:', waText);
+            }
+        };
     </script>
+    <style>
+    @media print {
+        nav, footer, .no-print, #toast-notif { display: none !important; }
+        body { background: white !important; color: black !important; }
+        main { max-width: 100% !important; margin: 0 !important; padding: 0.5rem !important; }
+        #piket-container { display: grid !important; grid-template-cols: repeat(5, minmax(0, 1fr)) !important; gap: 0.5rem !important; }
+        .piket-card { break-inside: avoid; border: 1px solid #cbd5e1 !important; box-shadow: none !important; }
+    }
+    </style>
 </body>
 </html>
