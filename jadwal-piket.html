@@ -488,16 +488,34 @@
         'Jumat': ['Avniela', 'Dayyana', 'Flano', 'Nabil', 'Alvin', 'Alya', 'Anin']
     };
 
+    function sanitizePiketMap(map) {
+        if (!map || typeof map !== 'object') return map;
+        let alvinFound = false;
+        Object.keys(map).forEach(day => {
+            if (Array.isArray(map[day])) {
+                map[day] = map[day].map(name => {
+                    if (name === 'Alvin') {
+                        if (!alvinFound && day === 'Jumat') {
+                            alvinFound = true;
+                            return 'Alvin';
+                        }
+                        return 'Dafi';
+                    }
+                    return name;
+                });
+            }
+        });
+        return map;
+    }
+
     function loadDynamicPiketMap() {
         const saved = localStorage.getItem('piket_schedule_map');
         if (saved) {
             try {
-                const parsed = JSON.parse(saved);
+                let parsed = JSON.parse(saved);
                 if (parsed && typeof parsed === 'object') {
-                    if (parsed['Senin']) {
-                        parsed['Senin'] = parsed['Senin'].map(m => (m === 'Alvin' ? 'Dafi' : m));
-                        localStorage.setItem('piket_schedule_map', JSON.stringify(parsed));
-                    }
+                    parsed = sanitizePiketMap(parsed);
+                    localStorage.setItem('piket_schedule_map', JSON.stringify(parsed));
                     piketMembersMap = parsed;
                 }
             } catch (e) {

@@ -76,7 +76,7 @@
 
             const defaultDays = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
             
-            // Default 35 students duty mapping
+            // Default 35 students duty mapping (Alvin on Friday, Dafi on Monday)
             const defaultPiketMap = {
                 'Senin': ['Mieke', 'Ceza', 'Raihan', 'Winda', 'Hikaru', 'Dafi', 'Fawaaz'],
                 'Selasa': ['Rakha', 'Wahyu', 'Queen', 'Naya', 'Irland', 'Alicia', 'Rafi'],
@@ -86,6 +86,26 @@
             };
 
             let currentPiketMap = null;
+
+            function sanitizePiketMap(map) {
+                if (!map || typeof map !== 'object') return map;
+                let alvinFound = false;
+                Object.keys(map).forEach(day => {
+                    if (Array.isArray(map[day])) {
+                        map[day] = map[day].map(name => {
+                            if (name === 'Alvin') {
+                                if (!alvinFound && day === 'Jumat') {
+                                    alvinFound = true;
+                                    return 'Alvin';
+                                }
+                                return 'Dafi';
+                            }
+                            return name;
+                        });
+                    }
+                });
+                return map;
+            }
 
             function showToast(msg) {
                 if (toast && toastMsg) {
@@ -106,10 +126,8 @@
                 if (savedLocal) {
                     try {
                         currentPiketMap = JSON.parse(savedLocal);
-                        if (currentPiketMap && currentPiketMap['Senin']) {
-                            currentPiketMap['Senin'] = currentPiketMap['Senin'].map(m => (m === 'Alvin' ? 'Dafi' : m));
-                            localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
-                        }
+                        currentPiketMap = sanitizePiketMap(currentPiketMap);
+                        localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
                     } catch (e) {
                         currentPiketMap = null;
                     }
@@ -257,7 +275,7 @@
             const activeMap = window.currentPiketData || {
                 'Senin': ['Nathan', 'Khanza', 'Jorel', 'Dika', 'Luna', 'Nadyah', 'Jonas'],
                 'Selasa': ['Hizkia', 'Fathir', 'Nabila', 'Naufal', 'Ceza', 'Alicia', 'Alya'],
-                'Rabu': ['Naya', 'Alvin', 'Dayyana', 'Faaris', 'Christiano', 'Dito', 'Lovy'],
+                'Rabu': ['Naya', 'Dafi', 'Dayyana', 'Faaris', 'Christiano', 'Dito', 'Lovy'],
                 'Kamis': ['Ceza', 'Bima', 'Avniela', 'Hikaru', 'Chevy', 'Aulia', 'Aisyah'],
                 'Jumat': ['Nabil', 'Irland', 'Rinesa', 'Zufar', 'Vian', 'Wildan', 'Yudika']
             };
