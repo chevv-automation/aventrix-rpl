@@ -580,9 +580,9 @@
             return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
         }
 
-        window.renderPublicTugas = function() {
+        window.renderPublicTugas = function(passedItems) {
             const saved = localStorage.getItem('admin_tugas_records');
-            let items = saved ? JSON.parse(saved) : defaultTugas;
+            let items = passedItems || (saved ? JSON.parse(saved) : defaultTugas);
             const containerAktif = document.getElementById('public-tugas-container');
             const containerHistory = document.getElementById('public-history-container');
             const searchInput = document.getElementById('tugas-search-input');
@@ -679,8 +679,33 @@
             }
         };
 
-        document.addEventListener('DOMContentLoaded', () => {
+        async function fetchSupabasePublicTugas() {
+            if (window.supabase && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
+                try {
+                    const client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+                    const { data, error } = await client.from('tugas').select('*').order('created_at', { ascending: false });
+                    if (!error && data && data.length > 0) {
+                        const formatted = data.map(row => ({
+                            id: row.id,
+                            mapel: row.mapel || row.subject || '',
+                            judul: row.judul || row.title || '',
+                            guru: row.guru || row.teacher || '',
+                            deadline: row.deadline || '',
+                            deskripsi: row.deskripsi || row.description || '',
+                            link: row.link || '',
+                            status: row.status || 'aktif'
+                        }));
+                        localStorage.setItem('admin_tugas_records', JSON.stringify(formatted));
+                        window.renderPublicTugas(formatted);
+                        return;
+                    }
+                } catch(e) { console.warn(e); }
+            }
             window.renderPublicTugas();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchSupabasePublicTugas();
         });
     </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

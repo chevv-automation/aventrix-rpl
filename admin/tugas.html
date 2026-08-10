@@ -150,6 +150,48 @@
             }
         ];
 
+        // Supabase Client Helper
+        function getSupabaseClient() {
+            if (window.supabaseClient) return window.supabaseClient;
+            if (window.supabase && window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
+                window.supabaseClient = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+                return window.supabaseClient;
+            }
+            return null;
+        }
+
+        // Fetch Tasks from Supabase DB or LocalStorage
+        async function loadTugasData() {
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    const { data, error } = await client.from('tugas').select('*').order('created_at', { ascending: false });
+                    if (!error && data && data.length > 0) {
+                        const formatted = data.map(row => ({
+                            id: row.id,
+                            mapel: row.mapel || row.subject || '',
+                            judul: row.judul || row.title || '',
+                            guru: row.guru || row.teacher || '',
+                            deadline: row.deadline || '',
+                            deskripsi: row.deskripsi || row.description || '',
+                            link: row.link || '',
+                            status: row.status || 'aktif'
+                        }));
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(formatted));
+                        renderTugasList(formatted);
+                        return;
+                    }
+                } catch (err) {
+                    console.warn('Supabase fetch tasks error, falling back to localStorage:', err);
+                }
+            }
+
+            // Fallback to localStorage
+            const saved = localStorage.getItem(STORAGE_KEY);
+            let items = saved ? JSON.parse(saved) : defaultTugas;
+            renderTugasList(items);
+        }
+
         function getTugasItems() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
@@ -160,7 +202,7 @@
 
         function saveTugasItems(items) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-            renderTugasList();
+            renderTugasList(items);
         }
 
         // Calculate Days Remaining
@@ -176,8 +218,13 @@
         }
 
         // Add Tugas Submission
-        document.getElementById('add-tugas-form').addEventListener('submit', (e) => {
+        document.getElementById('add-tugas-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalBtn = btn.innerHTML;
+            btn.innerHTML = `<span class="material-symbols-outlined animate-spin text-lg">sync</span> Menyimpan...`;
+            btn.disabled = true;
+
             const mapel = document.getElementById('tugas-mapel').value.trim();
             const judul = document.getElementById('tugas-judul').value.trim();
             const guru = document.getElementById('tugas-guru').value.trim();
@@ -196,17 +243,37 @@
                 status: 'aktif'
             };
 
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    await client.from('tugas').insert([{
+                        id: newItem.id,
+                        mapel: newItem.mapel,
+                        judul: newItem.judul,
+                        guru: newItem.guru,
+                        deadline: newItem.deadline,
+                        deskripsi: newItem.deskripsi,
+                        link: newItem.link,
+                        status: newItem.status
+                    }]);
+                } catch(err) {
+                    console.warn('Supabase insert error:', err);
+                }
+            }
+
             const items = getTugasItems();
             items.unshift(newItem);
             saveTugasItems(items);
 
             document.getElementById('add-tugas-form').reset();
-            alert('Tugas pelajaran baru berhasil dipublikasikan!');
+            btn.innerHTML = originalBtn;
+            btn.disabled = false;
+            alert('✅ Tugas pelajaran baru berhasil dipublikasikan & tersinkronisasi ke seluruh perangkat!');
         });
 
         // Render List
-        function renderTugasList() {
-            const items = getTugasItems();
+        function renderTugasList(passedItems) {
+            const items = passedItems || getTugasItems();
             document.getElementById('total-tugas-count').textContent = items.length;
             const container = document.getElementById('tugas-list-container');
 
@@ -228,10 +295,10 @@
                         badgeClass = 'bg-slate-200 text-slate-700';
                         badgeText = '⚠️ Lewat Deadline';
                     } else if (daysLeft === 0) {
-                        badgeClass = 'bg-rose-600 text-white animate-pulse';
+                        badgeClass = 'bg-blue-700 text-white animate-pulse';
                         badgeText = '🔥 HARI INI DEADLINE!';
                     } else if (daysLeft <= 3) {
-                        badgeClass = 'bg-rose-100 text-rose-800 font-bold';
+                        badgeClass = 'bg-blue-100 text-blue-900 font-bold';
                         badgeText = `⏰ H-${daysLeft} Deadline!`;
                     } else {
                         badgeClass = 'bg-blue-100 text-blue-800';
@@ -271,34 +338,65 @@
             }).join('');
         }
 
-        window.toggleStatusTugas = function(id) {
+        window.toggleStatusTugas = async function(id) {
             let items = getTugasItems();
+            let newStatus = 'aktif';
             items = items.map(item => {
                 if (item.id === id) {
                     item.status = item.status === 'selesai' ? 'aktif' : 'selesai';
+                    newStatus = item.status;
                 }
                 return item;
             });
+
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    await client.from('tugas').update({ status: newStatus }).eq('id', id);
+                } catch(err) {
+                    console.warn('Supabase update status error:', err);
+                }
+            }
+
             saveTugasItems(items);
         };
 
-        window.deleteTugas = function(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus tugas ini?')) {
+        window.deleteTugas = async function(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus tugas ini dari SEMUA perangkat (HP & Laptop)?')) {
+                const client = getSupabaseClient();
+                if (client) {
+                    try {
+                        await client.from('tugas').delete().eq('id', id);
+                    } catch(err) {
+                        console.warn('Supabase delete error:', err);
+                    }
+                }
+
                 let items = getTugasItems();
                 items = items.filter(item => item.id !== id);
                 saveTugasItems(items);
             }
         };
 
-        window.clearAllTugas = function() {
-            if (confirm('Reset seluruh daftar tugas ke default awal?')) {
+        window.clearAllTugas = async function() {
+            if (confirm('Reset seluruh daftar tugas ke default awal di SEMUA perangkat?')) {
+                const client = getSupabaseClient();
+                if (client) {
+                    try {
+                        await client.from('tugas').delete().neq('id', '');
+                    } catch(err) {
+                        console.warn('Supabase clear all error:', err);
+                    }
+                }
                 localStorage.removeItem(STORAGE_KEY);
-                renderTugasList();
+                loadTugasData();
             }
         };
 
-        // Initialize Page
-        renderTugasList();
+        // Initialize Page with Supabase Realtime Sync
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTugasData();
+        });
     </script>
 </body>
 </html>

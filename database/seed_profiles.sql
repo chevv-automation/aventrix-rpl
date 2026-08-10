@@ -354,4 +354,29 @@ ON CONFLICT (nomor_absen) DO UPDATE SET
     email = EXCLUDED.email,
     alamat_rumah = EXCLUDED.alamat_rumah,
     jabatan = EXCLUDED.jabatan,
-    deskripsi_diri = EXCLUDED.deskripsi_diri;
+    deskripsi_diri = EXCLUDED.deskripsi_diri;;;;SPLIT_HERE;;;
+
+-- Table: tugas (Realtime Sync Across HP & Laptop)
+CREATE TABLE IF NOT EXISTS public.tugas (
+    id VARCHAR(100) PRIMARY KEY,
+    mapel TEXT NOT NULL,
+    judul TEXT NOT NULL,
+    guru TEXT,
+    deadline DATE,
+    deskripsi TEXT,
+    link TEXT,
+    status VARCHAR(20) DEFAULT 'aktif',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS & Policies for tugas table
+ALTER TABLE public.tugas ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "Allow public read tugas" ON public.tugas;
+DROP POLICY IF EXISTS "Allow public insert tugas" ON public.tugas;
+DROP POLICY IF EXISTS "Allow public update tugas" ON public.tugas;
+DROP POLICY IF EXISTS "Allow public delete tugas" ON public.tugas;
+
+CREATE POLICY "Allow public read tugas" ON public.tugas FOR SELECT USING (true);
+CREATE POLICY "Allow public insert tugas" ON public.tugas FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow public update tugas" ON public.tugas FOR UPDATE USING (true);
+CREATE POLICY "Allow public delete tugas" ON public.tugas FOR DELETE USING (true);
