@@ -273,7 +273,7 @@
             document.getElementById('add-tugas-form').reset();
             btn.innerHTML = originalBtn;
             btn.disabled = false;
-            alert('✅ Tugas pelajaran baru berhasil dipublikasikan & tersinkronisasi ke seluruh perangkat!');
+            alert('Tugas pelajaran baru berhasil dipublikasikan & tersinkronisasi ke seluruh perangkat!');
         });
 
         // Render List
@@ -294,20 +294,20 @@
 
                 if (item.status === 'selesai') {
                     badgeClass = 'bg-emerald-100 text-emerald-800';
-                    badgeText = '✅ Selesai / Terkumpul';
+                    badgeText = 'Selesai / Terkumpul';
                 } else if (daysLeft !== null) {
                     if (daysLeft < 0) {
                         badgeClass = 'bg-slate-200 text-slate-700';
-                        badgeText = '⚠️ Lewat Deadline';
+                        badgeText = 'Lewat Deadline';
                     } else if (daysLeft === 0) {
                         badgeClass = 'bg-blue-700 text-white animate-pulse';
-                        badgeText = '🔥 HARI INI DEADLINE!';
+                        badgeText = 'HARI INI DEADLINE!';
                     } else if (daysLeft <= 3) {
                         badgeClass = 'bg-blue-100 text-blue-900 font-bold';
-                        badgeText = `⏰ H-${daysLeft} Deadline!`;
+                        badgeText = `H-${daysLeft} Deadline!`;
                     } else {
                         badgeClass = 'bg-blue-100 text-blue-800';
-                        badgeText = `⏰ H-${daysLeft} (${item.deadline})`;
+                        badgeText = `H-${daysLeft} (${item.deadline})`;
                     }
                 }
 
@@ -323,7 +323,7 @@
                             </span>
                         </div>
                         <h3 class="font-bold text-base text-slate-900 mb-1">${item.judul}</h3>
-                        ${item.guru ? `<p class="text-xs font-semibold text-slate-500 mb-2">👨‍🏫 Guru: ${item.guru}</p>` : ''}
+                        ${item.guru ? `<p class="text-xs font-semibold text-slate-500 mb-2">Guru: ${item.guru}</p>` : ''}
                         <p class="text-xs text-slate-600 mb-3 leading-relaxed">${item.deskripsi || 'Tidak ada instruksi tambahan.'}</p>
                     </div>
 

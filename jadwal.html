@@ -623,20 +623,20 @@
 
                 if (item.status === 'selesai') {
                     badgeClass = 'bg-emerald-100 text-emerald-800';
-                    badgeText = '✅ Selesai';
+                    badgeText = 'Selesai';
                 } else if (daysLeft !== null) {
                     if (daysLeft < 0) {
                         badgeClass = 'bg-slate-200 text-slate-700';
-                        badgeText = '⚠️ Expired / Arsip';
+                        badgeText = 'Expired / Arsip';
                     } else if (daysLeft === 0) {
                         badgeClass = 'bg-blue-700 text-white animate-pulse';
-                        badgeText = '🔥 HARI INI DEADLINE!';
+                        badgeText = 'HARI INI DEADLINE!';
                     } else if (daysLeft <= 3) {
                         badgeClass = 'bg-blue-100 text-blue-900 font-extrabold';
-                        badgeText = `⏰ H-${daysLeft} Deadline!`;
+                        badgeText = `H-${daysLeft} Deadline!`;
                     } else {
                         badgeClass = 'bg-blue-50 text-blue-800 border border-blue-200';
-                        badgeText = `⏰ H-${daysLeft} (${item.deadline})`;
+                        badgeText = `H-${daysLeft} (${item.deadline})`;
                     }
                 }
 
@@ -652,7 +652,7 @@
                             </span>
                         </div>
                         <h3 class="font-bold text-base text-on-surface mb-1">${item.judul}</h3>
-                        ${item.guru ? `<p class="text-xs font-semibold text-on-surface-variant mb-1.5">👨‍🏫 Guru: ${item.guru}</p>` : ''}
+                        ${item.guru ? `<p class="text-xs font-semibold text-on-surface-variant mb-1.5">Guru: ${item.guru}</p>` : ''}
                         <p class="text-xs text-on-surface-variant leading-relaxed mb-3 line-clamp-2">${item.deskripsi || 'Tidak ada deskripsi.'}</p>
                     </div>
 
@@ -666,14 +666,14 @@
 
             // Render Active Tasks
             if (activeItems.length === 0) {
-                containerAktif.innerHTML = `<div class="col-span-2 text-center py-6 text-slate-400 text-xs italic bg-slate-50 rounded-xl border border-dashed border-slate-200">Tidak ada tugas aktif mendesak saat ini. ✨</div>`;
+                containerAktif.innerHTML = `<div class="col-span-2 text-center py-6 text-slate-400 text-xs italic bg-slate-50 rounded-xl border border-dashed border-slate-200">Tidak ada tugas aktif mendesak saat ini.</div>`;
             } else {
                 containerAktif.innerHTML = activeItems.map(item => renderCard(item, false)).join('');
             }
 
             // Render History Tasks
             if (historyItems.length === 0) {
-                containerHistory.innerHTML = `<div class="col-span-2 text-center py-6 text-slate-400 text-xs italic bg-slate-50 rounded-xl border border-dashed border-slate-200">Belum ada riwayat / arsip tugas terdahulu. 📜</div>`;
+                containerHistory.innerHTML = `<div class="col-span-2 text-center py-6 text-slate-400 text-xs italic bg-slate-50 rounded-xl border border-dashed border-slate-200">Belum ada riwayat / arsip tugas terdahulu.</div>`;
             } else {
                 containerHistory.innerHTML = historyItems.map(item => renderCard(item, true)).join('');
             }
