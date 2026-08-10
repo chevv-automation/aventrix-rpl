@@ -684,7 +684,7 @@
                 try {
                     const client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
                     const { data, error } = await client.from('tugas').select('*').order('created_at', { ascending: false });
-                    if (!error && data && data.length > 0) {
+                    if (!error && Array.isArray(data)) {
                         const formatted = data.map(row => ({
                             id: row.id,
                             mapel: row.mapel || row.subject || '',

@@ -166,7 +166,7 @@
             if (client) {
                 try {
                     const { data, error } = await client.from('tugas').select('*').order('created_at', { ascending: false });
-                    if (!error && data && data.length > 0) {
+                    if (!error && Array.isArray(data)) {
                         const formatted = data.map(row => ({
                             id: row.id,
                             mapel: row.mapel || row.subject || '',
@@ -180,6 +180,8 @@
                         localStorage.setItem(STORAGE_KEY, JSON.stringify(formatted));
                         renderTugasList(formatted);
                         return;
+                    } else if (error) {
+                        console.warn('Supabase table "tugas" error:', error.message);
                     }
                 } catch (err) {
                     console.warn('Supabase fetch tasks error, falling back to localStorage:', err);
