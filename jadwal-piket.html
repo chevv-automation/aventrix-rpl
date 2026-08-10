@@ -322,7 +322,7 @@
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">4</span> Naya</li>
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">5</span> Irland</li>
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">6</span> Alicia</li>
-<li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">7</span> Rafi</li>
+<li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">7</span> Alvin</li>
 </ol>
 <div class="duty-footer hidden mt-6 pt-4 border-t border-surface-variant flex justify-center">
 <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Bertugas Sekarang</span>
@@ -386,7 +386,7 @@
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">2</span> Dayyana</li>
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">3</span> Flano</li>
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">4</span> Nabil</li>
-<li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">5</span> Alvin</li>
+<li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">5</span> Rafi</li>
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">6</span> Alya</li>
 <li class="flex items-center gap-3 text-sm font-medium"><span class="w-5 h-5 flex items-center justify-center bg-surface-container rounded-full text-[10px] font-bold text-primary">7</span> Anin</li>
 </ol>
@@ -482,23 +482,27 @@
 <script>
     let piketMembersMap = {
         'Senin': ['Mieke', 'Ceza', 'Raihan', 'Winda', 'Hikaru', 'Dafi', 'Fawaaz'],
-        'Selasa': ['Rakha', 'Wahyu', 'Queen', 'Naya', 'Irland', 'Alicia', 'Rafi'],
+        'Selasa': ['Rakha', 'Wahyu', 'Queen', 'Naya', 'Irland', 'Alicia', 'Alvin'],
         'Rabu': ['Nathan', 'Khanza', 'Jorel', 'Dika', 'Luna', 'Nadyah', 'Jonas'],
         'Kamis': ['Mikhaela', 'Lovy', 'Naufal', 'Adam', 'Chevy', 'Bima', 'Hizkia'],
-        'Jumat': ['Avniela', 'Dayyana', 'Flano', 'Nabil', 'Alvin', 'Alya', 'Anin']
+        'Jumat': ['Avniela', 'Dayyana', 'Flano', 'Nabil', 'Rafi', 'Alya', 'Anin']
     };
 
     function sanitizePiketMap(map) {
         if (!map || typeof map !== 'object') return map;
-        let alvinFound = false;
         Object.keys(map).forEach(day => {
             if (Array.isArray(map[day])) {
                 map[day] = map[day].map(name => {
-                    if (name === 'Alvin') {
-                        if (!alvinFound && day === 'Jumat') {
-                            alvinFound = true;
-                            return 'Alvin';
-                        }
+                    if (day === 'Selasa' && (name === 'Dafi' || name === 'Rafi')) {
+                        return 'Alvin';
+                    }
+                    if (day === 'Senin' && name === 'Alvin') {
+                        return 'Dafi';
+                    }
+                    if (day === 'Jumat' && name === 'Alvin') {
+                        return 'Rafi';
+                    }
+                    if (day === 'Rabu' && name === 'Alvin') {
                         return 'Dafi';
                     }
                     return name;

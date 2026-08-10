@@ -76,28 +76,32 @@
 
             const defaultDays = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
             
-            // Default 35 students duty mapping (Alvin on Friday, Dafi on Monday)
+            // Default 35 students duty mapping (Alvin on Tuesday, Dafi on Monday, Rafi on Friday)
             const defaultPiketMap = {
                 'Senin': ['Mieke', 'Ceza', 'Raihan', 'Winda', 'Hikaru', 'Dafi', 'Fawaaz'],
-                'Selasa': ['Rakha', 'Wahyu', 'Queen', 'Naya', 'Irland', 'Alicia', 'Rafi'],
+                'Selasa': ['Rakha', 'Wahyu', 'Queen', 'Naya', 'Irland', 'Alicia', 'Alvin'],
                 'Rabu': ['Nathan', 'Khanza', 'Jorel', 'Dika', 'Luna', 'Nadyah', 'Jonas'],
                 'Kamis': ['Mikhaela', 'Lovy', 'Naufal', 'Adam', 'Chevy', 'Bima', 'Hizkia'],
-                'Jumat': ['Avniela', 'Dayyana', 'Flano', 'Nabil', 'Alvin', 'Alya', 'Anin']
+                'Jumat': ['Avniela', 'Dayyana', 'Flano', 'Nabil', 'Rafi', 'Alya', 'Anin']
             };
 
             let currentPiketMap = null;
 
             function sanitizePiketMap(map) {
                 if (!map || typeof map !== 'object') return map;
-                let alvinFound = false;
                 Object.keys(map).forEach(day => {
                     if (Array.isArray(map[day])) {
                         map[day] = map[day].map(name => {
-                            if (name === 'Alvin') {
-                                if (!alvinFound && day === 'Jumat') {
-                                    alvinFound = true;
-                                    return 'Alvin';
-                                }
+                            if (day === 'Selasa' && (name === 'Dafi' || name === 'Rafi')) {
+                                return 'Alvin';
+                            }
+                            if (day === 'Senin' && name === 'Alvin') {
+                                return 'Dafi';
+                            }
+                            if (day === 'Jumat' && name === 'Alvin') {
+                                return 'Rafi';
+                            }
+                            if (day === 'Rabu' && name === 'Alvin') {
                                 return 'Dafi';
                             }
                             return name;
