@@ -39,13 +39,13 @@
     <main class="flex-grow max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8">
         
         <!-- Header -->
-        <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-rose-900 via-red-800 to-rose-950 text-white p-6 sm:p-8 rounded-2xl shadow-md">
+        <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white p-6 sm:p-8 rounded-2xl shadow-md">
             <div>
-                <span class="bg-white/20 text-rose-100 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">TASK & DEADLINE TRACKER</span>
+                <span class="bg-white/20 text-blue-100 text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2 inline-block">TASK &amp; DEADLINE TRACKER</span>
                 <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">Tugas &amp; PR Pelajaran Kelas</h1>
-                <p class="text-rose-100/90 text-xs sm:text-sm mt-1">Input tugas baru, pasang deadline pengumpulan, dan pantau status tugas agar tidak tertumpuk.</p>
+                <p class="text-blue-100/90 text-xs sm:text-sm mt-1">Input tugas baru, pasang deadline pengumpulkan, dan pantau status tugas agar tidak tertumpuk.</p>
             </div>
-            <a href="../jadwal.html#tugas-section" target="_blank" class="inline-flex items-center gap-2 bg-white text-rose-900 font-bold px-4 py-2.5 rounded-xl text-xs hover:bg-rose-50 transition-all shadow-sm shrink-0">
+            <a href="../jadwal.html#tugas-section" target="_blank" class="inline-flex items-center gap-2 bg-white text-blue-900 font-bold px-4 py-2.5 rounded-xl text-xs hover:bg-blue-50 transition-all shadow-sm shrink-0">
                 <span class="material-symbols-outlined text-sm">open_in_new</span> Lihat Halaman Publik
             </a>
         </div>
@@ -56,42 +56,42 @@
             <div class="lg:col-span-1">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 sticky top-24">
                     <h2 class="font-bold text-lg text-slate-900 mb-4 flex items-center gap-2 border-b pb-3">
-                        <span class="material-symbols-outlined text-rose-600">add_task</span>
+                        <span class="material-symbols-outlined text-blue-600">add_task</span>
                         Tambah Tugas Baru
                     </h2>
 
                     <form id="add-tugas-form" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Mata Pelajaran *</label>
-                            <input type="text" id="tugas-mapel" required placeholder="Contoh: Pemrograman Web (PWPB)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-600 focus:bg-white transition-all">
+                            <input type="text" id="tugas-mapel" required placeholder="Contoh: Pemrograman Web (PWPB)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Judul / Topik Tugas *</label>
-                            <input type="text" id="tugas-judul" required placeholder="Contoh: Membuat CRUD Supabase & LocalStorage" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-600 focus:bg-white transition-all">
+                            <input type="text" id="tugas-judul" required placeholder="Contoh: Membuat CRUD Supabase & LocalStorage" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Guru Pengampu</label>
-                            <input type="text" id="tugas-guru" placeholder="Contoh: Pak Tri / Bu Ani" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-600 focus:bg-white transition-all">
+                            <input type="text" id="tugas-guru" placeholder="Contoh: Pak Tri / Bu Ani" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal Deadline Pengumpulan *</label>
-                            <input type="date" id="tugas-deadline" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-600 focus:bg-white transition-all">
+                            <input type="date" id="tugas-deadline" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Instruksi & Detail Tugas</label>
-                            <textarea id="tugas-deskripsi" rows="3" placeholder="Rincian instruksi tugas, format file yang dikumpulkan, dll..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-600 focus:bg-white transition-all"></textarea>
+                            <textarea id="tugas-deskripsi" rows="3" placeholder="Rincian instruksi tugas, format file yang dikumpulkan, dll..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all"></textarea>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Link Google Classroom / Drive (Opsional)</label>
-                            <input type="url" id="tugas-link" placeholder="https://classroom.google.com/..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-rose-600 focus:bg-white transition-all">
+                            <input type="url" id="tugas-link" placeholder="https://classroom.google.com/..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
                         </div>
 
-                        <button type="submit" class="w-full py-3 bg-rose-700 hover:bg-rose-800 text-white font-bold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <button type="submit" class="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
                             <span class="material-symbols-outlined text-lg">post_add</span> Publikasikan Tugas
                         </button>
                     </form>
@@ -103,7 +103,7 @@
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
                     <div class="flex items-center justify-between mb-6 border-b pb-4">
                         <h2 class="font-bold text-lg text-slate-900 flex items-center gap-2">
-                            <span class="material-symbols-outlined text-rose-600">checklist</span>
+                            <span class="material-symbols-outlined text-blue-600">checklist</span>
                             Daftar Tugas Pelajaran (<span id="total-tugas-count">0</span>)
                         </h2>
                         <button onclick="window.clearAllTugas()" class="text-xs font-bold text-red-600 hover:text-red-800 transition-colors">
@@ -243,7 +243,7 @@
                 <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl flex flex-col justify-between hover:shadow-md transition-all ${item.status === 'selesai' ? 'opacity-70' : ''}">
                     <div>
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                            <span class="text-xs font-bold text-rose-700 uppercase tracking-wider bg-rose-50 px-2.5 py-1 rounded-md border border-rose-200">
+                            <span class="text-xs font-bold text-blue-800 uppercase tracking-wider bg-blue-50 px-2.5 py-1 rounded-md border border-blue-200">
                                 ${item.mapel}
                             </span>
                             <span class="text-[11px] font-bold px-3 py-1 rounded-full ${badgeClass}">
