@@ -472,6 +472,44 @@
 </div>
 </footer>
 <script>
+        // Dynamic loading from Admin Panel
+        (function loadAdminPrestasi() {
+            const saved = localStorage.getItem('admin_prestasi_records');
+            if (saved) {
+                try {
+                    const items = JSON.parse(saved);
+                    const container = document.getElementById('achievements-container');
+                    if (container && items && items.length > 0) {
+                        items.forEach(item => {
+                            if (item.id === 'pres-1' || item.id === 'pres-2' || item.id === 'pres-3') return;
+                            const article = document.createElement('article');
+                            article.className = 'achievement-card bg-surface-container-lowest rounded-2xl overflow-hidden flex flex-col border border-slate-100 shadow-sm hover:shadow-md transition-all';
+                            article.setAttribute('data-category', item.kategori || 'non-akademik');
+                            article.innerHTML = `
+                                <div class="aspect-video overflow-hidden bg-slate-50 p-1 flex items-center justify-center border-b border-slate-100">
+                                <img class="w-full h-full object-cover rounded-lg" alt="${item.judul}" src="${item.url}">
+                                </div>
+                                <div class="p-6 flex flex-col flex-grow">
+                                <div class="flex justify-between items-start mb-3">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-caps text-[10px] font-bold uppercase">${item.kategori || 'Prestasi'}</span>
+                                <span class="text-outline font-label-caps text-[11px] font-medium">${item.tingkat || '2025'}</span>
+                                </div>
+                                <h3 class="font-headline-md text-xl font-bold text-primary mb-2">${item.judul}</h3>
+                                <p class="font-body-md text-xs text-secondary mb-6 flex-grow leading-relaxed">
+                                    <strong>${item.peraih}</strong> — ${item.deskripsi || ''}
+                                </p>
+                                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-primary font-bold">
+                                    <span>${item.lomba || 'XII RPL'}</span>
+                                    <span class="material-symbols-outlined text-sm">workspace_premium</span>
+                                </div>
+                                </div>`;
+                            container.prepend(article);
+                        });
+                    }
+                } catch(e) { console.error('Error loading admin prestasi:', e); }
+            }
+        })();
+
         // Functional Category Filter Engine
         document.querySelectorAll('.filter-pill').forEach(pill => {
             pill.addEventListener('click', () => {
@@ -508,10 +546,9 @@
         const modalCertCaption = document.getElementById('modal-cert-caption');
         const closeCertModalBtn = document.getElementById('close-cert-modal');
 
-        document.querySelectorAll('.achievement-card').forEach(card => {
-            const imgContainer = card.querySelector('.aspect-video') || card;
-            imgContainer.style.cursor = 'pointer';
-            imgContainer.addEventListener('click', () => {
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('.achievement-card');
+            if (card) {
                 const img = card.querySelector('img');
                 const title = card.querySelector('h3')?.textContent || 'Sertifikat Prestasi';
                 const caption = card.querySelector('p')?.textContent || '';
@@ -525,7 +562,7 @@
                     certModal.classList.add('flex');
                     document.body.style.overflow = 'hidden';
                 }
-            });
+            }
         });
 
         const closeCertModal = () => {
