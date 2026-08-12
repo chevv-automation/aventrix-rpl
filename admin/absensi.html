@@ -435,17 +435,17 @@
                 btnSave.disabled = true;
 
                 try {
-                    // Build record array with clean UUID/VARCHAR compatibility
+                    // Build payload matching exact Supabase UUID schema (letting Supabase auto-generate valid UUIDs for 'id')
                     const recordData = allStudents.map(s => {
                         const isUuid = s.id && typeof s.id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.id);
-                        return {
-                            id: 'abs_' + (s.nomor_absen || s.id) + '_' + selDate,
-                            profile_id: isUuid ? s.id : null,
+                        const item = {
                             nama: s.nama,
                             tanggal: selDate,
                             status: currentStatusMap[s.id] || 'Hadir',
                             keterangan: currentKetMap[s.id] || ''
                         };
+                        if (isUuid) item.profile_id = s.id;
+                        return item;
                     });
 
                     // 1. Save to localStorage for instant local fallback
@@ -466,14 +466,6 @@
                             if (insErr) {
                                 console.error("Supabase absensi insert error:", insErr);
                                 lastErrorMessage = insErr.message || 'Insert Error';
-                                // Secondary fallback: try upsert
-                                const { error: upErr } = await saveClient.from('absensi').upsert(recordData);
-                                if (upErr) {
-                                    console.error("Supabase absensi upsert error:", upErr);
-                                    lastErrorMessage = upErr.message || lastErrorMessage;
-                                } else {
-                                    supabaseSuccess = true;
-                                }
                             } else {
                                 supabaseSuccess = true;
                             }
