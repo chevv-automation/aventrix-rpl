@@ -435,23 +435,27 @@
                 btnSave.disabled = true;
 
                 try {
-                    // Build record array with exact standard columns (id, profile_id, nama, tanggal, status, keterangan)
-                    const recordData = allStudents.map(s => ({
-                        id: 'abs_' + (s.nomor_absen || s.id) + '_' + selDate,
-                        profile_id: String(s.id || s.nomor_absen),
-                        nama: s.nama,
-                        tanggal: selDate,
-                        status: currentStatusMap[s.id] || 'Hadir',
-                        keterangan: currentKetMap[s.id] || ''
-                    }));
+                    // Build record array with clean UUID/VARCHAR compatibility
+                    const recordData = allStudents.map(s => {
+                        const isUuid = s.id && typeof s.id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.id);
+                        return {
+                            id: 'abs_' + (s.nomor_absen || s.id) + '_' + selDate,
+                            profile_id: isUuid ? s.id : null,
+                            nama: s.nama,
+                            tanggal: selDate,
+                            status: currentStatusMap[s.id] || 'Hadir',
+                            keterangan: currentKetMap[s.id] || ''
+                        };
+                    });
 
-                    // 1. Save to localStorage for instant local sync
+                    // 1. Save to localStorage for instant local fallback
                     localStorage.setItem('admin_absensi_records', JSON.stringify(recordData));
                     localStorage.setItem('admin_absensi_date', selDate);
 
                     // 2. Save to Supabase Cloud DB for Multi-Device Sync
                     const saveClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
                     let supabaseSuccess = false;
+                    let lastErrorMessage = '';
                     
                     if (saveClient) {
                         try {
@@ -461,10 +465,12 @@
                             const { data: insData, error: insErr } = await saveClient.from('absensi').insert(recordData);
                             if (insErr) {
                                 console.error("Supabase absensi insert error:", insErr);
-                                // Fallback: try upsert
+                                lastErrorMessage = insErr.message || 'Insert Error';
+                                // Secondary fallback: try upsert
                                 const { error: upErr } = await saveClient.from('absensi').upsert(recordData);
                                 if (upErr) {
-                                    console.warn("Supabase absensi upsert note:", upErr);
+                                    console.error("Supabase absensi upsert error:", upErr);
+                                    lastErrorMessage = upErr.message || lastErrorMessage;
                                 } else {
                                     supabaseSuccess = true;
                                 }
@@ -473,13 +479,16 @@
                             }
                         } catch (sErr) {
                             console.warn("Supabase absensi insert note:", sErr);
+                            lastErrorMessage = sErr.message || 'Exception Error';
                         }
                     }
 
                     if (supabaseSuccess) {
                         alert("✅ Presensi berhasil disimpan dan tersinkronisasi ke seluruh perangkat!");
+                    } else if (lastErrorMessage) {
+                        alert("⚠️ Gagal menyinkronkan ke Supabase Database Cloud:\n" + lastErrorMessage + "\n\n(Data tersimpan sementara di browser ini).");
                     } else {
-                        alert("✅ Presensi berhasil disimpan di penyimpanan lokal!");
+                        alert("✅ Presensi tersimpan di penyimpanan browser!");
                     }
                 } catch(err) {
                     alert("Gagal menyimpan presensi: " + err.message);
