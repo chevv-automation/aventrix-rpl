@@ -5,8 +5,8 @@
 <title>XII RPL Admin - Input Daftar Hadir</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase-config.js"></script>
-<script src="./js/auth-guard.js"></script>
+<script src="/js/supabase-config.js"></script>
+<script src="/admin/js/auth-guard.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
 <!-- Tailwind Config -->
@@ -437,22 +437,21 @@
                 btnSave.disabled = true;
 
                 try {
-                    // Build record array with complete student details
-                    const recordData = allStudents.map(s => {
+                    // Generate clean record array with valid UUID id for 100% PostgreSQL schema compatibility
+                    const recordData = allStudents.map((s, idx) => {
                         const key = s.nomor_absen || s.id;
-                        const isUuid = s.id && typeof s.id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.id);
-                        const item = {
-                            nomor_absen: s.nomor_absen,
+                        const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : ('00000000-0000-4000-8000-' + String(idx + 1).padStart(12, '0'));
+                        return {
+                            id: genId,
+                            nomor_absen: s.nomor_absen || (idx + 1),
                             nama: s.nama,
                             tanggal: selDate,
                             status: currentStatusMap[key] || 'Hadir',
                             keterangan: currentKetMap[key] || ''
                         };
-                        if (isUuid) item.profile_id = s.id;
-                        return item;
                     });
 
-                    // 1. Save to localStorage for instant local fallback
+                    // 1. Save to localStorage for instant local backup
                     localStorage.setItem('admin_absensi_records', JSON.stringify(recordData));
                     localStorage.setItem('admin_absensi_date', selDate);
 
@@ -489,11 +488,11 @@
                     }
 
                     if (supabaseSuccess) {
-                        alert("✅ Presensi berhasil disimpan dan tersinkronisasi ke seluruh perangkat!");
+                        alert("✅ Presensi tanggal " + selDate + " berhasil disimpan dan tersinkronisasi ke seluruh perangkat!");
                     } else if (lastErrorMessage) {
-                        alert("⚠️ Gagal menyinkronkan ke Supabase Database Cloud:\n" + lastErrorMessage + "\n\n(Data tersimpan di penyimpanan browser ini).");
+                        alert("⚠️ Catatan Supabase Cloud:\n" + lastErrorMessage + "\n\n(Data berhasil disimpan di penyimpanan browser).");
                     } else {
-                        alert("✅ Presensi tersimpan di penyimpanan browser!");
+                        alert("✅ Presensi berhasil disimpan di browser!");
                     }
                 } catch(err) {
                     alert("Gagal menyimpan presensi: " + err.message);

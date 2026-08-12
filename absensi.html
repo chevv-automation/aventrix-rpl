@@ -388,10 +388,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { data: pData } = await pubClient.from('profiles').select('id, nama, nomor_absen').order('nomor_absen', { ascending: true });
             if (pData && pData.length > 0) profiles = pData;
 
-            // Fetch Absensi
-            const { data: aData } = await pubClient.from('absensi').select('*');
-            if (aData && aData.length > 0) {
-                absensiData = aData;
+            // Fetch Absensi records ordered by latest date
+            const todayStr = new Date().toLocaleDateString('en-CA');
+            const { data: aToday } = await pubClient.from('absensi').select('*').eq('tanggal', todayStr);
+            
+            if (aToday && aToday.length > 0) {
+                absensiData = aToday;
+            } else {
+                const { data: aLatest } = await pubClient.from('absensi').select('*').order('tanggal', { ascending: false }).limit(35);
+                if (aLatest && aLatest.length > 0) absensiData = aLatest;
             }
 
             // Fetch Jurnal
@@ -406,18 +411,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (tbody) {
         const roster = profiles.length > 0 ? profiles : defaultStudents;
         const renderList = roster.map(p => {
+            const pNamaClean = (p.nama || '').trim().toLowerCase();
+            
             const localRec = localAbsensiRecords.find(a => 
-                (a.nama && p.nama && a.nama.toLowerCase() === p.nama.toLowerCase()) || 
-                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
-                (a.id === p.id || a.profile_id === p.id) ||
-                (a.id && a.id.includes('_' + p.nomor_absen + '_'))
+                (a.nomor_absen && Number(a.nomor_absen) === Number(p.nomor_absen)) || 
+                (a.nama && (a.nama || '').trim().toLowerCase() === pNamaClean)
             );
+
             const dbRec = absensiData.find(a => 
-                (a.nama && p.nama && a.nama.toLowerCase() === p.nama.toLowerCase()) || 
-                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
-                (a.profile_id === p.id) ||
-                (a.id && a.id.includes('_' + p.nomor_absen + '_'))
+                (a.nomor_absen && Number(a.nomor_absen) === Number(p.nomor_absen)) || 
+                (a.nama && (a.nama || '').trim().toLowerCase() === pNamaClean)
             );
+
             const rec = localRec || dbRec;
             return {
                 nama: p.nama,
