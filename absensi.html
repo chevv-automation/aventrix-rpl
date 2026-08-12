@@ -404,25 +404,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- Render Absensi Roster ---
     if (tbody) {
-        let renderList = [];
-
-        if (profiles.length > 0) {
-            renderList = profiles.map(p => {
-                // Priority: localStorage admin input -> Supabase DB record -> default Hadir
-                const localRec = localAbsensiRecords.find(a => a.id === p.id || a.profile_id === p.id || a.nomor_absen === p.nomor_absen || (a.nama && a.nama.toLowerCase() === p.nama.toLowerCase()));
-                const dbRec = absensiData.find(a => a.profile_id === p.id || a.nomor_absen === p.nomor_absen);
-                const rec = localRec || dbRec;
-                return {
-                    nama: p.nama,
-                    status: rec ? rec.status : 'Hadir',
-                    ket: rec && rec.keterangan ? rec.keterangan : ''
-                };
-            });
-        } else if (localAbsensiRecords.length > 0) {
-            renderList = localAbsensiRecords;
-        } else {
-            renderList = defaultStudents;
-        }
+        const roster = profiles.length > 0 ? profiles : defaultStudents;
+        const renderList = roster.map(p => {
+            const localRec = localAbsensiRecords.find(a => 
+                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
+                (a.nama && p.nama && a.nama.toLowerCase() === p.nama.toLowerCase()) || 
+                (a.id === p.id || a.profile_id === p.id)
+            );
+            const dbRec = absensiData.find(a => 
+                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
+                (a.nama && p.nama && a.nama.toLowerCase() === p.nama.toLowerCase()) || 
+                (a.profile_id === p.id)
+            );
+            const rec = localRec || dbRec;
+            return {
+                nama: p.nama,
+                status: rec ? rec.status : 'Hadir',
+                ket: rec && rec.keterangan ? rec.keterangan : ''
+            };
+        });
 
         tbody.innerHTML = renderList.map(s => {
             let sBadge = '<span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Hadir</span>';

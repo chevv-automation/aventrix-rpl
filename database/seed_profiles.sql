@@ -384,7 +384,7 @@ CREATE POLICY "Allow public delete tugas" ON public.tugas FOR DELETE USING (true
 -- Table: absensi (Multi-Device Sync)
 CREATE TABLE IF NOT EXISTS public.absensi (
     id VARCHAR(100) PRIMARY KEY,
-    profile_id UUID,
+    profile_id VARCHAR(100),
     nomor_absen INT,
     nama TEXT,
     tanggal DATE NOT NULL,
@@ -410,7 +410,7 @@ CREATE TABLE IF NOT EXISTS public.jurnal_kelas (
 -- Table: jadwal_piket (Multi-Device Sync)
 CREATE TABLE IF NOT EXISTS public.jadwal_piket (
     id VARCHAR(100) PRIMARY KEY,
-    profile_id UUID,
+    profile_id VARCHAR(100),
     hari VARCHAR(20) NOT NULL,
     urutan_piket INT DEFAULT 1,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()

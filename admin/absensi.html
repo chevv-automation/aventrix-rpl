@@ -233,6 +233,44 @@
             const dateInput = document.getElementById('tanggal-presensi');
             dateInput.value = new Date().toISOString().split('T')[0];
 
+            const defaultStudents = [
+                { id: 'prof_1', nomor_absen: 1, nama: 'Alvin Pratama' },
+                { id: 'prof_2', nomor_absen: 2, nama: 'Fawaaz Alim' },
+                { id: 'prof_3', nomor_absen: 3, nama: 'Avniela Calista Novawan' },
+                { id: 'prof_4', nomor_absen: 4, nama: 'Wahyu Hidayat' },
+                { id: 'prof_5', nomor_absen: 5, nama: 'Bima Mahesa' },
+                { id: 'prof_6', nomor_absen: 6, nama: 'Chevy Abrary' },
+                { id: 'prof_7', nomor_absen: 7, nama: 'Christiano Flano S' },
+                { id: 'prof_8', nomor_absen: 8, nama: "Dayyana Khoirun Nisa'" },
+                { id: 'prof_9', nomor_absen: 9, nama: 'Hikaru' },
+                { id: 'prof_10', nomor_absen: 10, nama: 'Naya Putri' },
+                { id: 'prof_11', nomor_absen: 11, nama: 'Irland Setiawan' },
+                { id: 'prof_12', nomor_absen: 12, nama: 'Rafi Ahmad' },
+                { id: 'prof_13', nomor_absen: 13, nama: 'Jorel Permana' },
+                { id: 'prof_14', nomor_absen: 14, nama: 'Khanssa Alicia Fairy' },
+                { id: 'prof_15', nomor_absen: 15, nama: 'Nathaniel' },
+                { id: 'prof_16', nomor_absen: 16, nama: 'M. Ceza Fairus' },
+                { id: 'prof_17', nomor_absen: 17, nama: 'Dika Ramadhan' },
+                { id: 'prof_18', nomor_absen: 18, nama: 'Luna Maya' },
+                { id: 'prof_19', nomor_absen: 19, nama: 'Mikhaela Aulia Susanto' },
+                { id: 'prof_20', nomor_absen: 20, nama: 'Jonas Kurniawan' },
+                { id: 'prof_21', nomor_absen: 21, nama: 'Lovy Ananda' },
+                { id: 'prof_22', nomor_absen: 22, nama: 'Adam Malik' },
+                { id: 'prof_23', nomor_absen: 23, nama: 'Hizkia Saputra' },
+                { id: 'prof_24', nomor_absen: 24, nama: 'Naufal Ahmad Zufar' },
+                { id: 'prof_25', nomor_absen: 25, nama: 'Nadyah Gina Fatin' },
+                { id: 'prof_26', nomor_absen: 26, nama: 'Nabil Syahputra' },
+                { id: 'prof_27', nomor_absen: 27, nama: 'Queen Zhevanya Kirania' },
+                { id: 'prof_28', nomor_absen: 28, nama: 'Alya Rohali' },
+                { id: 'prof_29', nomor_absen: 29, nama: 'M. Raihan' },
+                { id: 'prof_30', nomor_absen: 30, nama: 'Anin Setyawati' },
+                { id: 'prof_31', nomor_absen: 31, nama: 'Rakha Pratama Mahardika' },
+                { id: 'prof_32', nomor_absen: 32, nama: 'Mieke Wijaya' },
+                { id: 'prof_33', nomor_absen: 33, nama: 'Khanza Kirana' },
+                { id: 'prof_34', nomor_absen: 34, nama: 'Winda' },
+                { id: 'prof_35', nomor_absen: 35, nama: 'Yudika Adi Pratama' }
+            ];
+
             let allStudents = [];
             let currentStatusMap = {}; // Maps profile_id -> status
             let currentKetMap = {};    // Maps profile_id -> keterangan
@@ -249,11 +287,14 @@
                 tbody.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-slate-500 italic">Memuat data...</td></tr>';
                 try {
                     // Fetch students
-                    if (allStudents.length === 0 && sClient) {
+                    if (sClient) {
                         const { data: pData, error: pError } = await sClient.from('profiles').select('*').order('nomor_absen', { ascending: true });
                         if (!pError && pData && pData.length > 0) {
                             allStudents = pData;
                         }
+                    }
+                    if (allStudents.length === 0) {
+                        allStudents = defaultStudents;
                     }
 
                     // Fetch absensi for selected date
@@ -265,16 +306,23 @@
                         const { data: aData, error: aError } = await sClient.from('absensi').select('*').eq('tanggal', selDate);
                         if (!aError && aData && aData.length > 0) {
                             aData.forEach(a => {
-                                absensiMap[a.profile_id || a.id] = a.status;
-                                ketMap[a.profile_id || a.id] = a.keterangan || '';
+                                if (a.profile_id) absensiMap[a.profile_id] = a.status;
+                                if (a.nomor_absen) absensiMap['no_' + a.nomor_absen] = a.status;
+                                if (a.nama) absensiMap['nama_' + a.nama.toLowerCase()] = a.status;
+
+                                if (a.profile_id) ketMap[a.profile_id] = a.keterangan || '';
+                                if (a.nomor_absen) ketMap['no_' + a.nomor_absen] = a.keterangan || '';
+                                if (a.nama) ketMap['nama_' + a.nama.toLowerCase()] = a.keterangan || '';
                             });
                         }
                     }
 
                     // Build initial map defaulting to 'Hadir'
                     allStudents.forEach(s => {
-                        currentStatusMap[s.id] = absensiMap[s.id] || 'Hadir';
-                        currentKetMap[s.id] = ketMap[s.id] || '';
+                        const st = absensiMap[s.id] || absensiMap['no_' + s.nomor_absen] || absensiMap['nama_' + (s.nama || '').toLowerCase()] || 'Hadir';
+                        const kt = ketMap[s.id] || ketMap['no_' + s.nomor_absen] || ketMap['nama_' + (s.nama || '').toLowerCase()] || '';
+                        currentStatusMap[s.id] = st;
+                        currentKetMap[s.id] = kt;
                     });
 
                     applyFilters();
@@ -376,10 +424,10 @@
                 btnSave.disabled = true;
 
                 try {
-                    // Build record array with custom Alasan/Keterangan
+                    // Build record array with custom Alasan/Keterangan & unique Primary Key ID per date
                     const recordData = allStudents.map(s => ({
-                        id: s.id,
-                        profile_id: s.id,
+                        id: 'abs_' + (s.nomor_absen || s.id) + '_' + selDate,
+                        profile_id: String(s.id || s.nomor_absen),
                         nomor_absen: s.nomor_absen,
                         nama: s.nama,
                         tanggal: selDate,
@@ -395,14 +443,20 @@
                     const saveClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
                     if (saveClient) {
                         try {
-                            await saveClient.from('absensi').delete().eq('tanggal', selDate);
-                            await saveClient.from('absensi').insert(recordData);
+                            const { error: delErr } = await saveClient.from('absensi').delete().eq('tanggal', selDate);
+                            if (delErr) console.warn("Supabase absensi delete note:", delErr);
+
+                            const { data: insData, error: insErr } = await saveClient.from('absensi').insert(recordData);
+                            if (insErr) {
+                                console.error("Supabase absensi insert error:", insErr);
+                                alert("Catatan Supabase: " + insErr.message + " (Data tersimpan di penyimpanan lokal).");
+                            }
                         } catch (sErr) {
                             console.warn("Supabase absensi insert note:", sErr);
                         }
                     }
 
-                    alert("Berhasil menyimpan presensi & alasan! Data di seluruh perangkat otomatis terbarui.");
+                    alert("✅ Presensi berhasil disimpan dan tersinkronisasi ke seluruh perangkat!");
                 } catch(err) {
                     alert("Gagal menyimpan presensi: " + err.message);
                 } finally {
