@@ -158,12 +158,7 @@
             "Pendidikan Pancasila & Kewarganegaraan"
         ];
 
-        const defaultGuru = [
-            "Bu Mimin Putri Raharyani, S.Kom",
-            "Pak Ahmad, S.Kom",
-            "Pak Bambang Sukoco, S.Kom",
-            "Pak Didik, S.T.",
-            "Bu Rina, S.Pd.",
+        const defaultGuru = [            "Bu Rina, S.Pd.",
             "Pak Slamet, M.Pd.",
             "Bu Indah, S.Pd.",
             "Guru Pengampu Lainnya"
@@ -188,16 +183,16 @@
                 }
             }
 
-            // 2. Try fetching from Supabase if connected
-            if (window.supabaseClient) {
+            // 2. Try fetching from Supabase Cloud DB for Multi-Device Sync
+            const jClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+            if (jClient) {
                 try {
-                    const { data, error } = await window.supabaseClient
+                    const { data, error } = await jClient
                         .from('jurnal_kelas')
                         .select('*')
                         .order('created_at', { ascending: false });
                     
-                    if (!error && data && data.length > 0) {
-                        // Merge db records with local ones
+                    if (!error && Array.isArray(data) && data.length > 0) {
                         const dbRecords = data.map(d => ({
                             id: d.id,
                             tanggal: d.tanggal,
@@ -219,6 +214,7 @@
         }
 
         function renderList() {
+            if (!listContainer) return;
             if (jurnalList.length === 0) {
                 listContainer.innerHTML = '<div class="text-center italic text-slate-500 py-4">Belum ada jurnal tersimpan.</div>';
                 return;
@@ -261,21 +257,25 @@
         };
 
         window.resetForm = () => {
-            form.reset();
-            document.getElementById('jurnal-id').value = '';
-            document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
-            document.getElementById('btn-save-jurnal').innerText = "Simpan Jurnal";
+            if (form) form.reset();
+            const jId = document.getElementById('jurnal-id');
+            const dt = document.getElementById('tanggal');
+            const btn = document.getElementById('btn-save-jurnal');
+            if (jId) jId.value = '';
+            if (dt) dt.value = new Date().toISOString().split('T')[0];
+            if (btn) btn.innerText = "Simpan Jurnal";
         };
 
         window.deleteJurnal = async (id) => {
-            if (confirm("Hapus jurnal ini?")) {
+            if (confirm("Hapus jurnal ini di SEMUA perangkat?")) {
                 try {
                     jurnalList = jurnalList.filter(j => String(j.id) !== String(id));
                     localStorage.setItem('admin_jurnal_records', JSON.stringify(jurnalList));
 
-                    if (window.supabaseClient) {
+                    const jClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                    if (jClient) {
                         try {
-                            await window.supabaseClient.from('jurnal_kelas').delete().eq('id', id);
+                            await jClient.from('jurnal_kelas').delete().eq('id', id);
                         } catch (sErr) {
                             console.warn("Supabase delete note:", sErr);
                         }
@@ -289,82 +289,76 @@
             }
         };
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btn-save-jurnal');
-            const originalText = btn.innerText;
-            btn.innerHTML = 'Menyimpan...';
-            btn.disabled = true;
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const btn = document.getElementById('btn-save-jurnal');
+                const originalText = btn.innerText;
+                btn.innerHTML = 'Menyimpan...';
+                btn.disabled = true;
 
-            const existingId = document.getElementById('jurnal-id').value;
-            const newId = existingId || 'jurnal_' + Date.now();
-            
-            const payload = {
-                id: newId,
-                tanggal: document.getElementById('tanggal').value || new Date().toISOString().split('T')[0],
-                mata_pelajaran: sanitizeText(document.getElementById('mapel').value) || 'Pemrograman Berbasis Teks (PBT)',
-                guru: sanitizeText(document.getElementById('guru').value) || 'Bu Mimin Putri Raharyani, S.Kom',
-                guru_pengajar: sanitizeText(document.getElementById('guru').value) || 'Bu Mimin Putri Raharyani, S.Kom',
-                materi: sanitizeText(document.getElementById('materi').value) || 'Pembahasan Materi Kelas XII RPL',
-                materi_pembahasan: sanitizeText(document.getElementById('materi').value) || 'Pembahasan Materi Kelas XII RPL',
-                kegiatan: sanitizeText(document.getElementById('kegiatan').value) || '',
-                catatan_khusus: sanitizeText(document.getElementById('catatan').value) || '',
-                created_at: new Date().toISOString()
-            };
+                const existingId = document.getElementById('jurnal-id').value;
+                const newId = existingId || 'jurnal_' + Date.now();
+                
+                const payload = {
+                    id: newId,
+                    tanggal: document.getElementById('tanggal').value || new Date().toISOString().split('T')[0],
+                    mata_pelajaran: sanitizeText(document.getElementById('mapel').value) || 'Pemrograman Berbasis Teks (PBT)',
+                    guru: sanitizeText(document.getElementById('guru').value) || 'Bu Mimin Putri Raharyani, S.Kom',
+                    guru_pengajar: sanitizeText(document.getElementById('guru').value) || 'Bu Mimin Putri Raharyani, S.Kom',
+                    materi: sanitizeText(document.getElementById('materi').value) || 'Pembahasan Materi Kelas XII RPL',
+                    materi_pembahasan: sanitizeText(document.getElementById('materi').value) || 'Pembahasan Materi Kelas XII RPL',
+                    kegiatan: sanitizeText(document.getElementById('kegiatan').value) || '',
+                    catatan_khusus: sanitizeText(document.getElementById('catatan').value) || '',
+                    created_at: new Date().toISOString()
+                };
 
-            try {
-                // 1. Update / Insert in local storage array
-                if (existingId) {
-                    const idx = jurnalList.findIndex(j => String(j.id) === String(existingId));
-                    if (idx !== -1) jurnalList[idx] = payload;
-                    else jurnalList.unshift(payload);
-                } else {
-                    jurnalList.unshift(payload);
-                }
-
-                localStorage.setItem('admin_jurnal_records', JSON.stringify(jurnalList));
-
-                // 2. Insert into Supabase if connected
-                if (window.supabaseClient) {
-                    try {
-                        if (existingId) {
-                            await window.supabaseClient.from('jurnal_kelas').update(payload).eq('id', existingId);
-                        } else {
-                            await window.supabaseClient.from('jurnal_kelas').insert([payload]);
-                        }
-                    } catch (sErr) {
-                        console.warn("Note: Supabase insert note:", sErr);
+                try {
+                    // 1. Update / Insert in local storage array
+                    if (existingId) {
+                        const idx = jurnalList.findIndex(j => String(j.id) === String(existingId));
+                        if (idx !== -1) jurnalList[idx] = payload;
+                        else jurnalList.unshift(payload);
+                    } else {
+                        jurnalList.unshift(payload);
                     }
+
+                    localStorage.setItem('admin_jurnal_records', JSON.stringify(jurnalList));
+
+                    // 2. Insert/Upsert into Supabase for Multi-Device Sync
+                    const jClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                    if (jClient) {
+                        try {
+                            await jClient.from('jurnal_kelas').upsert([payload]);
+                        } catch (sErr) {
+                            console.warn("Note: Supabase upsert note:", sErr);
+                        }
+                    }
+
+                    resetForm();
+                    renderList();
+                    alert("Jurnal kelas berhasil disimpan & tersinkronisasi ke seluruh perangkat!");
+                } catch (err) {
+                    alert("Gagal menyimpan jurnal: " + err.message);
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
                 }
+            });
+        }
 
-                resetForm();
-                renderList();
-                alert("✅ Jurnal kelas berhasil disimpan!");
-            } catch (err) {
-                alert("Gagal menyimpan jurnal: " + err.message);
-            } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            }
-        });
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            resetForm();
-            loadDropdowns();
-            loadJurnal();
-        });
-        
         async function loadDropdowns() {
             const mapelSelect = document.getElementById('mapel');
             const guruSelect = document.getElementById('guru');
+            if (!mapelSelect || !guruSelect) return;
 
             let mapelList = defaultMapel;
             let guruList = defaultGuru;
 
-            if (window.supabaseClient) {
+            const jClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+            if (jClient) {
                 try {
-                    const { data } = await window.supabaseClient.from('jadwal_pelajaran').select('mata_pelajaran, guru_pengajar');
+                    const { data } = await jClient.from('jadwal_pelajaran').select('mata_pelajaran, guru_pengajar');
                     if (data && data.length > 0) {
                         const mSet = new Set(defaultMapel);
                         const gSet = new Set(defaultGuru);
@@ -383,7 +377,13 @@
             mapelSelect.innerHTML = mapelList.map(m => `<option value="${m}">${m}</option>`).join('');
             guruSelect.innerHTML = guruList.map(g => `<option value="${g}">${g}</option>`).join('');
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            resetForm();
+            loadDropdowns();
+            loadJurnal();
+        });
     </script>
 
 
-</body></html>
+</body></html>/html>

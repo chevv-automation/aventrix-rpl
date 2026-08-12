@@ -381,23 +381,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    if (window.supabaseClient) {
+    const pubClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+    if (pubClient) {
         try {
             // Fetch Profiles
-            const { data: pData } = await window.supabaseClient.from('profiles').select('id, nama, nomor_absen').order('nomor_absen', { ascending: true });
+            const { data: pData } = await pubClient.from('profiles').select('id, nama, nomor_absen').order('nomor_absen', { ascending: true });
             if (pData && pData.length > 0) profiles = pData;
 
             // Fetch Absensi
-            const { data: aData } = await window.supabaseClient.from('absensi').select('*');
+            const { data: aData } = await pubClient.from('absensi').select('*');
             if (aData && aData.length > 0) {
                 absensiData = aData;
-            } else {
-                const { data: aHarian } = await window.supabaseClient.from('absensi_harian').select('*');
-                if (aHarian && aHarian.length > 0) absensiData = aHarian;
             }
 
             // Fetch Jurnal
-            const { data: jData } = await window.supabaseClient.from('jurnal_kelas').select('*').order('created_at', { ascending: false });
+            const { data: jData } = await pubClient.from('jurnal_kelas').select('*').order('created_at', { ascending: false });
             if (jData && jData.length > 0) jurnalData = jData;
         } catch (err) {
             console.warn("Supabase fetch note:", err);

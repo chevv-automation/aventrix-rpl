@@ -653,9 +653,44 @@
         }
     };
 
+    async function fetchSupabasePiket() {
+        const client = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+        if (!client) return;
+        try {
+            const { data: pData } = await client.from('profiles').select('id, nama');
+            const { data: jData } = await client.from('jadwal_piket').select('*').order('urutan_piket', { ascending: true });
+
+            if (jData && jData.length > 0 && pData && pData.length > 0) {
+                const supabaseMap = { 'Senin': [], 'Selasa': [], 'Rabu': [], 'Kamis': [], 'Jumat': [] };
+                jData.forEach(item => {
+                    const prof = pData.find(p => p.id === item.profile_id);
+                    if (prof && supabaseMap[item.hari]) {
+                        supabaseMap[item.hari].push(prof.nama);
+                    }
+                });
+
+                let hasData = false;
+                Object.keys(supabaseMap).forEach(d => {
+                    if (supabaseMap[d].length > 0) hasData = true;
+                });
+
+                if (hasData) {
+                    let cleaned = sanitizePiketMap(supabaseMap);
+                    piketMembersMap = cleaned;
+                    localStorage.setItem('piket_schedule_map', JSON.stringify(cleaned));
+                    loadDynamicPiketMap();
+                    updateRealtimePiket();
+                }
+            }
+        } catch (err) {
+            console.warn("Note: Supabase piket fetch note:", err);
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         loadDynamicPiketMap();
         updateRealtimePiket();
+        fetchSupabasePiket();
         setInterval(updateRealtimePiket, 1000);
     });
 </script>

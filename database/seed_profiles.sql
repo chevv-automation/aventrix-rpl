@@ -380,3 +380,51 @@ CREATE POLICY "Allow public read tugas" ON public.tugas FOR SELECT USING (true);
 CREATE POLICY "Allow public insert tugas" ON public.tugas FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public update tugas" ON public.tugas FOR UPDATE USING (true);
 CREATE POLICY "Allow public delete tugas" ON public.tugas FOR DELETE USING (true);
+
+-- Table: absensi (Multi-Device Sync)
+CREATE TABLE IF NOT EXISTS public.absensi (
+    id VARCHAR(100) PRIMARY KEY,
+    profile_id UUID,
+    nomor_absen INT,
+    nama TEXT,
+    tanggal DATE NOT NULL,
+    status VARCHAR(20) DEFAULT 'Hadir',
+    keterangan TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Table: jurnal_kelas (Multi-Device Sync)
+CREATE TABLE IF NOT EXISTS public.jurnal_kelas (
+    id VARCHAR(100) PRIMARY KEY,
+    tanggal DATE NOT NULL,
+    mata_pelajaran TEXT,
+    guru TEXT,
+    guru_pengajar TEXT,
+    materi TEXT,
+    materi_pembahasan TEXT,
+    kegiatan TEXT,
+    catatan_khusus TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Table: jadwal_piket (Multi-Device Sync)
+CREATE TABLE IF NOT EXISTS public.jadwal_piket (
+    id VARCHAR(100) PRIMARY KEY,
+    profile_id UUID,
+    hari VARCHAR(20) NOT NULL,
+    urutan_piket INT DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable RLS & Policies
+ALTER TABLE public.absensi ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.jurnal_kelas ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.jadwal_piket ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public all absensi" ON public.absensi;
+DROP POLICY IF EXISTS "Allow public all jurnal_kelas" ON public.jurnal_kelas;
+DROP POLICY IF EXISTS "Allow public all jadwal_piket" ON public.jadwal_piket;
+
+CREATE POLICY "Allow public all absensi" ON public.absensi FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all jurnal_kelas" ON public.jurnal_kelas FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Allow public all jadwal_piket" ON public.jadwal_piket FOR ALL USING (true) WITH CHECK (true);

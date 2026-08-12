@@ -227,7 +227,7 @@
 </footer>
 <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            if (!window.supabaseClient) return;
+            const client = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
 
             // Current date setter
             const dateInput = document.getElementById('tanggal-presensi');
@@ -245,26 +245,31 @@
             const btnSave = document.getElementById('btn-save');
 
             const loadData = async () => {
+                const sClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
                 tbody.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-slate-500 italic">Memuat data...</td></tr>';
                 try {
                     // Fetch students
-                    if (allStudents.length === 0) {
-                        const { data: pData, error: pError } = await window.supabaseClient.from('profiles').select('*').order('nomor_absen', { ascending: true });
-                        if (pError) throw pError;
-                        allStudents = pData || [];
+                    if (allStudents.length === 0 && sClient) {
+                        const { data: pData, error: pError } = await sClient.from('profiles').select('*').order('nomor_absen', { ascending: true });
+                        if (!pError && pData && pData.length > 0) {
+                            allStudents = pData;
+                        }
                     }
 
                     // Fetch absensi for selected date
                     const selDate = dateInput.value;
-                    const { data: aData, error: aError } = await window.supabaseClient.from('absensi').select('*').eq('tanggal', selDate);
-                    if (aError) console.warn("Supabase absensi select note:", aError);
+                    let absensiMap = {};
+                    let ketMap = {};
 
-                    const absensiMap = {};
-                    const ketMap = {};
-                    (aData || []).forEach(a => {
-                        absensiMap[a.profile_id] = a.status;
-                        ketMap[a.profile_id] = a.keterangan || '';
-                    });
+                    if (sClient) {
+                        const { data: aData, error: aError } = await sClient.from('absensi').select('*').eq('tanggal', selDate);
+                        if (!aError && aData && aData.length > 0) {
+                            aData.forEach(a => {
+                                absensiMap[a.profile_id || a.id] = a.status;
+                                ketMap[a.profile_id || a.id] = a.keterangan || '';
+                            });
+                        }
+                    }
 
                     // Build initial map defaulting to 'Hadir'
                     allStudents.forEach(s => {
@@ -386,23 +391,18 @@
                     localStorage.setItem('admin_absensi_records', JSON.stringify(recordData));
                     localStorage.setItem('admin_absensi_date', selDate);
 
-                    // 2. Save to Supabase if connected
-                    if (window.supabaseClient) {
+                    // 2. Save to Supabase Cloud DB for Multi-Device Sync
+                    const saveClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                    if (saveClient) {
                         try {
-                            await window.supabaseClient.from('absensi').delete().eq('tanggal', selDate);
-                            await window.supabaseClient.from('absensi').insert(recordData);
+                            await saveClient.from('absensi').delete().eq('tanggal', selDate);
+                            await saveClient.from('absensi').insert(recordData);
                         } catch (sErr) {
                             console.warn("Supabase absensi insert note:", sErr);
                         }
-                        try {
-                            await window.supabaseClient.from('absensi_harian').delete().eq('tanggal', selDate);
-                            await window.supabaseClient.from('absensi_harian').insert(recordData);
-                        } catch (sErr2) {
-                            console.warn("Supabase absensi_harian insert note:", sErr2);
-                        }
                     }
 
-                    alert("✅ Berhasil menyimpan presensi & alasan! Data di halaman publik otomatis terbarui.");
+                    alert("Berhasil menyimpan presensi & alasan! Data di seluruh perangkat otomatis terbarui.");
                 } catch(err) {
                     alert("Gagal menyimpan presensi: " + err.message);
                 } finally {

@@ -138,10 +138,11 @@
                 }
 
                 // 2. Try fetching from Supabase if connected
-                if (window.supabaseClient) {
+                const pClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                if (pClient) {
                     try {
-                        const { data: pData } = await window.supabaseClient.from('profiles').select('id, nama');
-                        const { data: jData } = await window.supabaseClient.from('jadwal_piket').select('*').order('urutan_piket', { ascending: true });
+                        const { data: pData } = await pClient.from('profiles').select('id, nama');
+                        const { data: jData } = await pClient.from('jadwal_piket').select('*').order('urutan_piket', { ascending: true });
 
                         if (jData && jData.length > 0 && pData && pData.length > 0) {
                             const supabaseMap = { 'Senin': [], 'Selasa': [], 'Rabu': [], 'Kamis': [], 'Jumat': [] };
@@ -158,7 +159,7 @@
                             });
 
                             if (hasData) {
-                                currentPiketMap = supabaseMap;
+                                currentPiketMap = sanitizePiketMap(supabaseMap);
                                 localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
                             }
                         }
@@ -169,7 +170,7 @@
 
                 // 3. Fallback to default class mapping if empty
                 if (!currentPiketMap) {
-                    currentPiketMap = defaultPiketMap;
+                    currentPiketMap = sanitizePiketMap(defaultPiketMap);
                     localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
                 }
 
@@ -226,14 +227,15 @@
                         'Jumat': currentPiketMap['Kamis'] || []
                     };
 
-                    currentPiketMap = newMap;
+                    currentPiketMap = sanitizePiketMap(newMap);
                     localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
 
                     // Save to Supabase if connected
-                    if (window.supabaseClient) {
+                    const rollClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                    if (rollClient) {
                         try {
-                            const { data: pData } = await window.supabaseClient.from('profiles').select('id, nama');
-                            const { data: jData } = await window.supabaseClient.from('jadwal_piket').select('*');
+                            const { data: pData } = await rollClient.from('profiles').select('id, nama');
+                            const { data: jData } = await rollClient.from('jadwal_piket').select('*');
                             
                             if (jData && jData.length > 0 && pData && pData.length > 0) {
                                 const nextDayMap = {
@@ -249,7 +251,7 @@
                                     hari: nextDayMap[item.hari],
                                     urutan_piket: item.urutan_piket
                                 }));
-                                await window.supabaseClient.from('jadwal_piket').upsert(updates);
+                                await rollClient.from('jadwal_piket').upsert(updates);
                             }
                         } catch (err) {
                             console.warn("Supabase upsert note:", err);
@@ -257,7 +259,7 @@
                     }
 
                     renderPiket();
-                    showToast("✅ Jadwal piket berhasil diputar 1 hari ke depan!");
+                    showToast("Jadwal piket berhasil diputar & tersinkronisasi ke seluruh perangkat!");
 
                 } catch (err) {
                     alert("Gagal memutar jadwal: " + err.message);
