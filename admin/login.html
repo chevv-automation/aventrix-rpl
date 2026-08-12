@@ -218,9 +218,11 @@
                 }
 
                 if (authenticated) {
+                    sessionStorage.setItem('admin_session', 'true');
+                    sessionStorage.setItem('admin_email', email);
                     localStorage.setItem('admin_session', 'true');
                     localStorage.setItem('admin_email', email);
-                    window.location.href = 'index.html';
+                    window.location.replace(window.location.origin + '/admin/index.html');
                 } else {
                     throw new Error('Email atau password tidak valid.');
                 }
