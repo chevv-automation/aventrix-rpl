@@ -293,8 +293,20 @@
             const searchInput = document.getElementById('search-input');
             const btnSave = document.getElementById('btn-save');
 
+            function getSupabaseClient() {
+                if (window.supabaseClient) return window.supabaseClient;
+                if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
+                if (window.supabase && typeof window.supabase.createClient === 'function') {
+                    const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
+                    const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
+                    window.supabaseClient = window.supabase.createClient(url, key);
+                    return window.supabaseClient;
+                }
+                return null;
+            }
+
             const loadData = async () => {
-                const sClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                const sClient = getSupabaseClient();
                 tbody.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-slate-500 italic">Memuat data...</td></tr>';
                 try {
                     // Fetch students
@@ -317,7 +329,7 @@
                         const { data: aData, error: aError } = await sClient.from('absensi').select('*').eq('tanggal', selDate);
                         if (!aError && aData && aData.length > 0) {
                             aData.forEach(a => {
-                                const key = a.nomor_absen || (allStudents.find(st => (st.nama || '').toLowerCase() === (a.nama || '').toLowerCase())?.nomor_absen) || a.profile_id || a.id;
+                                const key = a.nomor_absen || (allStudents.find(st => (st.nama || '').trim().toLowerCase() === (a.nama || '').trim().toLowerCase())?.nomor_absen) || a.profile_id || a.id;
                                 if (key) {
                                     absensiMap[key] = a.status || 'Hadir';
                                     ketMap[key] = a.keterangan || '';
@@ -456,7 +468,7 @@
                     localStorage.setItem('admin_absensi_date', selDate);
 
                     // 2. Save to Supabase Cloud DB for Multi-Device Sync
-                    const saveClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                    const saveClient = getSupabaseClient();
                     let supabaseSuccess = false;
                     let lastErrorMessage = '';
                     

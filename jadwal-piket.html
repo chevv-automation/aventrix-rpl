@@ -651,10 +651,20 @@
         } else {
             prompt('Salin teks format WhatsApp di bawah ini:', waText);
         }
-    };
+    function getSupabaseClient() {
+        if (window.supabaseClient) return window.supabaseClient;
+        if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
+            const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
+            window.supabaseClient = window.supabase.createClient(url, key);
+            return window.supabaseClient;
+        }
+        return null;
+    }
 
     async function fetchSupabasePiket() {
-        const client = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+        const client = getSupabaseClient();
         if (!client) return;
         try {
             const { data: jData } = await client.from('jadwal_piket').select('*').order('urutan_piket', { ascending: true });

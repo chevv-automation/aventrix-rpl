@@ -381,7 +381,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    const pubClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+    function getSupabaseClient() {
+        if (window.supabaseClient) return window.supabaseClient;
+        if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
+        if (window.supabase && typeof window.supabase.createClient === 'function') {
+            const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
+            const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
+            window.supabaseClient = window.supabase.createClient(url, key);
+            return window.supabaseClient;
+        }
+        return null;
+    }
+
+    const pubClient = getSupabaseClient();
     if (pubClient) {
         try {
             // Fetch Profiles
