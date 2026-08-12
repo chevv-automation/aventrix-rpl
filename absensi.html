@@ -435,7 +435,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 (a.nama && (a.nama || '').trim().toLowerCase() === pNamaClean)
             );
 
-            const rec = localRec || dbRec;
+            const rec = (absensiData && absensiData.length > 0) ? (dbRec || localRec) : (localRec || dbRec);
             return {
                 nama: p.nama,
                 status: rec ? rec.status : 'Hadir',

@@ -261,7 +261,11 @@
                             const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
                             days.forEach(day => {
                                 (currentPiketMap[day] || []).forEach((memberName, idx) => {
-                                    const prof = pData ? pData.find(p => (p.nama || '').trim().toLowerCase() === memberName.trim().toLowerCase()) : null;
+                                    const prof = pData ? pData.find(p => {
+                                        const pName = (p.nama || '').trim().toLowerCase();
+                                        const mName = memberName.trim().toLowerCase();
+                                        return pName === mName || pName.includes(mName) || mName.includes(pName);
+                                    }) : null;
                                     const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : undefined;
                                     
                                     const row = {

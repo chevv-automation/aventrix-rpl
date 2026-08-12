@@ -469,42 +469,77 @@
 </footer>
 <script>
         // Dynamic loading from Admin Panel
-        (function loadAdminPrestasi() {
-            const saved = localStorage.getItem('admin_prestasi_records');
-            if (saved) {
-                try {
-                    const items = JSON.parse(saved);
-                    const container = document.getElementById('achievements-container');
-                    if (container && items && items.length > 0) {
-                        items.forEach(item => {
-                            if (item.id === 'pres-1' || item.id === 'pres-2' || item.id === 'pres-3') return;
-                            const article = document.createElement('article');
-                            article.className = 'achievement-card bg-surface-container-lowest rounded-2xl overflow-hidden flex flex-col border border-slate-100 shadow-sm hover:shadow-md transition-all';
-                            article.setAttribute('data-category', item.kategori || 'non-akademik');
-                            article.innerHTML = `
-                                <div class="aspect-video overflow-hidden bg-slate-50 p-1 flex items-center justify-center border-b border-slate-100">
-                                <img class="w-full h-full object-cover rounded-lg" alt="${item.judul}" src="${item.url}">
-                                </div>
-                                <div class="p-6 flex flex-col flex-grow">
-                                <div class="flex justify-between items-start mb-3">
-                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-caps text-[10px] font-bold uppercase">${item.kategori || 'Prestasi'}</span>
-                                <span class="text-outline font-label-caps text-[11px] font-medium">${item.tingkat || '2025'}</span>
-                                </div>
-                                <h3 class="font-headline-md text-xl font-bold text-primary mb-2">${item.judul}</h3>
-                                <p class="font-body-md text-xs text-secondary mb-6 flex-grow leading-relaxed">
-                                    <strong>${item.peraih}</strong> : ${item.deskripsi || ''}
-                                </p>
-                                <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-primary font-bold">
-                                    <span>${item.lomba || 'XII RPL'}</span>
-                                    <span class="material-symbols-outlined text-sm">workspace_premium</span>
-                                </div>
-                                </div>`;
-                            container.prepend(article);
-                        });
-                    }
-                } catch(e) { console.error('Error loading admin prestasi:', e); }
+        function getSupabaseClient() {
+            if (window.supabaseClient) return window.supabaseClient;
+            if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
+                const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
+                window.supabaseClient = window.supabase.createClient(url, key);
+                return window.supabaseClient;
             }
-        })();
+            return null;
+        }
+
+        async function loadAdminPrestasi() {
+            let items = [];
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    const { data, error } = await client.from('prestasi').select('*').order('created_at', { ascending: true });
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        items = data.map(row => ({
+                            id: row.id,
+                            judul: row.judul || '',
+                            peraih: row.peserta || row.peraih || '',
+                            lomba: row.guru_pembimbing || row.lomba || '',
+                            kategori: row.tipe_peserta || row.kategori || 'Akademik',
+                            tingkat: row.tingkat || 'Kabupaten',
+                            url: row.url || './image_prestasi/1786273026262..jpg',
+                            deskripsi: row.deskripsi_lomba || row.deskripsi || ''
+                        }));
+                        localStorage.setItem('admin_prestasi_records', JSON.stringify(items));
+                    }
+                } catch(e) { console.warn('Supabase prestasi fetch note:', e); }
+            }
+
+            if (items.length === 0) {
+                const saved = localStorage.getItem('admin_prestasi_records');
+                if (saved) {
+                    try { items = JSON.parse(saved) || []; } catch(e) { items = []; }
+                }
+            }
+
+            const container = document.getElementById('achievements-container');
+            if (container && items && items.length > 0) {
+                items.forEach(item => {
+                    if (item.id === 'pres-1' || item.id === 'pres-2' || item.id === 'pres-3') return;
+                    const article = document.createElement('article');
+                    article.className = 'achievement-card bg-surface-container-lowest rounded-2xl overflow-hidden flex flex-col border border-slate-100 shadow-sm hover:shadow-md transition-all';
+                    article.setAttribute('data-category', item.kategori || 'non-akademik');
+                    article.innerHTML = `
+                        <div class="aspect-video overflow-hidden bg-slate-50 p-1 flex items-center justify-center border-b border-slate-100">
+                        <img class="w-full h-full object-cover rounded-lg" alt="${item.judul}" src="${item.url}">
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-3">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full font-label-caps text-[10px] font-bold uppercase">${item.kategori || 'Prestasi'}</span>
+                        <span class="text-outline font-label-caps text-[11px] font-medium">${item.tingkat || '2025'}</span>
+                        </div>
+                        <h3 class="font-headline-md text-xl font-bold text-primary mb-2">${item.judul}</h3>
+                        <p class="font-body-md text-xs text-secondary mb-6 flex-grow leading-relaxed">
+                            <strong>${item.peraih}</strong> : ${item.deskripsi || ''}
+                        </p>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-primary font-bold">
+                            <span>${item.lomba || 'XII RPL'}</span>
+                            <span class="material-symbols-outlined text-sm">workspace_premium</span>
+                        </div>
+                        </div>`;
+                    container.prepend(article);
+                });
+            }
+        }
+        loadAdminPrestasi();
 
         // Functional Category Filter Engine
         document.querySelectorAll('.filter-pill').forEach(pill => {

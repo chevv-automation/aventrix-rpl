@@ -168,6 +168,45 @@
             }
         ];
 
+        function getSupabaseClient() {
+            if (window.supabaseClient) return window.supabaseClient;
+            if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
+                const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
+                window.supabaseClient = window.supabase.createClient(url, key);
+                return window.supabaseClient;
+            }
+            return null;
+        }
+
+        async function loadGaleriData() {
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    const { data, error } = await client.from('galeri').select('*').order('created_at', { ascending: false });
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        const formatted = data.map(row => ({
+                            id: row.id,
+                            judul: row.judul || '',
+                            kategori: row.kategori || 'Kegiatan Kelas',
+                            tanggal: row.tanggal || '2025/2026',
+                            url: row.url || '',
+                            deskripsi: row.deskripsi || ''
+                        }));
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(formatted));
+                        renderGaleriList(formatted);
+                        return;
+                    }
+                } catch(e) {
+                    console.warn('Galeri fetch note:', e);
+                }
+            }
+            const saved = localStorage.getItem(STORAGE_KEY);
+            let items = saved ? JSON.parse(saved) : defaultGaleri;
+            renderGaleriList(items);
+        }
+
         function getGaleriItems() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
@@ -178,7 +217,7 @@
 
         function saveGaleriItems(items) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-            renderGaleriList();
+            renderGaleriList(items);
         }
 
         // Handle Image File / URL Selection
@@ -211,7 +250,7 @@
         });
 
         // Add New Foto Submission
-        document.getElementById('add-galeri-form').addEventListener('submit', (e) => {
+        document.getElementById('add-galeri-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const judul = document.getElementById('foto-judul').value.trim();
             const kategori = document.getElementById('foto-kategori').value;
@@ -224,14 +263,24 @@
                 return;
             }
 
+            const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : undefined;
             const newItem = {
-                id: 'galeri-' + Date.now(),
                 judul: judul,
                 kategori: kategori,
                 tanggal: tanggal,
                 url: imageUrl,
                 deskripsi: deskripsi
             };
+            if (genId) newItem.id = genId;
+
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    await client.from('galeri').insert([newItem]);
+                } catch(err) {
+                    console.warn('Supabase galeri insert error:', err);
+                }
+            }
 
             const items = getGaleriItems();
             items.unshift(newItem);
@@ -241,12 +290,13 @@
             document.getElementById('add-galeri-form').reset();
             currentBase64 = '';
             previewBox.classList.add('hidden');
-            alert('Foto galeri baru berhasil dipublikasikan!');
+            alert('✅ Foto galeri baru berhasil dipublikasikan & tersinkronisasi ke seluruh perangkat!');
+            loadGaleriData();
         });
 
         // Render List
-        function renderGaleriList() {
-            const items = getGaleriItems();
+        function renderGaleriList(passedItems) {
+            const items = passedItems || getGaleriItems();
             document.getElementById('total-foto-count').textContent = items.length;
             const container = document.getElementById('galeri-list-container');
 
@@ -277,23 +327,39 @@
             `).join('');
         }
 
-        window.deleteGaleri = function(id) {
+        window.deleteGaleri = async function(id) {
             if (confirm('Apakah Anda yakin ingin menghapus foto galeri ini?')) {
+                const client = getSupabaseClient();
+                if (client) {
+                    try {
+                        await client.from('galeri').delete().eq('id', id);
+                    } catch(err) {
+                        console.warn('Supabase galeri delete error:', err);
+                    }
+                }
                 let items = getGaleriItems();
                 items = items.filter(item => item.id !== id);
                 saveGaleriItems(items);
             }
         };
 
-        window.clearAllGaleri = function() {
+        window.clearAllGaleri = async function() {
             if (confirm('Reset seluruh foto galeri ke default awal?')) {
+                const client = getSupabaseClient();
+                if (client) {
+                    try {
+                        await client.from('galeri').delete().neq('id', '');
+                    } catch(err) {
+                        console.warn('Supabase galeri clear error:', err);
+                    }
+                }
                 localStorage.removeItem(STORAGE_KEY);
-                renderGaleriList();
+                loadGaleriData();
             }
         };
 
         // Initialize Page
-        renderGaleriList();
+        loadGaleriData();
     </script>
 </body>
 </html>

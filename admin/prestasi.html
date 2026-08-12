@@ -192,6 +192,47 @@
             }
         ];
 
+        function getSupabaseClient() {
+            if (window.supabaseClient) return window.supabaseClient;
+            if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
+                const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
+                window.supabaseClient = window.supabase.createClient(url, key);
+                return window.supabaseClient;
+            }
+            return null;
+        }
+
+        async function loadPrestasiData() {
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    const { data, error } = await client.from('prestasi').select('*').order('created_at', { ascending: false });
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        const formatted = data.map(row => ({
+                            id: row.id,
+                            judul: row.judul || '',
+                            peraih: row.peserta || row.peraih || '',
+                            lomba: row.guru_pembimbing || row.lomba || '',
+                            kategori: row.tipe_peserta || row.kategori || 'Akademik',
+                            tingkat: row.tingkat || 'Kabupaten',
+                            url: row.url || '../image_prestasi/1786273026262..jpg',
+                            deskripsi: row.deskripsi_lomba || row.deskripsi || ''
+                        }));
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(formatted));
+                        renderPrestasiList(formatted);
+                        return;
+                    }
+                } catch(e) {
+                    console.warn('Prestasi fetch note:', e);
+                }
+            }
+            const saved = localStorage.getItem(STORAGE_KEY);
+            let items = saved ? JSON.parse(saved) : defaultPrestasi;
+            renderPrestasiList(items);
+        }
+
         function getPrestasiItems() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
@@ -202,7 +243,7 @@
 
         function savePrestasiItems(items) {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-            renderPrestasiList();
+            renderPrestasiList(items);
         }
 
         // Handle Image File / URL Selection
@@ -235,7 +276,7 @@
         });
 
         // Add New Prestasi Submission
-        document.getElementById('add-prestasi-form').addEventListener('submit', (e) => {
+        document.getElementById('add-prestasi-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const judul = document.getElementById('pres-judul').value.trim();
             const peraih = document.getElementById('pres-peraih').value.trim();
@@ -250,16 +291,31 @@
                 return;
             }
 
+            const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : undefined;
             const newItem = {
-                id: 'pres-' + Date.now(),
                 judul: judul,
+                peserta: peraih,
                 peraih: peraih,
                 lomba: lomba,
+                guru_pembimbing: lomba,
+                tipe_peserta: kategori,
                 kategori: kategori,
                 tingkat: tingkat,
+                tanggal: new Date().toISOString().split('T')[0],
                 url: imageUrl,
-                deskripsi: deskripsi
+                deskripsi: deskripsi,
+                deskripsi_lomba: deskripsi
             };
+            if (genId) newItem.id = genId;
+
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    await client.from('prestasi').insert([newItem]);
+                } catch(err) {
+                    console.warn('Supabase prestasi insert error:', err);
+                }
+            }
 
             const items = getPrestasiItems();
             items.unshift(newItem);
@@ -269,12 +325,13 @@
             document.getElementById('add-prestasi-form').reset();
             currentPresBase64 = '';
             presPreviewBox.classList.add('hidden');
-            alert('Prestasi baru berhasil dipublikasikan!');
+            alert('✅ Prestasi baru berhasil dipublikasikan & tersinkronisasi ke seluruh perangkat!');
+            loadPrestasiData();
         });
 
         // Render List
-        function renderPrestasiList() {
-            const items = getPrestasiItems();
+        function renderPrestasiList(passedItems) {
+            const items = passedItems || getPrestasiItems();
             document.getElementById('total-prestasi-count').textContent = items.length;
             const container = document.getElementById('prestasi-list-container');
 
@@ -307,23 +364,39 @@
             `).join('');
         }
 
-        window.deletePrestasi = function(id) {
+        window.deletePrestasi = async function(id) {
             if (confirm('Apakah Anda yakin ingin menghapus prestasi ini?')) {
+                const client = getSupabaseClient();
+                if (client) {
+                    try {
+                        await client.from('prestasi').delete().eq('id', id);
+                    } catch(err) {
+                        console.warn('Supabase delete prestasi error:', err);
+                    }
+                }
                 let items = getPrestasiItems();
                 items = items.filter(item => item.id !== id);
                 savePrestasiItems(items);
             }
         };
 
-        window.clearAllPrestasi = function() {
+        window.clearAllPrestasi = async function() {
             if (confirm('Reset seluruh prestasi ke default awal?')) {
+                const client = getSupabaseClient();
+                if (client) {
+                    try {
+                        await client.from('prestasi').delete().neq('id', '');
+                    } catch(err) {
+                        console.warn('Supabase clear prestasi error:', err);
+                    }
+                }
                 localStorage.removeItem(STORAGE_KEY);
-                renderPrestasiList();
+                loadPrestasiData();
             }
         };
 
         // Initialize Page
-        renderPrestasiList();
+        loadPrestasiData();
     </script>
 </body>
 </html>

@@ -497,33 +497,66 @@
 </footer>
 <script>
         // Dynamic loading from Admin Panel
-        (function loadAdminGaleri() {
-            const saved = localStorage.getItem('admin_galeri_records');
-            if (saved) {
-                try {
-                    const items = JSON.parse(saved);
-                    const grid = document.getElementById('gallery-grid');
-                    if (grid && items && items.length > 0) {
-                        items.forEach(item => {
-                            if (item.id && item.id.startsWith('default-')) return;
-                            const div = document.createElement('div');
-                            div.className = 'gallery-item';
-                            div.setAttribute('data-category', item.kategori || 'Kegiatan Kelas');
-                            div.innerHTML = `
-                                <div class="gallery-card relative overflow-hidden rounded-2xl bg-surface-container-high group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300">
-                                  <img class="w-full h-72 object-cover transform transition-transform duration-500 group-hover:scale-105" src="${item.url}" alt="${item.judul}" loading="lazy">
-                                  <div class="gallery-overlay absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5">
-                                    <span class="inline-block bg-primary text-white px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider mb-1.5 w-fit uppercase">${item.kategori || 'Momen'}</span>
-                                    <h3 class="text-white font-bold text-base leading-snug">${item.judul}</h3>
-                                    <p class="text-slate-300 text-xs mt-1">${item.deskripsi || item.tanggal || ''}</p>
-                                  </div>
-                                </div>`;
-                            grid.prepend(div);
-                        });
-                    }
-                } catch(e) { console.error('Error loading admin galeri:', e); }
+        function getSupabaseClient() {
+            if (window.supabaseClient) return window.supabaseClient;
+            if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
+            if (window.supabase && typeof window.supabase.createClient === 'function') {
+                const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
+                const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
+                window.supabaseClient = window.supabase.createClient(url, key);
+                return window.supabaseClient;
             }
-        })();
+            return null;
+        }
+
+        async function loadAdminGaleri() {
+            let items = [];
+            const client = getSupabaseClient();
+            if (client) {
+                try {
+                    const { data, error } = await client.from('galeri').select('*').order('created_at', { ascending: true });
+                    if (!error && Array.isArray(data) && data.length > 0) {
+                        items = data.map(row => ({
+                            id: row.id,
+                            judul: row.judul || '',
+                            kategori: row.kategori || 'Kegiatan Kelas',
+                            tanggal: row.tanggal || '2025/2026',
+                            url: row.url || '',
+                            deskripsi: row.deskripsi || ''
+                        }));
+                        localStorage.setItem('admin_galeri_records', JSON.stringify(items));
+                    }
+                } catch(e) { console.warn('Supabase galeri fetch note:', e); }
+            }
+
+            if (items.length === 0) {
+                const saved = localStorage.getItem('admin_galeri_records');
+                if (saved) {
+                    try { items = JSON.parse(saved) || []; } catch(e) { items = []; }
+                }
+            }
+
+            const grid = document.getElementById('gallery-grid');
+            if (grid && items && items.length > 0) {
+                items.forEach(item => {
+                    if (item.id && String(item.id).startsWith('default-')) return;
+                    const div = document.createElement('div');
+                    div.className = 'gallery-item';
+                    div.setAttribute('data-category', item.kategori || 'Kegiatan Kelas');
+                    div.innerHTML = `
+                        <div class="gallery-card relative overflow-hidden rounded-2xl bg-surface-container-high group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300">
+                          <img class="w-full h-72 object-cover transform transition-transform duration-500 group-hover:scale-105" src="${item.url}" alt="${item.judul}" loading="lazy">
+                          <div class="gallery-overlay absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-5">
+                            <span class="inline-block bg-primary text-white px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider mb-1.5 w-fit uppercase">${item.kategori || 'Momen'}</span>
+                            <h3 class="text-white font-bold text-base leading-snug">${item.judul}</h3>
+                            <p class="text-slate-300 text-xs mt-1">${item.deskripsi || item.tanggal || ''}</p>
+                          </div>
+                        </div>`;
+                    grid.prepend(div);
+                });
+            }
+        }
+        loadAdminGaleri();
 
         // Gallery Category Filter Logic
         const filterBtns = document.querySelectorAll('.gallery-filter-btn');
