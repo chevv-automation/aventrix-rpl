@@ -283,8 +283,8 @@
             ];
 
             let allStudents = [];
-            let currentStatusMap = {}; // Maps profile_id -> status
-            let currentKetMap = {};    // Maps profile_id -> keterangan
+            let currentStatusMap = {}; // Maps nomor_absen / id -> status
+            let currentKetMap = {};    // Maps nomor_absen / id -> keterangan
             let currentPage = 1;
             const itemsPerPage = 10;
             let filteredStudents = [];
@@ -317,23 +317,22 @@
                         const { data: aData, error: aError } = await sClient.from('absensi').select('*').eq('tanggal', selDate);
                         if (!aError && aData && aData.length > 0) {
                             aData.forEach(a => {
-                                if (a.profile_id) absensiMap[a.profile_id] = a.status;
-                                if (a.nomor_absen) absensiMap['no_' + a.nomor_absen] = a.status;
-                                if (a.nama) absensiMap['nama_' + a.nama.toLowerCase()] = a.status;
-
-                                if (a.profile_id) ketMap[a.profile_id] = a.keterangan || '';
-                                if (a.nomor_absen) ketMap['no_' + a.nomor_absen] = a.keterangan || '';
-                                if (a.nama) ketMap['nama_' + a.nama.toLowerCase()] = a.keterangan || '';
+                                const key = a.nomor_absen || (allStudents.find(st => (st.nama || '').toLowerCase() === (a.nama || '').toLowerCase())?.nomor_absen) || a.profile_id || a.id;
+                                if (key) {
+                                    absensiMap[key] = a.status || 'Hadir';
+                                    ketMap[key] = a.keterangan || '';
+                                }
                             });
                         }
                     }
 
                     // Build initial map defaulting to 'Hadir'
                     allStudents.forEach(s => {
-                        const st = absensiMap[s.id] || absensiMap['no_' + s.nomor_absen] || absensiMap['nama_' + (s.nama || '').toLowerCase()] || 'Hadir';
-                        const kt = ketMap[s.id] || ketMap['no_' + s.nomor_absen] || ketMap['nama_' + (s.nama || '').toLowerCase()] || '';
-                        currentStatusMap[s.id] = st;
-                        currentKetMap[s.id] = kt;
+                        const key = s.nomor_absen || s.id;
+                        const st = absensiMap[key] || absensiMap[s.id] || absensiMap[s.nomor_absen] || 'Hadir';
+                        const kt = ketMap[key] || ketMap[s.id] || ketMap[s.nomor_absen] || '';
+                        currentStatusMap[key] = st;
+                        currentKetMap[key] = kt;
                     });
 
                     applyFilters();
@@ -354,7 +353,9 @@
             const updateMetrics = () => {
                 let counts = { Hadir: 0, Izin: 0, Sakit: 0, Alpa: 0 };
                 allStudents.forEach(s => {
-                    counts[currentStatusMap[s.id]]++;
+                    const key = s.nomor_absen || s.id;
+                    const st = currentStatusMap[key] || 'Hadir';
+                    if (counts[st] !== undefined) counts[st]++;
                 });
                 document.getElementById('count-hadir').textContent = counts.Hadir;
                 document.getElementById('count-izin').textContent = counts.Izin;
@@ -362,14 +363,14 @@
                 document.getElementById('count-alpa').textContent = counts.Alpa;
             };
 
-            window.changeStatus = (id, newStatus) => {
-                currentStatusMap[id] = newStatus;
+            window.changeStatus = (key, newStatus) => {
+                currentStatusMap[key] = newStatus;
                 renderTable();
                 updateMetrics();
             };
 
-            window.changeKeterangan = (id, val) => {
-                currentKetMap[id] = val;
+            window.changeKeterangan = (key, val) => {
+                currentKetMap[key] = val;
             };
 
             const renderTable = () => {
@@ -383,8 +384,9 @@
                 const paginated = filteredStudents.slice(startIdx, startIdx + itemsPerPage);
 
                 tbody.innerHTML = paginated.map(s => {
-                    const st = currentStatusMap[s.id];
-                    const ketVal = currentKetMap[s.id] || '';
+                    const key = s.nomor_absen || s.id;
+                    const st = currentStatusMap[key] || 'Hadir';
+                    const ketVal = currentKetMap[key] || '';
                     
                     const btnClass = (type, match) => {
                         if (st !== match) return "text-on-surface-variant hover:bg-white";
@@ -402,14 +404,14 @@
                         <td class="px-6 py-4 font-headline-md text-[15px] text-primary font-bold">${s.nama}</td>
                         <td class="px-6 py-4">
                             <div class="flex justify-center items-center gap-1 bg-surface-container p-1 rounded-full w-fit mx-auto">
-                                <button onclick="changeStatus('${s.id}', 'Hadir')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Hadir')}">Hadir</button>
-                                <button onclick="changeStatus('${s.id}', 'Izin')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Izin')}">Izin</button>
-                                <button onclick="changeStatus('${s.id}', 'Sakit')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Sakit')}">Sakit</button>
-                                <button onclick="changeStatus('${s.id}', 'Alpa')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Alpa')}">Alpa</button>
+                                <button onclick="changeStatus('${key}', 'Hadir')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Hadir')}">Hadir</button>
+                                <button onclick="changeStatus('${key}', 'Izin')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Izin')}">Izin</button>
+                                <button onclick="changeStatus('${key}', 'Sakit')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Sakit')}">Sakit</button>
+                                <button onclick="changeStatus('${key}', 'Alpa')" class="px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all ${btnClass(st, 'Alpa')}">Alpa</button>
                             </div>
                         </td>
                         <td class="px-6 py-4">
-                            <input type="text" value="${ketVal}" oninput="changeKeterangan('${s.id}', this.value)" placeholder="${placeholderKet}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                            <input type="text" value="${ketVal}" oninput="changeKeterangan('${key}', this.value)" placeholder="${placeholderKet}" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-medium text-slate-800 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
                         </td>
                     </tr>`;
                 }).join('');
@@ -435,14 +437,16 @@
                 btnSave.disabled = true;
 
                 try {
-                    // Build payload matching exact Supabase UUID schema (letting Supabase auto-generate valid UUIDs for 'id')
+                    // Build record array with complete student details
                     const recordData = allStudents.map(s => {
+                        const key = s.nomor_absen || s.id;
                         const isUuid = s.id && typeof s.id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.id);
                         const item = {
+                            nomor_absen: s.nomor_absen,
                             nama: s.nama,
                             tanggal: selDate,
-                            status: currentStatusMap[s.id] || 'Hadir',
-                            keterangan: currentKetMap[s.id] || ''
+                            status: currentStatusMap[key] || 'Hadir',
+                            keterangan: currentKetMap[key] || ''
                         };
                         if (isUuid) item.profile_id = s.id;
                         return item;
@@ -462,7 +466,16 @@
                             const { error: delErr } = await saveClient.from('absensi').delete().eq('tanggal', selDate);
                             if (delErr) console.warn("Supabase absensi delete note:", delErr);
 
-                            const { data: insData, error: insErr } = await saveClient.from('absensi').insert(recordData);
+                            // Try inserting with nomor_absen first
+                            let { data: insData, error: insErr } = await saveClient.from('absensi').insert(recordData);
+                            
+                            // If schema doesn't have 'nomor_absen' column, retry without 'nomor_absen'
+                            if (insErr && (insErr.message.includes('nomor_absen') || insErr.code === 'PGRST204')) {
+                                const cleanPayload = recordData.map(({ nomor_absen, ...rest }) => rest);
+                                const resClean = await saveClient.from('absensi').insert(cleanPayload);
+                                insErr = resClean.error;
+                            }
+
                             if (insErr) {
                                 console.error("Supabase absensi insert error:", insErr);
                                 lastErrorMessage = insErr.message || 'Insert Error';
@@ -478,7 +491,7 @@
                     if (supabaseSuccess) {
                         alert("✅ Presensi berhasil disimpan dan tersinkronisasi ke seluruh perangkat!");
                     } else if (lastErrorMessage) {
-                        alert("⚠️ Gagal menyinkronkan ke Supabase Database Cloud:\n" + lastErrorMessage + "\n\n(Data tersimpan sementara di browser ini).");
+                        alert("⚠️ Gagal menyinkronkan ke Supabase Database Cloud:\n" + lastErrorMessage + "\n\n(Data tersimpan di penyimpanan browser ini).");
                     } else {
                         alert("✅ Presensi tersimpan di penyimpanan browser!");
                     }
