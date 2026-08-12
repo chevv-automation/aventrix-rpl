@@ -657,15 +657,16 @@
         const client = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
         if (!client) return;
         try {
-            const { data: pData } = await client.from('profiles').select('id, nama');
             const { data: jData } = await client.from('jadwal_piket').select('*').order('urutan_piket', { ascending: true });
 
-            if (jData && jData.length > 0 && pData && pData.length > 0) {
+            if (jData && jData.length > 0) {
+                const { data: pData } = await client.from('profiles').select('id, nama');
                 const supabaseMap = { 'Senin': [], 'Selasa': [], 'Rabu': [], 'Kamis': [], 'Jumat': [] };
+                
                 jData.forEach(item => {
-                    const prof = pData.find(p => p.id === item.profile_id);
-                    if (prof && supabaseMap[item.hari]) {
-                        supabaseMap[item.hari].push(prof.nama);
+                    const memberName = item.nama || (pData && pData.find(p => p.id === item.profile_id)?.nama);
+                    if (memberName && supabaseMap[item.hari]) {
+                        supabaseMap[item.hari].push(memberName);
                     }
                 });
 

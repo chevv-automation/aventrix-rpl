@@ -239,36 +239,39 @@
                     currentPiketMap = sanitizePiketMap(newMap);
                     localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
 
-                    // Save to Supabase if connected
+                    // Save and Sync to Supabase Cloud DB
                     const rollClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
                     if (rollClient) {
                         try {
-                            const { data: pData } = await rollClient.from('profiles').select('id, nama');
-                            const { data: jData } = await rollClient.from('jadwal_piket').select('*');
-                            
-                            if (jData && jData.length > 0 && pData && pData.length > 0) {
-                                const nextDayMap = {
-                                    'Senin': 'Selasa',
-                                    'Selasa': 'Rabu',
-                                    'Rabu': 'Kamis',
-                                    'Kamis': 'Jumat',
-                                    'Jumat': 'Senin'
-                                };
-                                const updates = jData.map(item => ({
-                                    id: item.id,
-                                    profile_id: item.profile_id,
-                                    hari: nextDayMap[item.hari],
-                                    urutan_piket: item.urutan_piket
-                                }));
-                                await rollClient.from('jadwal_piket').upsert(updates);
+                            const rowsToInsert = [];
+                            const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
+                            days.forEach(day => {
+                                (currentPiketMap[day] || []).forEach((memberName, idx) => {
+                                    rowsToInsert.push({
+                                        id: 'piket_' + day + '_' + (idx + 1),
+                                        hari: day,
+                                        nama: memberName,
+                                        urutan_piket: idx + 1
+                                    });
+                                });
+                            });
+
+                            const { error: delErr } = await rollClient.from('jadwal_piket').delete().neq('id', '0');
+                            if (delErr) console.warn("Supabase piket delete note:", delErr);
+
+                            let { error: insErr } = await rollClient.from('jadwal_piket').insert(rowsToInsert);
+                            if (insErr) {
+                                // Fallback without custom string id
+                                const cleanRows = rowsToInsert.map(({ id, ...rest }) => rest);
+                                await rollClient.from('jadwal_piket').insert(cleanRows);
                             }
                         } catch (err) {
-                            console.warn("Supabase upsert note:", err);
+                            console.warn("Supabase piket sync note:", err);
                         }
                     }
 
                     renderPiket();
-                    showToast("Jadwal piket berhasil diputar & tersinkronisasi ke seluruh perangkat!");
+                    showToast("Jadwal piket berhasil diputar & tersinkronisasi ke seluruh perangkat HP & Laptop!");
 
                 } catch (err) {
                     alert("Gagal memutar jadwal: " + err.message);

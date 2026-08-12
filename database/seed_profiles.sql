@@ -411,6 +411,7 @@ CREATE TABLE IF NOT EXISTS public.jurnal_kelas (
 CREATE TABLE IF NOT EXISTS public.jadwal_piket (
     id VARCHAR(100) PRIMARY KEY,
     profile_id VARCHAR(100),
+    nama TEXT,
     hari VARCHAR(20) NOT NULL,
     urutan_piket INT DEFAULT 1,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
