@@ -139,46 +139,50 @@
                 loading.classList.remove('hidden');
                 container.classList.add('hidden');
 
-                // 1. Try loading from localStorage first
-                const savedLocal = localStorage.getItem('piket_schedule_map');
-                if (savedLocal) {
-                    try {
-                        currentPiketMap = JSON.parse(savedLocal);
-                        currentPiketMap = sanitizePiketMap(currentPiketMap);
-                        localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
-                    } catch (e) {
-                        currentPiketMap = null;
-                    }
-                }
-
-                // 2. Try fetching from Supabase if connected
+                // 1. Fetch from Supabase Cloud DB First
                 const pClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                let cloudLoaded = false;
+
                 if (pClient) {
                     try {
                         const { data: pData } = await pClient.from('profiles').select('id, nama');
                         const { data: jData } = await pClient.from('jadwal_piket').select('*').order('urutan_piket', { ascending: true });
 
-                        if (jData && jData.length > 0 && pData && pData.length > 0) {
+                        if (jData && jData.length > 0) {
                             const supabaseMap = { 'Senin': [], 'Selasa': [], 'Rabu': [], 'Kamis': [], 'Jumat': [] };
                             jData.forEach(item => {
-                                const prof = pData.find(p => p.id === item.profile_id);
-                                if (prof && supabaseMap[item.hari]) {
-                                    supabaseMap[item.hari].push(prof.nama);
+                                const memberName = item.nama || (pData && pData.find(p => p.id === item.profile_id)?.nama);
+                                if (memberName && supabaseMap[item.hari]) {
+                                    supabaseMap[item.hari].push(memberName);
                                 }
                             });
 
                             let hasData = false;
                             defaultDays.forEach(d => {
-                                if (supabaseMap[d].length > 0) hasData = true;
+                                if (supabaseMap[d] && supabaseMap[d].length > 0) hasData = true;
                             });
 
                             if (hasData) {
                                 currentPiketMap = sanitizePiketMap(supabaseMap);
                                 localStorage.setItem('piket_schedule_map', JSON.stringify(currentPiketMap));
+                                cloudLoaded = true;
                             }
                         }
                     } catch (err) {
                         console.warn("Supabase fetch note:", err);
+                    }
+                }
+
+                // 2. Fallback to localStorage if cloud DB fetch returned nothing
+                if (!cloudLoaded) {
+                    const savedLocal = localStorage.getItem('piket_schedule_map');
+                    if (savedLocal) {
+                        try {
+                            currentPiketMap = JSON.parse(savedLocal);
+                            currentPiketMap = sanitizePiketMap(currentPiketMap);
+                        } catch (e) {
+                            currentPiketMap = null;
+                        }
                     }
                 }
 
@@ -275,6 +279,7 @@
                                     
                                     const row = {
                                         hari: day,
+                                        nama: memberName,
                                         urutan_piket: idx + 1
                                     };
                                     if (genId) row.id = genId;

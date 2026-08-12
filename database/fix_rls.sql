@@ -36,6 +36,7 @@ CREATE POLICY "Public Update for jurnal_kelas" ON jurnal_kelas FOR UPDATE USING 
 CREATE POLICY "Public Delete for jurnal_kelas" ON jurnal_kelas FOR DELETE USING (true);
 
 -- 3. Tabel jadwal_piket
+ALTER TABLE IF EXISTS jadwal_piket ADD COLUMN IF NOT EXISTS nama VARCHAR(255);
 ALTER TABLE IF EXISTS jadwal_piket ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for jadwal_piket" ON jadwal_piket;
 DROP POLICY IF EXISTS "Authenticated Insert for jadwal_piket" ON jadwal_piket;
