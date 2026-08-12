@@ -255,27 +255,31 @@
                     const rollClient = getSupabaseClient();
                     if (rollClient) {
                         try {
+                            const { data: pData } = await rollClient.from('profiles').select('id, nama');
+                            
                             const rowsToInsert = [];
                             const days = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'];
                             days.forEach(day => {
                                 (currentPiketMap[day] || []).forEach((memberName, idx) => {
-                                    rowsToInsert.push({
-                                        id: 'piket_' + day + '_' + (idx + 1),
+                                    const prof = pData ? pData.find(p => (p.nama || '').trim().toLowerCase() === memberName.trim().toLowerCase()) : null;
+                                    const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : undefined;
+                                    
+                                    const row = {
                                         hari: day,
-                                        nama: memberName,
                                         urutan_piket: idx + 1
-                                    });
+                                    };
+                                    if (genId) row.id = genId;
+                                    if (prof && prof.id) row.profile_id = prof.id;
+                                    rowsToInsert.push(row);
                                 });
                             });
 
-                            const { error: delErr } = await rollClient.from('jadwal_piket').delete().neq('id', '0');
+                            const { error: delErr } = await rollClient.from('jadwal_piket').delete().neq('urutan_piket', -1);
                             if (delErr) console.warn("Supabase piket delete note:", delErr);
 
                             let { error: insErr } = await rollClient.from('jadwal_piket').insert(rowsToInsert);
                             if (insErr) {
-                                // Fallback without custom string id
-                                const cleanRows = rowsToInsert.map(({ id, ...rest }) => rest);
-                                await rollClient.from('jadwal_piket').insert(cleanRows);
+                                console.warn("Supabase piket insert error:", insErr);
                             }
                         } catch (err) {
                             console.warn("Supabase piket sync note:", err);

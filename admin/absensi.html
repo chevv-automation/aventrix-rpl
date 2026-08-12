@@ -453,7 +453,11 @@
                     const recordData = allStudents.map((s, idx) => {
                         const key = s.nomor_absen || s.id;
                         const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : ('00000000-0000-4000-8000-' + String(idx + 1).padStart(12, '0'));
-                        return {
+                        
+                        // Check if s.id is a valid UUID format before sending as profile_id
+                        const isUUID = s.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s.id);
+                        
+                        const item = {
                             id: genId,
                             nomor_absen: s.nomor_absen || (idx + 1),
                             nama: s.nama,
@@ -461,6 +465,8 @@
                             status: currentStatusMap[key] || 'Hadir',
                             keterangan: currentKetMap[key] || ''
                         };
+                        if (isUUID) item.profile_id = s.id;
+                        return item;
                     });
 
                     // 1. Save to localStorage for instant local backup
@@ -477,7 +483,7 @@
                             const { error: delErr } = await saveClient.from('absensi').delete().eq('tanggal', selDate);
                             if (delErr) console.warn("Supabase absensi delete note:", delErr);
 
-                            // Try inserting with nomor_absen first
+                            // Try inserting complete payload first
                             let { data: insData, error: insErr } = await saveClient.from('absensi').insert(recordData);
                             
                             // If schema doesn't have 'nomor_absen' column, retry without 'nomor_absen'

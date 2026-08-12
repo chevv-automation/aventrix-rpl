@@ -310,44 +310,76 @@
                 btn.disabled = true;
 
                 const existingId = document.getElementById('jurnal-id').value;
-                const newId = existingId || 'jurnal_' + Date.now();
+                const isUUID = existingId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(existingId);
+                const validId = isUUID ? existingId : ((typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : '00000000-0000-4000-8000-' + String(Date.now()).slice(-12));
                 
-                const payload = {
-                    id: newId,
-                    tanggal: document.getElementById('tanggal').value || new Date().toISOString().split('T')[0],
-                    mata_pelajaran: sanitizeText(document.getElementById('mapel').value) || 'Pemrograman Berbasis Teks (PBT)',
-                    guru: sanitizeText(document.getElementById('guru').value) || 'Bu Mimin Putri Raharyani, S.Kom',
-                    guru_pengajar: sanitizeText(document.getElementById('guru').value) || 'Bu Mimin Putri Raharyani, S.Kom',
-                    materi: sanitizeText(document.getElementById('materi').value) || 'Pembahasan Materi Kelas XII RPL',
-                    materi_pembahasan: sanitizeText(document.getElementById('materi').value) || 'Pembahasan Materi Kelas XII RPL',
-                    kegiatan: sanitizeText(document.getElementById('kegiatan').value) || '',
-                    catatan_khusus: sanitizeText(document.getElementById('catatan').value) || '',
+                const tglVal = document.getElementById('tanggal').value || new Date().toISOString().split('T')[0];
+                const dtObj = new Date(tglVal);
+                const dayNames = ['Senin', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Senin'];
+                const dayEnum = dayNames[dtObj.getDay()] || 'Senin';
+                const mapelText = sanitizeText(document.getElementById('mapel').value) || 'Pemrograman Berbasis Teks (PBT)';
+                const guruText = sanitizeText(document.getElementById('guru').value) || 'Bu Mimin Putri Raharyani, S.Kom';
+                const materiText = sanitizeText(document.getElementById('materi').value) || 'Pembahasan Materi Kelas XII RPL';
+                const kegiatanText = sanitizeText(document.getElementById('kegiatan').value) || '';
+                const catatanText = sanitizeText(document.getElementById('catatan').value) || '';
+
+                const localItem = {
+                    id: validId,
+                    tanggal: tglVal,
+                    mata_pelajaran: mapelText,
+                    guru: guruText,
+                    guru_pengajar: guruText,
+                    materi: materiText,
+                    materi_pembahasan: materiText,
+                    kegiatan: kegiatanText,
+                    catatan_khusus: catatanText,
                     created_at: new Date().toISOString()
+                };
+
+                const dbPayload = {
+                    id: validId,
+                    judul: mapelText + ' (' + tglVal + ')',
+                    mata_pelajaran: mapelText,
+                    guru_pengajar: guruText,
+                    materi: materiText,
+                    deskripsi: (kegiatanText + ' ' + catatanText).trim() || materiText,
+                    tanggal: tglVal,
+                    hari: dayEnum
                 };
 
                 try {
                     if (existingId) {
                         const idx = jurnalList.findIndex(j => String(j.id) === String(existingId));
-                        if (idx !== -1) jurnalList[idx] = payload;
-                        else jurnalList.unshift(payload);
+                        if (idx !== -1) jurnalList[idx] = localItem;
+                        else jurnalList.unshift(localItem);
                     } else {
-                        jurnalList.unshift(payload);
+                        jurnalList.unshift(localItem);
                     }
 
                     localStorage.setItem('admin_jurnal_records', JSON.stringify(jurnalList));
 
                     const jClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                    let supabaseSuccess = false;
                     if (jClient) {
                         try {
-                            await jClient.from('jurnal_kelas').upsert([payload]);
+                            const { error: upErr } = await jClient.from('jurnal_kelas').upsert([dbPayload]);
+                            if (upErr) {
+                                console.warn("Supabase jurnal_kelas upsert error:", upErr);
+                            } else {
+                                supabaseSuccess = true;
+                            }
                         } catch (sErr) {
-                            console.warn("Note: Supabase upsert note:", sErr);
+                            console.warn("Note: Supabase upsert exception:", sErr);
                         }
                     }
 
                     resetForm();
                     renderList();
-                    alert("Jurnal kelas berhasil disimpan & tersinkronisasi ke seluruh perangkat!");
+                    if (supabaseSuccess) {
+                        alert("✅ Jurnal kelas berhasil disimpan & tersinkronisasi ke seluruh perangkat!");
+                    } else {
+                        alert("✅ Jurnal kelas disimpan di penyimpanan lokal browser!");
+                    }
                 } catch (err) {
                     alert("Gagal menyimpan jurnal: " + err.message);
                 } finally {
