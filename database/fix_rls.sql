@@ -1,9 +1,18 @@
 -- ============================================================
--- SKRIP PERBAIKAN RLS (ROW LEVEL SECURITY) SUPABASE
+-- SKRIP PERBAIKAN RLS & DATABASE SCHEMA SUPABASE
 -- Aventrix RPL - Multi-Device Cloud Synchronization
 -- ============================================================
 
 -- 1. Tabel absensi
+CREATE TABLE IF NOT EXISTS absensi (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    profile_id UUID,
+    tanggal DATE NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    keterangan TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE IF EXISTS absensi ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for absensi" ON absensi;
 DROP POLICY IF EXISTS "Authenticated Insert for absensi" ON absensi;
@@ -20,6 +29,18 @@ CREATE POLICY "Public Update for absensi" ON absensi FOR UPDATE USING (true);
 CREATE POLICY "Public Delete for absensi" ON absensi FOR DELETE USING (true);
 
 -- 2. Tabel jurnal_kelas
+CREATE TABLE IF NOT EXISTS jurnal_kelas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    judul VARCHAR(255),
+    mata_pelajaran VARCHAR(255),
+    guru_pengajar VARCHAR(255),
+    materi TEXT,
+    deskripsi TEXT,
+    tanggal DATE,
+    hari VARCHAR(50),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE IF EXISTS jurnal_kelas ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for jurnal_kelas" ON jurnal_kelas;
 DROP POLICY IF EXISTS "Authenticated Insert for jurnal_kelas" ON jurnal_kelas;
@@ -36,6 +57,15 @@ CREATE POLICY "Public Update for jurnal_kelas" ON jurnal_kelas FOR UPDATE USING 
 CREATE POLICY "Public Delete for jurnal_kelas" ON jurnal_kelas FOR DELETE USING (true);
 
 -- 3. Tabel jadwal_piket
+CREATE TABLE IF NOT EXISTS jadwal_piket (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    profile_id UUID,
+    nama VARCHAR(255),
+    hari VARCHAR(50) NOT NULL,
+    urutan_piket INT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE IF EXISTS jadwal_piket ADD COLUMN IF NOT EXISTS nama VARCHAR(255);
 ALTER TABLE IF EXISTS jadwal_piket ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for jadwal_piket" ON jadwal_piket;
@@ -53,6 +83,14 @@ CREATE POLICY "Public Update for jadwal_piket" ON jadwal_piket FOR UPDATE USING 
 CREATE POLICY "Public Delete for jadwal_piket" ON jadwal_piket FOR DELETE USING (true);
 
 -- 4. Tabel profiles
+CREATE TABLE IF NOT EXISTS profiles (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nama VARCHAR(255) NOT NULL,
+    nis VARCHAR(50),
+    email VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE IF EXISTS profiles ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for profiles" ON profiles;
 DROP POLICY IF EXISTS "Authenticated Insert for profiles" ON profiles;
@@ -68,6 +106,19 @@ CREATE POLICY "Public Update for profiles" ON profiles FOR UPDATE USING (true);
 CREATE POLICY "Public Delete for profiles" ON profiles FOR DELETE USING (true);
 
 -- 5. Tabel prestasi
+CREATE TABLE IF NOT EXISTS prestasi (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    judul VARCHAR(255) NOT NULL,
+    kategori VARCHAR(100),
+    penyelenggara VARCHAR(255),
+    tingkat VARCHAR(100),
+    tahun VARCHAR(50),
+    pemenang TEXT,
+    url TEXT,
+    deskripsi TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE IF EXISTS prestasi ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for prestasi" ON prestasi;
 DROP POLICY IF EXISTS "Authenticated Insert for prestasi" ON prestasi;
@@ -82,6 +133,15 @@ CREATE POLICY "Public Update for prestasi" ON prestasi FOR UPDATE USING (true);
 CREATE POLICY "Public Delete for prestasi" ON prestasi FOR DELETE USING (true);
 
 -- 6. Tabel inventaris_kelas
+CREATE TABLE IF NOT EXISTS inventaris_kelas (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nama_barang VARCHAR(255) NOT NULL,
+    jumlah INT DEFAULT 1,
+    kondisi VARCHAR(50) DEFAULT 'Baik',
+    keterangan TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE IF EXISTS inventaris_kelas ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for inventaris_kelas" ON inventaris_kelas;
 DROP POLICY IF EXISTS "Authenticated Insert for inventaris_kelas" ON inventaris_kelas;
@@ -95,6 +155,16 @@ CREATE POLICY "Public Update for inventaris_kelas" ON inventaris_kelas FOR UPDAT
 CREATE POLICY "Public Delete for inventaris_kelas" ON inventaris_kelas FOR DELETE USING (true);
 
 -- 7. Tabel jadwal_pelajaran
+CREATE TABLE IF NOT EXISTS jadwal_pelajaran (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    hari VARCHAR(50) NOT NULL,
+    jam_ke INT,
+    waktu VARCHAR(100),
+    mapel VARCHAR(255) NOT NULL,
+    guru VARCHAR(255),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 ALTER TABLE IF EXISTS jadwal_pelajaran ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for jadwal_pelajaran" ON jadwal_pelajaran;
 DROP POLICY IF EXISTS "Public Insert for jadwal_pelajaran" ON jadwal_pelajaran;
