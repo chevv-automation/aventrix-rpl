@@ -2,15 +2,20 @@
 // Redirect ke /admin/login.html jika belum terautentikasi.
 
 (async function authGuard() {
-    // Skip guard for login page
     const path = window.location.pathname.toLowerCase();
-    if (path.endsWith('login.html') || path.endsWith('login.html/')) return;
+    const isLoginPage = path.endsWith('login.html') || path.endsWith('login.html/') || path.endsWith('/login') || path.endsWith('/login/');
+
+    if (isLoginPage) {
+        if (document.documentElement) document.documentElement.style.display = '';
+        return;
+    }
 
     // 1. Check local session (sessionStorage or localStorage)
     const isSessionActive = sessionStorage.getItem('admin_session') === 'true' || 
                             localStorage.getItem('admin_session') === 'true';
 
     if (isSessionActive) {
+        if (document.documentElement) document.documentElement.style.display = '';
         return; // Valid admin session
     }
 
@@ -22,6 +27,7 @@
             if (!error && session) {
                 sessionStorage.setItem('admin_session', 'true');
                 localStorage.setItem('admin_session', 'true');
+                if (document.documentElement) document.documentElement.style.display = '';
                 return; // Valid session
             }
         } catch (err) {
@@ -29,8 +35,8 @@
         }
     }
 
-    // Not authenticated -> redirect to login page immediately
-    console.warn("Session tidak valid atau belum login. Redirecting to /admin/login.html...");
+    // Not authenticated -> redirect to login page immediately without rendering admin content
+    console.warn("Belum login. Diarahkan ke /admin/login.html...");
     
     const loginUrl = window.location.origin + '/admin/login.html';
     if (window.location.href !== loginUrl) {

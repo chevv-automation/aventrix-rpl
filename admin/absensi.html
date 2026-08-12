@@ -1,4 +1,5 @@
 <!DOCTYPE html><html class="light" lang="en" style=""><head>
+<script>document.documentElement.style.display='none';</script>
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <title>XII RPL Admin - Input Daftar Hadir</title>
@@ -434,23 +435,24 @@
                 btnSave.disabled = true;
 
                 try {
-                    // Build record array with custom Alasan/Keterangan & unique Primary Key ID per date
+                    // Build record array with exact standard columns (id, profile_id, nama, tanggal, status, keterangan)
                     const recordData = allStudents.map(s => ({
                         id: 'abs_' + (s.nomor_absen || s.id) + '_' + selDate,
                         profile_id: String(s.id || s.nomor_absen),
-                        nomor_absen: s.nomor_absen,
                         nama: s.nama,
                         tanggal: selDate,
                         status: currentStatusMap[s.id] || 'Hadir',
                         keterangan: currentKetMap[s.id] || ''
                     }));
 
-                    // 1. Save to localStorage for instant public sync
+                    // 1. Save to localStorage for instant local sync
                     localStorage.setItem('admin_absensi_records', JSON.stringify(recordData));
                     localStorage.setItem('admin_absensi_date', selDate);
 
                     // 2. Save to Supabase Cloud DB for Multi-Device Sync
                     const saveClient = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
+                    let supabaseSuccess = false;
+                    
                     if (saveClient) {
                         try {
                             const { error: delErr } = await saveClient.from('absensi').delete().eq('tanggal', selDate);
@@ -459,14 +461,26 @@
                             const { data: insData, error: insErr } = await saveClient.from('absensi').insert(recordData);
                             if (insErr) {
                                 console.error("Supabase absensi insert error:", insErr);
-                                alert("Catatan Supabase: " + insErr.message + " (Data tersimpan di penyimpanan lokal).");
+                                // Fallback: try upsert
+                                const { error: upErr } = await saveClient.from('absensi').upsert(recordData);
+                                if (upErr) {
+                                    console.warn("Supabase absensi upsert note:", upErr);
+                                } else {
+                                    supabaseSuccess = true;
+                                }
+                            } else {
+                                supabaseSuccess = true;
                             }
                         } catch (sErr) {
                             console.warn("Supabase absensi insert note:", sErr);
                         }
                     }
 
-                    alert("✅ Presensi berhasil disimpan dan tersinkronisasi ke seluruh perangkat!");
+                    if (supabaseSuccess) {
+                        alert("✅ Presensi berhasil disimpan dan tersinkronisasi ke seluruh perangkat!");
+                    } else {
+                        alert("✅ Presensi berhasil disimpan di penyimpanan lokal!");
+                    }
                 } catch(err) {
                     alert("Gagal menyimpan presensi: " + err.message);
                 } finally {

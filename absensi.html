@@ -407,14 +407,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const roster = profiles.length > 0 ? profiles : defaultStudents;
         const renderList = roster.map(p => {
             const localRec = localAbsensiRecords.find(a => 
-                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
                 (a.nama && p.nama && a.nama.toLowerCase() === p.nama.toLowerCase()) || 
-                (a.id === p.id || a.profile_id === p.id)
+                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
+                (a.id === p.id || a.profile_id === p.id) ||
+                (a.id && a.id.includes('_' + p.nomor_absen + '_'))
             );
             const dbRec = absensiData.find(a => 
-                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
                 (a.nama && p.nama && a.nama.toLowerCase() === p.nama.toLowerCase()) || 
-                (a.profile_id === p.id)
+                (a.nomor_absen && a.nomor_absen === p.nomor_absen) || 
+                (a.profile_id === p.id) ||
+                (a.id && a.id.includes('_' + p.nomor_absen + '_'))
             );
             const rec = localRec || dbRec;
             return {
