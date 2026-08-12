@@ -569,6 +569,8 @@
             }
         ];
 
+        let currentPublicTugasItems = [];
+
         function getDiff(deadlineStr) {
             if (!deadlineStr) return null;
             const today = new Date(); today.setHours(0,0,0,0);
@@ -579,6 +581,8 @@
         window.renderPublicTugas = function(passedItems) {
             const saved = localStorage.getItem('admin_tugas_records');
             let items = passedItems || (saved ? JSON.parse(saved) : defaultTugas);
+            currentPublicTugasItems = items;
+
             const containerAktif = document.getElementById('public-tugas-container');
             const containerHistory = document.getElementById('public-history-container');
             const searchInput = document.getElementById('tugas-search-input');
@@ -637,7 +641,7 @@
                 }
 
                 return `
-                <div class="bg-surface-container-lowest p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
+                <div onclick="window.openTaskDetail('${item.id}')" class="bg-surface-container-lowest p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between cursor-pointer group ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
                     <div>
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                             <span class="bg-primary/10 text-primary font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-md border border-primary/20">
@@ -647,12 +651,17 @@
                                 ${badgeText}
                             </span>
                         </div>
-                        <h3 class="font-bold text-base text-on-surface mb-1">${item.judul}</h3>
+                        <h3 class="font-bold text-base text-on-surface mb-1 group-hover:text-blue-700 transition-colors">${item.judul}</h3>
                         ${item.guru ? `<p class="text-xs font-semibold text-on-surface-variant mb-1.5">Guru: ${item.guru}</p>` : ''}
                         <p class="text-xs text-on-surface-variant leading-relaxed mb-3 line-clamp-2">${item.deskripsi || 'Tidak ada deskripsi.'}</p>
                     </div>
 
-                    ${item.link ? `<div class="pt-2 border-t border-slate-100 flex items-center justify-between"><a href="${item.link}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">open_in_new</span> Link Tugas</a></div>` : ''}
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
+                        <button onclick="window.openTaskDetail('${item.id}')" class="inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 px-3 py-1.5 rounded-xl transition-all active:scale-95 cursor-pointer">
+                            <span class="material-symbols-outlined text-sm">visibility</span> Detail Tugas
+                        </button>
+                        ${item.link ? `<a href="${item.link.startsWith('http') ? item.link : 'https://' + item.link}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">open_in_new</span> Link</a>` : ''}
+                    </div>
                 </div>`;
             }
 
@@ -674,6 +683,70 @@
                 containerHistory.innerHTML = historyItems.map(item => renderCard(item, true)).join('');
             }
         };
+
+        window.openTaskDetail = function(id) {
+            const item = currentPublicTugasItems.find(t => String(t.id) === String(id));
+            if (!item) return;
+
+            const modal = document.getElementById('modal-detail-tugas');
+            const card = document.getElementById('modal-detail-card');
+            if (!modal || !card) return;
+
+            document.getElementById('modal-task-mapel').textContent = item.mapel || 'Mata Pelajaran';
+            document.getElementById('modal-task-judul').textContent = item.judul || 'Detail Tugas';
+            document.getElementById('modal-task-guru').querySelector('span:last-child').textContent = item.guru || '-';
+            document.getElementById('modal-task-deadline').querySelector('span:last-child').textContent = item.deadline || 'Tanpa Deadline';
+            document.getElementById('modal-task-deskripsi').textContent = item.deskripsi || 'Tidak ada deskripsi tambahan.';
+
+            const daysLeft = getDiff(item.deadline);
+            const badgeEl = document.getElementById('modal-task-badge');
+            if (badgeEl) {
+                if (item.status === 'selesai') {
+                    badgeEl.className = 'text-[11px] font-bold px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-800';
+                    badgeEl.textContent = 'Selesai';
+                } else if (daysLeft !== null && daysLeft <= 0) {
+                    badgeEl.className = 'text-[11px] font-bold px-3 py-0.5 rounded-full bg-slate-200 text-slate-700';
+                    badgeEl.textContent = daysLeft === 0 ? 'HARI INI DEADLINE!' : 'Expired / Arsip';
+                } else {
+                    badgeEl.className = 'text-[11px] font-bold px-3 py-0.5 rounded-full bg-blue-100 text-blue-900';
+                    badgeEl.textContent = daysLeft !== null ? `H-${daysLeft} Deadline` : 'Aktif';
+                }
+            }
+
+            const linkContainer = document.getElementById('modal-task-link-container');
+            const linkEl = document.getElementById('modal-task-link');
+            if (item.link && item.link.trim() !== '') {
+                linkEl.href = item.link.startsWith('http') ? item.link : `https://${item.link}`;
+                linkContainer.classList.remove('hidden');
+            } else {
+                linkContainer.classList.add('hidden');
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        };
+
+        window.closeTaskDetail = function() {
+            const modal = document.getElementById('modal-detail-tugas');
+            const card = document.getElementById('modal-detail-card');
+            if (!modal || !card) return;
+
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        };
+
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('modal-detail-tugas');
+            if (modal && !modal.classList.contains('hidden') && e.target === modal) {
+                window.closeTaskDetail();
+            }
+        });
 
         async function fetchSupabasePublicTugas() {
             const client = typeof window.getSupabase === 'function' ? window.getSupabase() : (window.supabaseClient || null);
@@ -706,6 +779,65 @@
             fetchSupabasePublicTugas();
         });
     </script>
+
+    <!-- Modal Detail Tugas (Preview Modal) -->
+    <div id="modal-detail-tugas" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden transition-opacity duration-300">
+        <div id="modal-detail-card" class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-100 transform transition-all scale-95 opacity-0 duration-300">
+            <div class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white p-6 relative">
+                <button onclick="window.closeTaskDetail()" class="absolute top-4 right-4 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+                <div class="flex items-center gap-2 mb-2">
+                    <span id="modal-task-mapel" class="bg-white/20 text-blue-100 font-extrabold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full border border-white/20">
+                        Mata Pelajaran
+                    </span>
+                    <span id="modal-task-badge" class="text-[11px] font-bold px-3 py-0.5 rounded-full bg-blue-100 text-blue-900">
+                        Deadline
+                    </span>
+                </div>
+                <h2 id="modal-task-judul" class="text-xl md:text-2xl font-extrabold text-white leading-tight tracking-tight">
+                    Judul Tugas
+                </h2>
+            </div>
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Guru Pengampu</span>
+                        <p id="modal-task-guru" class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm text-blue-600">person</span>
+                            <span>-</span>
+                        </p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Batas Pengumpulan</span>
+                        <p id="modal-task-deadline" class="text-xs font-bold text-slate-800 flex items-center gap-1">
+                            <span class="material-symbols-outlined text-sm text-blue-600">calendar_today</span>
+                            <span>-</span>
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm text-blue-600">description</span>
+                        Deskripsi / Instruksi Lengkap
+                    </h4>
+                    <div id="modal-task-deskripsi" class="text-xs md:text-sm text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-2xl border border-slate-200/80 whitespace-pre-wrap">
+                        -
+                    </div>
+                </div>
+                <div id="modal-task-link-container" class="hidden pt-2">
+                    <a id="modal-task-link" href="#" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md shadow-blue-500/20 transition-all">
+                        <span class="material-symbols-outlined text-sm">open_in_new</span> Buka Link Tugas / Modul Pengumpulan
+                    </a>
+                </div>
+            </div>
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                <button onclick="window.closeTaskDetail()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs rounded-xl transition-all active:scale-95 cursor-pointer">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./js/supabase-config.js"></script>
 <script src="./js/global-ui.js"></script>

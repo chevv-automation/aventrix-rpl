@@ -56,17 +56,20 @@ CREATE POLICY "Public Insert for jurnal_kelas" ON jurnal_kelas FOR INSERT WITH C
 CREATE POLICY "Public Update for jurnal_kelas" ON jurnal_kelas FOR UPDATE USING (true);
 CREATE POLICY "Public Delete for jurnal_kelas" ON jurnal_kelas FOR DELETE USING (true);
 
--- 3. Tabel jadwal_piket
+-- 3. Tabel jadwal_piket (Membuat tabel & memastikan semua kolom ada)
 CREATE TABLE IF NOT EXISTS jadwal_piket (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     profile_id UUID,
     nama VARCHAR(255),
     hari VARCHAR(50) NOT NULL,
-    urutan_piket INT NOT NULL,
+    urutan_piket INT NOT NULL DEFAULT 1,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 ALTER TABLE IF EXISTS jadwal_piket ADD COLUMN IF NOT EXISTS nama VARCHAR(255);
+ALTER TABLE IF EXISTS jadwal_piket ADD COLUMN IF NOT EXISTS urutan_piket INT DEFAULT 1;
+ALTER TABLE IF EXISTS jadwal_piket ADD COLUMN IF NOT EXISTS profile_id UUID;
+ALTER TABLE IF EXISTS jadwal_piket ADD COLUMN IF NOT EXISTS hari VARCHAR(50);
 ALTER TABLE IF EXISTS jadwal_piket ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for jadwal_piket" ON jadwal_piket;
 DROP POLICY IF EXISTS "Authenticated Insert for jadwal_piket" ON jadwal_piket;
