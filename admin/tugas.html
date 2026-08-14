@@ -127,6 +127,7 @@
                             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">File / Modul PDF Dokumen</label>
                             <div class="space-y-2">
                                 <input type="file" id="tugas-file-input" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip" class="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer">
+                                <input type="text" id="tugas-file-name" placeholder="Nama / Judul File Kustom (Contoh: Modul Praktikum PWPB Bab 1.pdf)" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:border-blue-600 focus:bg-white transition-all">
                                 <input type="text" id="tugas-file" placeholder="Atau tempel URL File/Modul PDF (https://...)" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs outline-none focus:border-blue-600 focus:bg-white transition-all">
                                 <div id="file-name-preview" class="hidden text-xs font-bold text-emerald-800 bg-emerald-50 p-2 rounded-xl border border-emerald-200 flex items-center justify-between">
                                     <span class="truncate flex items-center gap-1"><span class="material-symbols-outlined text-sm">description</span> <span id="file-name-text">filename.pdf</span></span>
@@ -290,6 +291,10 @@
                         reader.onload = (evt) => {
                             uploadedFileBase64 = evt.target.result;
                             document.getElementById('tugas-file').value = uploadedFileBase64;
+                            const customNameInput = document.getElementById('tugas-file-name');
+                            if (customNameInput && !customNameInput.value) {
+                                customNameInput.value = file.name;
+                            }
                             document.getElementById('file-name-text').textContent = file.name;
                             document.getElementById('file-name-preview').classList.remove('hidden');
                         };
@@ -310,6 +315,8 @@
         window.clearFilePreview = function() {
             uploadedFileBase64 = '';
             document.getElementById('tugas-file').value = '';
+            const customNameInput = document.getElementById('tugas-file-name');
+            if (customNameInput) customNameInput.value = '';
             const docInput = document.getElementById('tugas-file-input');
             if (docInput) docInput.value = '';
             document.getElementById('file-name-preview').classList.add('hidden');
@@ -343,6 +350,7 @@
             const link = document.getElementById('tugas-link').value.trim();
             const foto_url = document.getElementById('tugas-foto') ? document.getElementById('tugas-foto').value.trim() : '';
             const file_url = document.getElementById('tugas-file') ? document.getElementById('tugas-file').value.trim() : '';
+            const file_name = document.getElementById('tugas-file-name') ? document.getElementById('tugas-file-name').value.trim() : '';
 
             const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'tugas-' + Date.now();
 
@@ -356,6 +364,7 @@
                 link: link,
                 foto_url: foto_url,
                 file_url: file_url,
+                file_name: file_name || 'File_Modul_Tugas',
                 status: 'aktif'
             };
 
@@ -372,6 +381,7 @@
                         link: newItem.link,
                         foto_url: newItem.foto_url,
                         file_url: newItem.file_url,
+                        file_name: newItem.file_name,
                         status: newItem.status
                     }]);
                 } catch(err) {

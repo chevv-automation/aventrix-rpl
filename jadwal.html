@@ -720,6 +720,9 @@
             const fileEl = document.getElementById('modal-task-file');
             if (item.file_url && item.file_url.trim() !== '') {
                 fileEl.href = item.file_url.startsWith('http') ? item.file_url : item.file_url;
+                const fileNameDisplay = item.file_name || 'File Modul Dokumen';
+                fileEl.innerHTML = `<span class="material-symbols-outlined text-base">download</span> Unduh: ${fileNameDisplay}`;
+                fileEl.download = fileNameDisplay;
                 fileContainer.classList.remove('hidden');
             } else {
                 fileContainer.classList.add('hidden');
@@ -809,6 +812,7 @@
                             link: row.link || '',
                             foto_url: row.foto_url || '',
                             file_url: row.file_url || '',
+                            file_name: row.file_name || '',
                             status: row.status || 'aktif'
                         }));
                         localStorage.setItem('admin_tugas_records', JSON.stringify(formatted));
