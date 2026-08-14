@@ -580,7 +580,8 @@
 
         window.renderPublicTugas = function(passedItems) {
             const saved = localStorage.getItem('admin_tugas_records');
-            let items = passedItems || (saved ? JSON.parse(saved) : defaultTugas);
+            let items = (passedItems && passedItems.length > 0) ? passedItems : (saved ? JSON.parse(saved) : defaultTugas);
+            if (!items || items.length === 0) items = defaultTugas;
             currentPublicTugasItems = items;
 
             const containerAktif = document.getElementById('public-tugas-container');
@@ -801,7 +802,7 @@
             if (client) {
                 try {
                     const { data, error } = await client.from('tugas').select('*').order('created_at', { ascending: false });
-                    if (!error && Array.isArray(data)) {
+                    if (!error && Array.isArray(data) && data.length > 0) {
                         const formatted = data.map(row => ({
                             id: row.id,
                             mapel: row.mapel || row.subject || '',
@@ -823,7 +824,10 @@
                     }
                 } catch(e) { console.warn(e); }
             }
-            window.renderPublicTugas();
+            const saved = localStorage.getItem('admin_tugas_records');
+            let fallback = saved ? JSON.parse(saved) : defaultTugas;
+            if (!fallback || fallback.length === 0) fallback = defaultTugas;
+            window.renderPublicTugas(fallback);
         }
 
         document.addEventListener('DOMContentLoaded', () => {

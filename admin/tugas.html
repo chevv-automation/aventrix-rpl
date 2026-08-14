@@ -218,7 +218,7 @@
             if (client) {
                 try {
                     const { data, error } = await client.from('tugas').select('*').order('created_at', { ascending: false });
-                    if (!error && Array.isArray(data)) {
+                    if (!error && Array.isArray(data) && data.length > 0) {
                         const formatted = data.map(row => ({
                             id: row.id,
                             mapel: row.mapel || row.subject || '',
@@ -229,6 +229,7 @@
                             link: row.link || '',
                             foto_url: row.foto_url || '',
                             file_url: row.file_url || '',
+                            file_name: row.file_name || '',
                             status: row.status || 'aktif'
                         }));
                         localStorage.setItem(STORAGE_KEY, JSON.stringify(formatted));
@@ -242,9 +243,11 @@
                 }
             }
 
-            // Fallback to localStorage
+            // Fallback to localStorage or defaultTugas
             const saved = localStorage.getItem(STORAGE_KEY);
             let items = saved ? JSON.parse(saved) : defaultTugas;
+            if (!items || items.length === 0) items = defaultTugas;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
             renderTugasList(items);
         }
 
