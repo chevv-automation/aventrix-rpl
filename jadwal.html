@@ -643,17 +643,45 @@
                 const hasFoto = item.foto_url && item.foto_url.trim() !== '';
                 const hasFile = item.file_url && item.file_url.trim() !== '';
 
+            // Card HTML Generator Helper
+            function renderCard(item, isHistory = false) {
+                const daysLeft = getDiff(item.deadline);
+                let badgeClass = 'bg-blue-100 text-blue-800';
+                let badgeText = `Deadline: ${item.deadline}`;
+
+                if (item.status === 'selesai') {
+                    badgeClass = 'bg-emerald-100 text-emerald-800';
+                    badgeText = 'Selesai';
+                } else if (daysLeft !== null) {
+                    if (daysLeft < 0) {
+                        badgeClass = 'bg-slate-200 text-slate-700';
+                        badgeText = 'Expired / Arsip';
+                    } else if (daysLeft === 0) {
+                        badgeClass = 'bg-blue-700 text-white animate-pulse';
+                        badgeText = 'HARI INI DEADLINE!';
+                    } else if (daysLeft <= 3) {
+                        badgeClass = 'bg-blue-100 text-blue-900 font-extrabold';
+                        badgeText = `H-${daysLeft} Deadline!`;
+                    } else {
+                        badgeClass = 'bg-blue-50 text-blue-800 border border-blue-200';
+                        badgeText = `H-${daysLeft} (${item.deadline})`;
+                    }
+                }
+
+                const hasFoto = item.foto_url && item.foto_url.trim() !== '';
+                const hasFile = item.file_url && item.file_url.trim() !== '';
+
                 return `
-                <div onclick="window.openTaskDetail('${item.id}')" class="bg-surface-container-lowest rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between cursor-pointer group overflow-hidden ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
-                    ${hasFoto ? `
-                    <div class="w-full h-36 bg-slate-100 overflow-hidden relative">
-                        <img src="${item.foto_url}" alt="${item.judul}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.parentElement.style.display='none'">
-                    </div>` : ''}
-                    <div class="p-5">
+                <div onclick="window.openTaskDetail('${item.id}')" class="bg-surface-container-lowest p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between cursor-pointer group ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
+                    <div>
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                            <span class="bg-primary/10 text-primary font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-md border border-primary/20">
-                                ${item.mapel}
-                            </span>
+                            <div class="flex items-center gap-1.5">
+                                <span class="bg-primary/10 text-primary font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-md border border-primary/20">
+                                    ${item.mapel}
+                                </span>
+                                ${hasFoto ? `<span class="text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">image</span> Gambar</span>` : ''}
+                                ${hasFile ? `<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">attach_file</span> File</span>` : ''}
+                            </div>
                             <span class="text-[11px] font-bold px-3 py-0.5 rounded-full ${badgeClass}">
                                 ${badgeText}
                             </span>
@@ -663,14 +691,11 @@
                         <p class="text-xs text-on-surface-variant leading-relaxed mb-3 line-clamp-2">${item.deskripsi || 'Tidak ada deskripsi.'}</p>
                     </div>
 
-                    <div class="px-5 pb-4 pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2" onclick="event.stopPropagation()">
-                        <button onclick="window.openTaskDetail('${item.id}')" class="inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 px-3 py-1.5 rounded-xl transition-all active:scale-95 cursor-pointer">
-                            <span class="material-symbols-outlined text-sm">visibility</span> Detail Tugas
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
+                        <button onclick="window.openTaskDetail('${item.id}')" class="inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 px-3.5 py-2 rounded-xl transition-all active:scale-95 cursor-pointer shadow-xs">
+                            <span class="material-symbols-outlined text-sm">visibility</span> Detail Tugas &amp; Lampiran
                         </button>
-                        <div class="flex items-center gap-2">
-                            ${hasFile ? `<a href="${item.file_url.startsWith('http') ? item.file_url : 'https://' + item.file_url}" target="_blank" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><span class="material-symbols-outlined text-sm">description</span> File Modul</a>` : ''}
-                            ${item.link ? `<a href="${item.link.startsWith('http') ? item.link : 'https://' + item.link}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">open_in_new</span> Link</a>` : ''}
-                        </div>
+                        ${item.link ? `<a href="${item.link.startsWith('http') ? item.link : 'https://' + item.link}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">open_in_new</span> Link</a>` : ''}
                     </div>
                 </div>`;
             }
@@ -722,7 +747,7 @@
             const fileContainer = document.getElementById('modal-task-file-container');
             const fileEl = document.getElementById('modal-task-file');
             if (item.file_url && item.file_url.trim() !== '') {
-                fileEl.href = item.file_url.startsWith('http') ? item.file_url : `https://${item.file_url}`;
+                fileEl.href = item.file_url.startsWith('http') ? item.file_url : item.file_url;
                 fileContainer.classList.remove('hidden');
             } else {
                 fileContainer.classList.add('hidden');
@@ -771,10 +796,28 @@
             }, 200);
         };
 
+        // Lightbox Functions for Full-Screen Image Preview
+        window.openImageLightbox = function(src) {
+            const lightbox = document.getElementById('modal-image-lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            if (!lightbox || !lightboxImg || !src) return;
+            lightboxImg.src = src;
+            lightbox.classList.remove('hidden');
+        };
+
+        window.closeImageLightbox = function() {
+            const lightbox = document.getElementById('modal-image-lightbox');
+            if (lightbox) lightbox.classList.add('hidden');
+        };
+
         document.addEventListener('click', (e) => {
             const modal = document.getElementById('modal-detail-tugas');
             if (modal && !modal.classList.contains('hidden') && e.target === modal) {
                 window.closeTaskDetail();
+            }
+            const lightbox = document.getElementById('modal-image-lightbox');
+            if (lightbox && !lightbox.classList.contains('hidden') && e.target === lightbox) {
+                window.closeImageLightbox();
             }
         });
 
@@ -832,9 +875,18 @@
                 </h2>
             </div>
             <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-                <!-- Foto / Gambar Tugas -->
-                <div id="modal-task-foto-container" class="hidden rounded-2xl overflow-hidden border border-slate-200 shadow-sm max-h-56 bg-slate-100">
-                    <img id="modal-task-foto" src="" alt="Ilustrasi Tugas" class="w-full h-full object-cover">
+                
+                <!-- Foto / Gambar Tugas (Click to View Fullscreen Lightbox) -->
+                <div id="modal-task-foto-container" class="hidden space-y-1">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm text-blue-600">image</span> Foto / Lampiran Gambar (Klik Untuk Perbesar):
+                    </span>
+                    <div onclick="window.openImageLightbox(document.getElementById('modal-task-foto').src)" class="rounded-2xl overflow-hidden border border-slate-200 shadow-sm max-h-56 bg-slate-100 cursor-pointer group relative">
+                        <img id="modal-task-foto" src="" alt="Ilustrasi Tugas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white font-bold text-xs gap-1.5">
+                            <span class="material-symbols-outlined text-lg">zoom_in</span> Perbesar Gambar Fullscreen
+                        </div>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
@@ -853,6 +905,7 @@
                         </p>
                     </div>
                 </div>
+
                 <div>
                     <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1">
                         <span class="material-symbols-outlined text-sm text-blue-600">description</span>
@@ -862,16 +915,18 @@
                         -
                     </div>
                 </div>
-                <!-- File Attachment Button -->
+
+                <!-- File Attachment Button (Download Modul) -->
                 <div id="modal-task-file-container" class="hidden pt-1">
-                    <a id="modal-task-file" href="#" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md shadow-emerald-500/20 transition-all">
-                        <span class="material-symbols-outlined text-sm">download_for_offline</span> Unduh / Buka File Modul PDF Dokumen
+                    <a id="modal-task-file" download="File_Modul_Tugas" href="#" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md shadow-emerald-500/20 transition-all">
+                        <span class="material-symbols-outlined text-base">download</span> Unduh / Buka File Modul Dokumen
                     </a>
                 </div>
+
                 <!-- Link Classroom Button -->
                 <div id="modal-task-link-container" class="hidden pt-1">
                     <a id="modal-task-link" href="#" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md shadow-blue-500/20 transition-all">
-                        <span class="material-symbols-outlined text-sm">open_in_new</span> Buka Link Classroom / Form Pengumpulan
+                        <span class="material-symbols-outlined text-base">open_in_new</span> Buka Link Classroom / Form Pengumpulan
                     </a>
                 </div>
             </div>
@@ -882,6 +937,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Lightbox Preview Gambar Fullscreen -->
+    <div id="modal-image-lightbox" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[60] flex items-center justify-center p-4 hidden transition-opacity duration-300" onclick="window.closeImageLightbox()">
+        <button onclick="window.closeImageLightbox()" class="absolute top-5 right-5 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-all cursor-pointer z-[61]">
+            <span class="material-symbols-outlined text-2xl">close</span>
+        </button>
+        <div class="max-w-4xl max-h-[90vh] overflow-hidden rounded-2xl shadow-2xl relative flex items-center justify-center" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="Preview Gambar Tugas" class="max-w-full max-h-[85vh] object-contain rounded-xl">
+        </div>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/supabase-config.js"></script>
+<script src="./js/global-ui.js"></script>
+    <script src="./js/supabase-fetch.js"></script></body></html>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./js/supabase-config.js"></script>
 <script src="./js/global-ui.js"></script>
