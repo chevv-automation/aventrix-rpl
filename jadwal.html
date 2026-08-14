@@ -643,34 +643,6 @@
                 const hasFoto = item.foto_url && item.foto_url.trim() !== '';
                 const hasFile = item.file_url && item.file_url.trim() !== '';
 
-            // Card HTML Generator Helper
-            function renderCard(item, isHistory = false) {
-                const daysLeft = getDiff(item.deadline);
-                let badgeClass = 'bg-blue-100 text-blue-800';
-                let badgeText = `Deadline: ${item.deadline}`;
-
-                if (item.status === 'selesai') {
-                    badgeClass = 'bg-emerald-100 text-emerald-800';
-                    badgeText = 'Selesai';
-                } else if (daysLeft !== null) {
-                    if (daysLeft < 0) {
-                        badgeClass = 'bg-slate-200 text-slate-700';
-                        badgeText = 'Expired / Arsip';
-                    } else if (daysLeft === 0) {
-                        badgeClass = 'bg-blue-700 text-white animate-pulse';
-                        badgeText = 'HARI INI DEADLINE!';
-                    } else if (daysLeft <= 3) {
-                        badgeClass = 'bg-blue-100 text-blue-900 font-extrabold';
-                        badgeText = `H-${daysLeft} Deadline!`;
-                    } else {
-                        badgeClass = 'bg-blue-50 text-blue-800 border border-blue-200';
-                        badgeText = `H-${daysLeft} (${item.deadline})`;
-                    }
-                }
-
-                const hasFoto = item.foto_url && item.foto_url.trim() !== '';
-                const hasFile = item.file_url && item.file_url.trim() !== '';
-
                 return `
                 <div onclick="window.openTaskDetail('${item.id}')" class="bg-surface-container-lowest p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between cursor-pointer group ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
                     <div>
@@ -951,8 +923,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./js/supabase-config.js"></script>
 <script src="./js/global-ui.js"></script>
-    <script src="./js/supabase-fetch.js"></script></body></html>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./js/supabase-config.js"></script>
-<script src="./js/global-ui.js"></script>
-    <script src="./js/supabase-fetch.js"></script></body></html>
+<script src="./js/supabase-fetch.js"></script>
+</body>
+</html>
