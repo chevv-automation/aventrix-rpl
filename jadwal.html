@@ -580,8 +580,7 @@
 
         window.renderPublicTugas = function(passedItems) {
             const saved = localStorage.getItem('admin_tugas_records');
-            let items = (passedItems && passedItems.length > 0) ? passedItems : (saved ? JSON.parse(saved) : defaultTugas);
-            if (!items || items.length === 0) items = defaultTugas;
+            let items = passedItems || (saved ? JSON.parse(saved) : defaultTugas);
             currentPublicTugasItems = items;
 
             const containerAktif = document.getElementById('public-tugas-container');
@@ -721,9 +720,6 @@
             const fileEl = document.getElementById('modal-task-file');
             if (item.file_url && item.file_url.trim() !== '') {
                 fileEl.href = item.file_url.startsWith('http') ? item.file_url : item.file_url;
-                const fileNameDisplay = item.file_name || 'File Modul Dokumen';
-                fileEl.innerHTML = `<span class="material-symbols-outlined text-base">download</span> Unduh: ${fileNameDisplay}`;
-                fileEl.download = fileNameDisplay;
                 fileContainer.classList.remove('hidden');
             } else {
                 fileContainer.classList.add('hidden');
@@ -802,7 +798,7 @@
             if (client) {
                 try {
                     const { data, error } = await client.from('tugas').select('*').order('created_at', { ascending: false });
-                    if (!error && Array.isArray(data) && data.length > 0) {
+                    if (!error && Array.isArray(data)) {
                         const formatted = data.map(row => ({
                             id: row.id,
                             mapel: row.mapel || row.subject || '',
@@ -813,7 +809,6 @@
                             link: row.link || '',
                             foto_url: row.foto_url || '',
                             file_url: row.file_url || '',
-                            file_name: row.file_name || '',
                             status: row.status || 'aktif'
                         }));
                         localStorage.setItem('admin_tugas_records', JSON.stringify(formatted));
@@ -824,10 +819,7 @@
                     }
                 } catch(e) { console.warn(e); }
             }
-            const saved = localStorage.getItem('admin_tugas_records');
-            let fallback = saved ? JSON.parse(saved) : defaultTugas;
-            if (!fallback || fallback.length === 0) fallback = defaultTugas;
-            window.renderPublicTugas(fallback);
+            window.renderPublicTugas();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
