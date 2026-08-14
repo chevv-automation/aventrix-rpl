@@ -288,8 +288,12 @@
                                 });
                             });
 
-                            const { error: delErr } = await rollClient.from('jadwal_piket').delete().neq('urutan_piket', -1);
-                            if (delErr) console.warn("Supabase piket delete note:", delErr);
+                            const { data: existingRows } = await rollClient.from('jadwal_piket').select('id');
+                            if (existingRows && existingRows.length > 0) {
+                                const existingIds = existingRows.map(r => r.id);
+                                const { error: delErr } = await rollClient.from('jadwal_piket').delete().in('id', existingIds);
+                                if (delErr) console.warn("Supabase piket delete note:", delErr);
+                            }
 
                             let { error: insErr } = await rollClient.from('jadwal_piket').insert(rowsToInsert);
                             if (insErr) {

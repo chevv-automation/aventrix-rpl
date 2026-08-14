@@ -103,8 +103,18 @@
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Link Google Classroom / Drive (Opsional)</label>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Link Google Classroom / Form (Opsional)</label>
                             <input type="url" id="tugas-link" placeholder="https://classroom.google.com/..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">URL Foto / Gambar Ilustrasi Tugas (Opsional)</label>
+                            <input type="text" id="tugas-foto" placeholder="https://... (URL Foto Papan Tulis / Diagram)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">URL File / Modul / Dokumen PDF (Opsional)</label>
+                            <input type="text" id="tugas-file" placeholder="https://... (Link File / Drive Modul PDF)" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-600 focus:bg-white transition-all">
                         </div>
 
                         <button type="submit" class="w-full py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
@@ -152,6 +162,8 @@
                 deadline: '2026-08-18',
                 deskripsi: 'Membuat fitur antarmuka web modern dengan sistem penyimpanan data lokal dan Supabase JS SDK.',
                 link: '',
+                foto_url: '',
+                file_url: '',
                 status: 'aktif'
             },
             {
@@ -162,6 +174,8 @@
                 deadline: '2026-08-20',
                 deskripsi: 'Tugas praktikum membuat class diagram dan mengimplementasikan hirarki objek Java.',
                 link: '',
+                foto_url: '',
+                file_url: '',
                 status: 'aktif'
             }
         ];
@@ -194,6 +208,8 @@
                             deadline: row.deadline || '',
                             deskripsi: row.deskripsi || row.description || '',
                             link: row.link || '',
+                            foto_url: row.foto_url || '',
+                            file_url: row.file_url || '',
                             status: row.status || 'aktif'
                         }));
                         localStorage.setItem(STORAGE_KEY, JSON.stringify(formatted));
@@ -252,15 +268,21 @@
             const deadline = document.getElementById('tugas-deadline').value;
             const deskripsi = document.getElementById('tugas-deskripsi').value.trim();
             const link = document.getElementById('tugas-link').value.trim();
+            const foto_url = document.getElementById('tugas-foto') ? document.getElementById('tugas-foto').value.trim() : '';
+            const file_url = document.getElementById('tugas-file') ? document.getElementById('tugas-file').value.trim() : '';
+
+            const genId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'tugas-' + Date.now();
 
             const newItem = {
-                id: 'tugas-' + Date.now(),
+                id: genId,
                 mapel: mapel,
                 judul: judul,
                 guru: guru,
                 deadline: deadline,
                 deskripsi: deskripsi,
                 link: link,
+                foto_url: foto_url,
+                file_url: file_url,
                 status: 'aktif'
             };
 
@@ -275,6 +297,8 @@
                         deadline: newItem.deadline,
                         deskripsi: newItem.deskripsi,
                         link: newItem.link,
+                        foto_url: newItem.foto_url,
+                        file_url: newItem.file_url,
                         status: newItem.status
                     }]);
                 } catch(err) {

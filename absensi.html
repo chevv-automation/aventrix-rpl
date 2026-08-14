@@ -400,15 +400,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { data: pData } = await pubClient.from('profiles').select('id, nama, nomor_absen').order('nomor_absen', { ascending: true });
             if (pData && pData.length > 0) profiles = pData;
 
-            // Fetch Absensi records ordered by latest date
-            const todayStr = new Date().toLocaleDateString('en-CA');
+            // Fetch Absensi records ONLY for target date (today)
+            const todayStr = new Date().toISOString().split('T')[0];
             const { data: aToday } = await pubClient.from('absensi').select('*').eq('tanggal', todayStr);
-            
             if (aToday && aToday.length > 0) {
                 absensiData = aToday;
             } else {
-                const { data: aLatest } = await pubClient.from('absensi').select('*').order('tanggal', { ascending: false }).limit(35);
-                if (aLatest && aLatest.length > 0) absensiData = aLatest;
+                // Fresh new day: default to empty absensiData so all students default to 'Hadir' for today
+                absensiData = [];
             }
 
             // Fetch Jurnal
@@ -424,22 +423,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const roster = profiles.length > 0 ? profiles : defaultStudents;
         const renderList = roster.map(p => {
             const pNamaClean = (p.nama || '').trim().toLowerCase();
-            
-            const localRec = localAbsensiRecords.find(a => 
-                (a.nomor_absen && Number(a.nomor_absen) === Number(p.nomor_absen)) || 
-                (a.nama && (a.nama || '').trim().toLowerCase() === pNamaClean)
-            );
 
             const dbRec = absensiData.find(a => 
                 (a.nomor_absen && Number(a.nomor_absen) === Number(p.nomor_absen)) || 
                 (a.nama && (a.nama || '').trim().toLowerCase() === pNamaClean)
             );
 
-            const rec = (absensiData && absensiData.length > 0) ? (dbRec || localRec) : (localRec || dbRec);
             return {
                 nama: p.nama,
-                status: rec ? rec.status : 'Hadir',
-                ket: rec && rec.keterangan ? rec.keterangan : ''
+                status: dbRec ? dbRec.status : 'Hadir',
+                ket: dbRec && dbRec.keterangan ? dbRec.keterangan : ''
             };
         });
 

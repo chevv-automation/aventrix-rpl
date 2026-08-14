@@ -640,9 +640,16 @@
                     }
                 }
 
+                const hasFoto = item.foto_url && item.foto_url.trim() !== '';
+                const hasFile = item.file_url && item.file_url.trim() !== '';
+
                 return `
-                <div onclick="window.openTaskDetail('${item.id}')" class="bg-surface-container-lowest p-5 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between cursor-pointer group ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
-                    <div>
+                <div onclick="window.openTaskDetail('${item.id}')" class="bg-surface-container-lowest rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between cursor-pointer group overflow-hidden ${isHistory ? 'bg-slate-50/70 border-slate-200 opacity-80' : ''}">
+                    ${hasFoto ? `
+                    <div class="w-full h-36 bg-slate-100 overflow-hidden relative">
+                        <img src="${item.foto_url}" alt="${item.judul}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onerror="this.parentElement.style.display='none'">
+                    </div>` : ''}
+                    <div class="p-5">
                         <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                             <span class="bg-primary/10 text-primary font-extrabold text-[10px] uppercase px-2.5 py-0.5 rounded-md border border-primary/20">
                                 ${item.mapel}
@@ -656,11 +663,14 @@
                         <p class="text-xs text-on-surface-variant leading-relaxed mb-3 line-clamp-2">${item.deskripsi || 'Tidak ada deskripsi.'}</p>
                     </div>
 
-                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2" onclick="event.stopPropagation()">
+                    <div class="px-5 pb-4 pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2" onclick="event.stopPropagation()">
                         <button onclick="window.openTaskDetail('${item.id}')" class="inline-flex items-center gap-1 text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200/80 px-3 py-1.5 rounded-xl transition-all active:scale-95 cursor-pointer">
                             <span class="material-symbols-outlined text-sm">visibility</span> Detail Tugas
                         </button>
-                        ${item.link ? `<a href="${item.link.startsWith('http') ? item.link : 'https://' + item.link}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">open_in_new</span> Link</a>` : ''}
+                        <div class="flex items-center gap-2">
+                            ${hasFile ? `<a href="${item.file_url.startsWith('http') ? item.file_url : 'https://' + item.file_url}" target="_blank" class="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2.5 py-1 rounded-lg flex items-center gap-1"><span class="material-symbols-outlined text-sm">description</span> File Modul</a>` : ''}
+                            ${item.link ? `<a href="${item.link.startsWith('http') ? item.link : 'https://' + item.link}" target="_blank" class="text-xs font-bold text-primary hover:underline flex items-center gap-1"><span class="material-symbols-outlined text-sm">open_in_new</span> Link</a>` : ''}
+                        </div>
                     </div>
                 </div>`;
             }
@@ -697,6 +707,26 @@
             document.getElementById('modal-task-guru').querySelector('span:last-child').textContent = item.guru || '-';
             document.getElementById('modal-task-deadline').querySelector('span:last-child').textContent = item.deadline || 'Tanpa Deadline';
             document.getElementById('modal-task-deskripsi').textContent = item.deskripsi || 'Tidak ada deskripsi tambahan.';
+
+            // Render Task Photo inside Detail Modal if available
+            const fotoContainer = document.getElementById('modal-task-foto-container');
+            const fotoImg = document.getElementById('modal-task-foto');
+            if (item.foto_url && item.foto_url.trim() !== '') {
+                fotoImg.src = item.foto_url;
+                fotoContainer.classList.remove('hidden');
+            } else {
+                fotoContainer.classList.add('hidden');
+            }
+
+            // Render File Attachment button if available
+            const fileContainer = document.getElementById('modal-task-file-container');
+            const fileEl = document.getElementById('modal-task-file');
+            if (item.file_url && item.file_url.trim() !== '') {
+                fileEl.href = item.file_url.startsWith('http') ? item.file_url : `https://${item.file_url}`;
+                fileContainer.classList.remove('hidden');
+            } else {
+                fileContainer.classList.add('hidden');
+            }
 
             const daysLeft = getDiff(item.deadline);
             const badgeEl = document.getElementById('modal-task-badge');
@@ -762,6 +792,8 @@
                             deadline: row.deadline || '',
                             deskripsi: row.deskripsi || row.description || '',
                             link: row.link || '',
+                            foto_url: row.foto_url || '',
+                            file_url: row.file_url || '',
                             status: row.status || 'aktif'
                         }));
                         localStorage.setItem('admin_tugas_records', JSON.stringify(formatted));
@@ -800,6 +832,11 @@
                 </h2>
             </div>
             <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+                <!-- Foto / Gambar Tugas -->
+                <div id="modal-task-foto-container" class="hidden rounded-2xl overflow-hidden border border-slate-200 shadow-sm max-h-56 bg-slate-100">
+                    <img id="modal-task-foto" src="" alt="Ilustrasi Tugas" class="w-full h-full object-cover">
+                </div>
+
                 <div class="grid grid-cols-2 gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
                     <div>
                         <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Guru Pengampu</span>
@@ -825,9 +862,16 @@
                         -
                     </div>
                 </div>
-                <div id="modal-task-link-container" class="hidden pt-2">
+                <!-- File Attachment Button -->
+                <div id="modal-task-file-container" class="hidden pt-1">
+                    <a id="modal-task-file" href="#" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md shadow-emerald-500/20 transition-all">
+                        <span class="material-symbols-outlined text-sm">download_for_offline</span> Unduh / Buka File Modul PDF Dokumen
+                    </a>
+                </div>
+                <!-- Link Classroom Button -->
+                <div id="modal-task-link-container" class="hidden pt-1">
                     <a id="modal-task-link" href="#" target="_blank" class="w-full inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md shadow-blue-500/20 transition-all">
-                        <span class="material-symbols-outlined text-sm">open_in_new</span> Buka Link Tugas / Modul Pengumpulan
+                        <span class="material-symbols-outlined text-sm">open_in_new</span> Buka Link Classroom / Form Pengumpulan
                     </a>
                 </div>
             </div>

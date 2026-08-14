@@ -188,10 +188,14 @@ CREATE TABLE IF NOT EXISTS tugas (
     deadline DATE,
     deskripsi TEXT,
     link TEXT,
+    foto_url TEXT,
+    file_url TEXT,
     status VARCHAR(50) DEFAULT 'aktif',
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+ALTER TABLE IF EXISTS tugas ADD COLUMN IF NOT EXISTS foto_url TEXT;
+ALTER TABLE IF EXISTS tugas ADD COLUMN IF NOT EXISTS file_url TEXT;
 ALTER TABLE IF EXISTS tugas ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS "Public Read Access for tugas" ON tugas;
 DROP POLICY IF EXISTS "Public Insert for tugas" ON tugas;
