@@ -698,11 +698,26 @@
         }
     }
 
+    async function setupPiketRealtime() {
+        const client = getSupabaseClient();
+        if (client && typeof client.channel === 'function') {
+            try {
+                client.channel('public:jadwal_piket')
+                    .on('postgres_changes', { event: '*', schema: 'public', table: 'jadwal_piket' }, () => {
+                        fetchSupabasePiket();
+                    })
+                    .subscribe();
+            } catch(e) { console.warn(e); }
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         loadDynamicPiketMap();
         updateRealtimePiket();
         fetchSupabasePiket();
+        setupPiketRealtime();
         setInterval(updateRealtimePiket, 1000);
+        setInterval(fetchSupabasePiket, 3000);
     });
 </script>
 <style>
