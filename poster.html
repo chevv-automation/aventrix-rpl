@@ -100,6 +100,15 @@
         }
     </script>
 <style>
+        * {
+            -webkit-tap-highlight-color: transparent !important;
+            -webkit-touch-callout: none;
+        }
+        button, a, select, input {
+            -webkit-tap-highlight-color: transparent !important;
+            outline: none !important;
+            touch-action: manipulation;
+        }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -247,276 +256,141 @@
 
 
 <!-- Page Header Band -->
-<section class="bg-primary-container pt-24 pb-8 md:pt-28 md:pb-12 flex items-center relative overflow-hidden">
-<div class="w-full px-4 md:px-gutter max-w-container-max mx-auto relative z-10">
-<h1 class="font-headline-xl text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mb-2 tracking-tight">Absensi Harian &amp; Jurnal</h1>
-<p class="text-primary-fixed/90 text-xs sm:text-sm md:text-base font-normal">Rekapitulasi kehadiran siswa dan jurnal kegiatan harian kelas.</p>
+<section class="h-[240px] flex items-center bg-primary-container">
+<div class="w-full px-gutter max-w-container-max mx-auto">
+<h1 class="font-headline-xl text-headline-xl text-white mb-2">Poster Kelas</h1>
+<p class="text-primary-fixed/80 font-body-md">Koleksi visi, komitmen, dan kebiasaan positif yang menginspirasi langkah kami.</p>
 </div>
 </section>
 
 <!-- Content Area -->
-<main class="max-w-container-max mx-auto px-4 md:px-gutter pb-section-gap mt-6 sm:mt-10 min-h-[50vh]">
-    
-    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-        <h2 class="text-2xl font-bold text-primary">Data Kehadiran Hari Ini</h2>
-        <div class="text-on-surface-variant text-sm font-bold bg-surface-container-high px-4 py-2 rounded-lg" id="tanggal-hari-ini"></div>
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Absensi List -->
-        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-surface-container-low text-on-surface-variant text-xs uppercase tracking-wider font-bold">
-                            <th class="px-6 py-4">Nama Siswa</th>
-                            <th class="px-6 py-4 text-center">Status</th>
-                            <th class="px-6 py-4">Keterangan</th>
-                        </tr>
-                    </thead>
-                    <tbody id="absensi-body" class="divide-y divide-outline-variant/20">
-                        <tr><td colspan="3" class="text-center py-12 text-on-surface-variant italic">Memuat data absensi...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Jurnal Section -->
-        <div class="lg:col-span-1">
-            <div class="bg-white rounded-2xl shadow-sm border border-outline-variant/30 overflow-hidden p-6">
-                <h3 class="text-lg font-bold text-primary mb-4 border-b border-outline-variant/20 pb-2">Jurnal Mengajar</h3>
-                <div id="jurnal-container" class="space-y-4">
-                    <div class="text-center py-8 text-on-surface-variant italic text-sm">Memuat jurnal...</div>
+<main class="max-w-container-max mx-auto px-gutter -mt-8 pb-section-gap mt-16 min-h-[50vh]">
+    <div class="max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            
+            <!-- Poster 1 -->
+            <div onclick="openPosterModal(1)" class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-outline-variant/30 overflow-hidden flex flex-col group cursor-pointer transform hover:-translate-y-1">
+                <div class="w-full bg-surface-container-lowest relative overflow-hidden">
+                    <img src="https://hcsrowlwbngnhyhrwvep.supabase.co/storage/v1/object/public/posters/7_KAIH.jpeg" alt="7 Kebiasaan Anak Indonesia Hebat" class="w-full h-auto object-contain group-hover:scale-[1.03] transition-transform duration-700 origin-bottom">
+                </div>
+                <div class="py-4 px-3 text-center bg-white z-10 flex-grow flex items-center justify-center border-t border-outline-variant/10">
+                    <h3 class="font-headline-md text-[17px] font-bold text-primary leading-tight">7 Kebiasaan Anak Indonesia Hebat</h3>
                 </div>
             </div>
+
+            <!-- Poster 2 -->
+            <div onclick="openPosterModal(2)" class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-outline-variant/30 overflow-hidden flex flex-col group cursor-pointer transform hover:-translate-y-1">
+                <div class="w-full bg-surface-container-lowest relative overflow-hidden">
+                    <img src="https://hcsrowlwbngnhyhrwvep.supabase.co/storage/v1/object/public/posters/Kesepakatan_Kelas_XII_RPL.jpeg" alt="Kesepakatan Kelas XII RPL" class="w-full h-auto object-contain group-hover:scale-[1.03] transition-transform duration-700 origin-bottom">
+                </div>
+                <div class="py-4 px-3 text-center bg-white z-10 flex-grow flex items-center justify-center border-t border-outline-variant/10">
+                    <h3 class="font-headline-md text-[17px] font-bold text-primary leading-tight">Kesepakatan Kelas XII RPL</h3>
+                </div>
+            </div>
+
+            <!-- Poster 3 -->
+            <div onclick="openPosterModal(3)" class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-outline-variant/30 overflow-hidden flex flex-col group cursor-pointer transform hover:-translate-y-1">
+                <div class="w-full bg-surface-container-lowest relative overflow-hidden">
+                    <img src="https://hcsrowlwbngnhyhrwvep.supabase.co/storage/v1/object/public/posters/8_Dimensi_Profil_Lulusan.jpeg" alt="8 Dimensi Profil Lulusan" class="w-full h-auto object-contain group-hover:scale-[1.03] transition-transform duration-700 origin-bottom">
+                </div>
+                <div class="py-4 px-3 text-center bg-white z-10 flex-grow flex items-center justify-center border-t border-outline-variant/10">
+                    <h3 class="font-headline-md text-[17px] font-bold text-primary leading-tight">8 Dimensi Profil Lulusan</h3>
+                </div>
+            </div>
+
         </div>
     </div>
+
+    <!-- Modal Overlay -->
+    <div id="poster-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 md:p-8">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity opacity-0" id="poster-backdrop" onclick="closePosterModal()"></div>
+        
+        <!-- Modal Content -->
+        <div id="poster-content" class="relative bg-white rounded-3xl shadow-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row transform scale-95 opacity-0 transition-all duration-300">
+            <!-- Close Button -->
+            <button onclick="closePosterModal()" class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-full flex items-center justify-center z-20 transition-colors shadow-sm">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            
+            <!-- Image Container -->
+            <div class="w-full md:w-1/2 bg-surface-container-lowest relative flex-shrink-0 border-b md:border-b-0 md:border-r border-outline-variant/20 p-4 md:p-8 flex items-center justify-center">
+                <img id="modal-img" src="" alt="Poster" class="w-full h-auto max-h-[40vh] md:max-h-[75vh] object-contain rounded-lg drop-shadow-md">
+            </div>
+            
+            <!-- Text Content -->
+            <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center overflow-y-auto custom-scrollbar">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-primary/10 text-primary rounded-full font-label-caps text-[10px] w-max mb-4">
+                    <span class="material-symbols-outlined text-[14px]">info</span> INSPIRASI KELAS
+                </div>
+                <h2 id="modal-title" class="font-headline-xl text-2xl md:text-4xl font-extrabold text-primary mb-6 leading-tight"></h2>
+                <p id="modal-desc" class="text-on-surface-variant text-body-lg leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const posterData = {
+            1: {
+                title: "7 Kebiasaan Anak Indonesia Hebat",
+                img: "https://hcsrowlwbngnhyhrwvep.supabase.co/storage/v1/object/public/posters/7_KAIH.jpeg",
+                desc: "Siapa bilang sukses itu cumaa soal nilai raport? Poster ini ngerangkum 7 kebiasaan kecee yang bakal ngebentuk karakter kuat kita bangett! Mulai dari inisiatif tingkat tinggi, punya visi masa depan yang jelas, tau prioritas mana yang mestii diduluin, sampai skill kolaborasi dan empati. Yukk, bareng-bareng kita asahh diri biar jadi versi paling hebatt dari kita!"
+            },
+            2: {
+                title: "Kesepakatan Kelas XII RPL",
+                img: "https://hcsrowlwbngnhyhrwvep.supabase.co/storage/v1/object/public/posters/Kesepakatan_Kelas_XII_RPL.jpeg",
+                desc: "Ini bukann sekadar aturan kaku dari sekolah lohh, tapi kontrak seruu yang udah kita bikin dan sepakati bareng-bareng! Mulai dari komitmen buatt saling menghargai, menjaga kebersihan, sampai janjii buat selalu kompakk nge-fix bug di setiap project. Lewat kesepakatan ini, kita mastiin XII RPL jadi circle belajar yang asikk, produktif, dan super suportif bangett!"
+            },
+            3: {
+                title: "8 Dimensi Profil Lulusan",
+                img: "https://hcsrowlwbngnhyhrwvep.supabase.co/storage/v1/object/public/posters/8_Dimensi_Profil_Lulusan.jpeg",
+                desc: "Ini diaa *cheat sheet* kita buatt survive di dunia industri digital! Gakk cuma dituntut jagoo coding, 8 dimensi ini mastiin kita punya mental bajaa, skill komunikasi luwess, dan etika kerja yang topcerr. Intinyaa, lulusan XII RPL dijamin nggak cuma pinter di depan monitor doangg, tapi juga siapp jadi profesional kerenn yang jadi inceran startup dan tech companyy!"
+            }
+        };
+
+        function openPosterModal(id) {
+            const modal = document.getElementById('poster-modal');
+            const backdrop = document.getElementById('poster-backdrop');
+            const content = document.getElementById('poster-content');
+            
+            document.getElementById('modal-img').src = posterData[id].img;
+            document.getElementById('modal-title').textContent = posterData[id].title;
+            document.getElementById('modal-desc').textContent = posterData[id].desc;
+            
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Trigger reflow for transition
+            void modal.offsetWidth;
+            
+            backdrop.classList.remove('opacity-0');
+            backdrop.classList.add('opacity-100');
+            
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+            
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePosterModal() {
+            const modal = document.getElementById('poster-modal');
+            const backdrop = document.getElementById('poster-backdrop');
+            const content = document.getElementById('poster-content');
+            
+            backdrop.classList.remove('opacity-100');
+            backdrop.classList.add('opacity-0');
+            
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.remove('flex');
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+    </script>
 </main>
-
-<script>
-document.addEventListener('DOMContentLoaded', async () => {
-    // Set Date Display
-    const now = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const todayFormatted = now.toLocaleDateString('id-ID', options);
-    const isoDate = now.toISOString().split('T')[0];
-
-    const dateHeader = document.getElementById('tanggal-hari-ini');
-    if (dateHeader) dateHeader.textContent = todayFormatted;
-
-    const tbody = document.getElementById('absensi-body');
-    const jContainer = document.getElementById('jurnal-container');
-
-    // Default 35 Class Students Roster
-    const defaultStudents = [
-        { nama: 'M. Ceza Fairus', nomor_absen: 16, status: 'Hadir', ket: '' },
-        { nama: 'Dayyana Khoirun Nisa\'', nomor_absen: 8, status: 'Hadir', ket: '' },
-        { nama: 'Jorel Permana', nomor_absen: 13, status: 'Hadir', ket: '' },
-        { nama: 'Yudika Adi Pratama', nomor_absen: 35, status: 'Hadir', ket: '' },
-        { nama: 'Bima Mahesa', nomor_absen: 5, status: 'Hadir', ket: '' },
-        { nama: 'Avniela Calista Novawan', nomor_absen: 3, status: 'Hadir', ket: '' },
-        { nama: 'Mikhaela Aulia Susanto', nomor_absen: 19, status: 'Hadir', ket: '' },
-        { nama: 'Khanssa Alicia Fairy', nomor_absen: 14, status: 'Hadir', ket: '' },
-        { nama: 'Naufal Ahmad Zufar', nomor_absen: 24, status: 'Hadir', ket: '' },
-        { nama: 'M. Raihan', nomor_absen: 29, status: 'Hadir', ket: '' },
-        { nama: 'Rakha Pratama Mahardika', nomor_absen: 31, status: 'Hadir', ket: '' },
-        { nama: 'Queen Zhevanya Kirania', nomor_absen: 27, status: 'Hadir', ket: '' },
-        { nama: 'Winda', nomor_absen: 34, status: 'Hadir', ket: '' },
-        { nama: 'Hikaru', nomor_absen: 9, status: 'Hadir', ket: '' },
-        { nama: 'Chevy Abrary', nomor_absen: 6, status: 'Hadir', ket: '' },
-        { nama: 'Christiano Flano S', nomor_absen: 7, status: 'Hadir', ket: '' },
-        { nama: 'Nadyah Gina Fatin', nomor_absen: 25, status: 'Hadir', ket: '' },
-        { nama: 'Alvin Pratama', nomor_absen: 1, status: 'Hadir', ket: '' },
-        { nama: 'Fawaaz Alim', nomor_absen: 2, status: 'Hadir', ket: '' },
-        { nama: 'Wahyu Hidayat', nomor_absen: 4, status: 'Hadir', ket: '' },
-        { nama: 'Naya Putri', nomor_absen: 10, status: 'Hadir', ket: '' },
-        { nama: 'Irland Setiawan', nomor_absen: 11, status: 'Hadir', ket: '' },
-        { nama: 'Rafi Ahmad', nomor_absen: 12, status: 'Hadir', ket: '' },
-        { nama: 'Nathaniel', nomor_absen: 15, status: 'Hadir', ket: '' },
-        { nama: 'Dika Ramadhan', nomor_absen: 17, status: 'Hadir', ket: '' },
-        { nama: 'Luna Maya', nomor_absen: 18, status: 'Hadir', ket: '' },
-        { nama: 'Jonas Kurniawan', nomor_absen: 20, status: 'Hadir', ket: '' },
-        { nama: 'Lovy Ananda', nomor_absen: 21, status: 'Hadir', ket: '' },
-        { nama: 'Adam Malik', nomor_absen: 22, status: 'Hadir', ket: '' },
-        { nama: 'Hizkia Saputra', nomor_absen: 23, status: 'Hadir', ket: '' },
-        { nama: 'Nabil Syahputra', nomor_absen: 26, status: 'Hadir', ket: '' },
-        { nama: 'Alya Rohali', nomor_absen: 28, status: 'Hadir', ket: '' },
-        { nama: 'Anin Setyawati', nomor_absen: 30, status: 'Hadir', ket: '' },
-        { nama: 'Mieke Wijaya', nomor_absen: 32, status: 'Sakit', ket: 'Surat Keterangan Dokter' },
-        { nama: 'Khanza Kirana', nomor_absen: 33, status: 'Izin', ket: 'Keperluan Keluarga' }
-    ];
-
-    // Default Class Journal Entries
-    const defaultJournals = [
-        {
-            jam: '07.00 - 09.30 WIB (Jam 1-3)',
-            mapel: 'Pemrograman Berbasis Teks (PBT)',
-            guru: 'Pak Ahmad, S.Kom',
-            materi: 'Implementasi RESTful API dengan Express.js & Authentication Token.'
-        },
-        {
-            jam: '09.45 - 12.00 WIB (Jam 4-6)',
-            mapel: 'Pemrograman Perangkat Bergerak (PPB)',
-            guru: 'Bu Mimin Putri Raharyani, S.Kom',
-            materi: 'Desain Layout Responsif dan Integrasi Supabase Client pada Flutter.'
-        },
-        {
-            jam: '12.30 - 14.30 WIB (Jam 7-8)',
-            mapel: 'Basis Data & SQL',
-            guru: 'Pak Bambang Sukoco, S.Kom',
-            materi: 'Optimasi Query Indexing dan Relasi Table Many-to-Many pada MySQL.'
-        }
-    ];
-
-    let profiles = [];
-    let absensiData = [];
-    let jurnalData = [];
-
-    // 1. Try loading localStorage admin inputs first
-    let localAbsensiRecords = [];
-    const savedAbsensi = localStorage.getItem('admin_absensi_records');
-    if (savedAbsensi) {
-        try {
-            localAbsensiRecords = JSON.parse(savedAbsensi) || [];
-        } catch (e) {
-            localAbsensiRecords = [];
-        }
-    }
-
-    function getSupabaseClient() {
-        if (window.supabaseClient) return window.supabaseClient;
-        if (typeof window.getSupabase === 'function' && window.getSupabase()) return window.getSupabase();
-        if (window.supabase && typeof window.supabase.createClient === 'function') {
-            const url = 'https://hcsrowlwbngnhyhrwvep.supabase.co';
-            const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhjc3Jvd2x3Ym5nbmh5aHJ3dmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMTI1MjcsImV4cCI6MjEwMTU4ODUyN30.cu75W_hVWvgrgpYI9MxF53P5KMte7MB8AbnArb_WI2Q';
-            window.supabaseClient = window.supabase.createClient(url, key);
-            return window.supabaseClient;
-        }
-        return null;
-    }
-
-    const pubClient = getSupabaseClient();
-    if (pubClient) {
-        try {
-            // Fetch Profiles
-            const { data: pData } = await pubClient.from('profiles').select('id, nama, nomor_absen').order('nomor_absen', { ascending: true });
-            if (pData && pData.length > 0) profiles = pData;
-
-            // Fetch Absensi records ONLY for target date (today)
-            const todayStr = new Date().toISOString().split('T')[0];
-            const { data: aToday } = await pubClient.from('absensi').select('*').eq('tanggal', todayStr);
-            if (aToday && aToday.length > 0) {
-                absensiData = aToday;
-            } else {
-                // Fresh new day: default to empty absensiData so all students default to 'Hadir' for today
-                absensiData = [];
-            }
-
-            // Fetch Jurnal
-            const { data: jData } = await pubClient.from('jurnal_kelas').select('*').order('created_at', { ascending: false });
-            if (jData && jData.length > 0) jurnalData = jData;
-        } catch (err) {
-            console.warn("Supabase fetch note:", err);
-        }
-    }
-
-    // --- Render Absensi Roster ---
-    if (tbody) {
-        const roster = profiles.length > 0 ? profiles : defaultStudents;
-        const renderList = roster.map(p => {
-            const pNamaClean = (p.nama || '').trim().toLowerCase();
-
-            const dbRec = absensiData.find(a => 
-                (a.nomor_absen && Number(a.nomor_absen) === Number(p.nomor_absen)) || 
-                (a.nama && (a.nama || '').trim().toLowerCase() === pNamaClean)
-            );
-
-            return {
-                nama: p.nama,
-                status: dbRec ? dbRec.status : 'Hadir',
-                ket: dbRec && dbRec.keterangan ? dbRec.keterangan : ''
-            };
-        });
-
-        tbody.innerHTML = renderList.map(s => {
-            let sBadge = '<span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Hadir</span>';
-            if (s.status === 'Sakit') sBadge = '<span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Sakit</span>';
-            if (s.status === 'Izin') sBadge = '<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Izin</span>';
-            if (s.status === 'Alpa') sBadge = '<span class="bg-rose-100 text-rose-800 px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Alpa</span>';
-
-            return `
-            <tr class="hover:bg-slate-50 transition-colors">
-                <td class="px-6 py-3.5 font-bold text-slate-800 text-sm">${s.nama}</td>
-                <td class="px-6 py-3.5 text-center">${sBadge}</td>
-                <td class="px-6 py-3.5 text-slate-500 text-xs italic">${s.ket || '-'}</td>
-            </tr>`;
-        }).join('');
-    }
-
-    // --- Render Jurnal ---
-    if (jContainer) {
-        let displayJournals = [];
-        if (jurnalData.length > 0) {
-            displayJournals = jurnalData;
-        } else {
-            const savedJurnals = localStorage.getItem('admin_jurnal_records');
-            if (savedJurnals) {
-                try {
-                    displayJournals = JSON.parse(savedJurnals) || [];
-                } catch (e) {
-                    displayJournals = [];
-                }
-            }
-        }
-
-        if (displayJournals.length > 0) {
-            jContainer.innerHTML = displayJournals.map(j => {
-                const materiStr = j.materi || j.materi_pembahasan || '';
-                const kegiatanStr = j.kegiatan || '';
-                const catatanStr = j.catatan_khusus || j.catatan || '';
-
-                return `
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200/80 space-y-3 mb-4 shadow-sm hover:border-blue-300 transition-all">
-                    <div class="flex items-center justify-between text-xs font-bold text-blue-800">
-                        <span class="bg-blue-100/80 text-blue-900 px-2.5 py-1 rounded-md">${j.tanggal || 'Hari Ini'}</span>
-                        <span class="text-slate-500 font-semibold">${j.jam_pelajaran || 'KBM XII RPL'}</span>
-                    </div>
-                    <div>
-                        <div class="font-extrabold text-slate-900 text-base leading-snug">${j.mata_pelajaran || j.mapel}</div>
-                        <div class="text-xs text-blue-700 font-bold mt-0.5">Pengampu: ${j.guru || j.guru_pengajar || '-'}</div>
-                    </div>
-
-                    ${materiStr ? `
-                    <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-1">
-                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Materi Pokok:</div>
-                        <div class="text-xs text-slate-800 font-semibold">${materiStr}</div>
-                    </div>` : ''}
-
-                    ${kegiatanStr ? `
-                    <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100 space-y-1">
-                        <div class="text-[11px] font-bold text-blue-800 uppercase tracking-wider flex items-center gap-1">
-                            <span class="material-symbols-outlined text-[14px]">menu_book</span> Kegiatan Pembelajaran:
-                        </div>
-                        <div class="text-xs text-slate-700 leading-relaxed font-medium">${kegiatanStr}</div>
-                    </div>` : ''}
-
-                    ${catatanStr ? `
-                    <div class="text-xs text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200/60 font-medium">
-                        <strong>Catatan:</strong> ${catatanStr}
-                    </div>` : ''}
-                </div>`;
-            }).join('');
-        } else {
-            jContainer.innerHTML = `
-                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200/80 text-center text-slate-500 space-y-2">
-                    <span class="material-symbols-outlined text-4xl text-slate-400">menu_book</span>
-                    <p class="font-bold text-sm text-slate-700">Belum ada jurnal pembelajaran hari ini.</p>
-                    <p class="text-xs text-slate-400">Jurnal akan tampil di sini secara real-time setelah diinput oleh guru/pengurus melalui Panel Admin.</p>
-                </div>`;
-        }
-    }
-});
-</script>
 <!-- Footer -->
 <footer class="w-full bg-white border-t border-outline-variant/30 py-8 mt-12">
 <div class="max-w-container-max mx-auto px-gutter">
@@ -564,7 +438,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
 
-        // Tabs Logic
+        // Tabs Logic (Instant touch color switching)
         const btnStruktur = document.getElementById('btn-struktur');
         const btnAnggota = document.getElementById('btn-anggota');
         const secStruktur = document.getElementById('struktur');
@@ -574,28 +448,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         const inactiveClasses = ['bg-surface-container-high', 'text-on-surface-variant'];
 
         if (btnStruktur && btnAnggota && secStruktur && secAnggota) {
-            // By default Anggota is hidden
-            secAnggota.style.display = 'none';
+            const activateTab = (tab) => {
+                if (tab === 'struktur') {
+                    btnStruktur.classList.remove(...inactiveClasses);
+                    btnStruktur.classList.add(...activeClasses);
+                    btnAnggota.classList.remove(...activeClasses);
+                    btnAnggota.classList.add(...inactiveClasses);
+                    secStruktur.style.display = 'block';
+                    secAnggota.style.display = 'none';
+                } else {
+                    btnAnggota.classList.remove(...inactiveClasses);
+                    btnAnggota.classList.add(...activeClasses);
+                    btnStruktur.classList.remove(...activeClasses);
+                    btnStruktur.classList.add(...inactiveClasses);
+                    secAnggota.style.display = 'block';
+                    secStruktur.style.display = 'none';
+                }
+            };
 
-            btnStruktur.addEventListener('click', () => {
-                btnStruktur.classList.remove(...inactiveClasses);
-                btnStruktur.classList.add(...activeClasses);
-                btnAnggota.classList.remove(...activeClasses);
-                btnAnggota.classList.add(...inactiveClasses);
-                
-                secStruktur.style.display = 'block';
-                secAnggota.style.display = 'none';
-            });
+            // Auto switch tab if URL contains ?tab=anggota or hash #anggota
+            const urlParams = new URLSearchParams(window.location.search);
+            const hash = window.location.hash;
+            if (urlParams.get('tab') === 'anggota' || hash === '#anggota') {
+                activateTab('anggota');
+            } else {
+                activateTab('struktur');
+            }
 
-            btnAnggota.addEventListener('click', () => {
-                btnAnggota.classList.remove(...inactiveClasses);
-                btnAnggota.classList.add(...activeClasses);
-                btnStruktur.classList.remove(...activeClasses);
-                btnStruktur.classList.add(...inactiveClasses);
-                
-                secAnggota.style.display = 'block';
-                secStruktur.style.display = 'none';
-            });
+            btnStruktur.addEventListener('pointerdown', (e) => { e.preventDefault(); activateTab('struktur'); });
+            btnStruktur.addEventListener('click', (e) => { e.preventDefault(); activateTab('struktur'); });
+            btnAnggota.addEventListener('pointerdown', (e) => { e.preventDefault(); activateTab('anggota'); });
+            btnAnggota.addEventListener('click', (e) => { e.preventDefault(); activateTab('anggota'); });
         }
     </script>
 
